@@ -14,7 +14,16 @@ class InvalidUserError extends Error {
   }
 }
 
+class PasswordUnchangedError extends Error {
+  constructor(message = "PasswordUnchangedError") {
+    super(message);
+    this.name = "PasswordUnchangedError";
+    this.statusCode = 400;
+  }
+}
+
 module.exports = {
   DuplicateUsernameError,
   InvalidUserError,
+  PasswordUnchangedError,
 };

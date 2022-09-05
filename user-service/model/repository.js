@@ -1,5 +1,3 @@
-require("dotenv/config");
-
 const createUserModel = require("./user-model");
 const User = createUserModel();
 const { DuplicateUsernameError, InvalidUserError } = require("../errors");
@@ -8,46 +6,42 @@ async function createUser(username, password) {
   await User.sync();
   const conflictingUser = await User.findOne({ where: { username } });
   if (conflictingUser != null) {
-    return { err: new DuplicateUsernameError() };
+    throw new DuplicateUsernameError();
   }
   return await User.create({ username, password });
 }
 
-async function getUser(username, password) {
-  const user = await User.findOne({ where: { username, password } });
+async function getUser(username) {
+  const user = await User.findOne({ where: { username } });
   if (user === null) {
-    return { err: new InvalidUserError() };
+    throw new InvalidUserError();
   }
   return user;
 }
 
-async function updateUser(username, currPassword, newPassword) {
+async function updateUser(username, newPassword) {
   const user = await User.findOne({
-    where: { username, password: currPassword },
+    where: { username },
   });
   if (user === null) {
-    return { err: new InvalidUserError() };
+    throw new InvalidUserError();
   }
-  const [numRowsUpdated] = await User.update(
+  return await User.update(
     { password: newPassword },
     {
-      where: { username, password: currPassword },
+      where: { username },
     }
   );
-  if (numRowsUpdated === 1 && currPassword === newPassword) {
-    return false;
-  }
-  return true;
 }
 
-async function deleteUser(username, password) {
+async function deleteUser(username) {
   const user = await User.findOne({
-    where: { username, password },
+    where: { username },
   });
   if (user === null) {
-    return { err: new InvalidUserError() };
+    throw new InvalidUserError();
   }
-  await User.destroy({ where: { username, password } });
+  await User.destroy({ where: { username } });
   return true;
 }
 
