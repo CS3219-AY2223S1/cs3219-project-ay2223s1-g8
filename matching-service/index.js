@@ -1,39 +1,38 @@
-const express = require('express');
-const cors = require('cors');
-const http = require('http');
-const database = require('./database');
+const express = require("express");
+const cors = require("cors");
+const http = require("http");
+const database = require("./database");
 
-const config = require('./config')[process.env.NODE_ENV || 'development'];
+const config = require("./config")[process.env.NODE_ENV || "development"];
 
 config.postgres.client = database.connectToPostgres();
 console.log(config.postgres.client);
 
 const app = express();
 
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
-app.use(cors()) // config cors so that front-end can use
-app.options('*', cors())
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cors()); // config cors so that front-end can use
+app.options("*", cors());
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.send('Hello World from matching-service');
-})
+const MatchController = require("./controller/matchController");
+module.exports = new MatchController(config.postgres.client);
+
+const { createMatch } = require("./test/match");
+
+router.post("/", createMatch);
 
 app.use("/api/match", router).all((_, res) => {
   res.setHeader("content-type", "application/json");
   res.setHeader("Access-Control-Allow-Origin", "*");
-  
-const MatchController = require('./controller/matchController');
-const matchController = new MatchController(config.postgres.client);
-
-app.get('/', (req, res) => {
-    res.send('Hello World from matching-service');
 });
 
-const httpServer = http.createServer(app)
+const httpServer = http.createServer(app);
 
 const port = process.env.PORT || 8001;
 httpServer.listen(port);
-console.log(`Matching-service listening on port ${port} in ${app.get('env')} mode.`);
+console.log(
+  `Matching-service listening on port ${port} in ${app.get("env")} mode.`
+);

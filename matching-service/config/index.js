@@ -5,7 +5,7 @@ module.exports = {
         postgres: {
             options: {
                 host: 'localhost',
-                port: 5432,
+                port: process.env.DB_PORT,
                 database: process.env.DB_LOCAL_NAME,
                 dialect: 'postgres',
                 username: process.env.DB_USER,
