@@ -15,14 +15,15 @@ app.use(express.json());
 app.use(cors()); // config cors so that front-end can use
 app.options("*", cors());
 
-const router = express.Router();
-
 const MatchController = require("./controller/matchController");
 module.exports = new MatchController(config.postgres.client);
 
-const { createMatch } = require("./test/match");
+const { createMatch, deleteMatch } = require("./controller/match");
+
+const router = express.Router();
 
 router.post("/", createMatch);
+router.delete("/", deleteMatch);
 
 app.use("/api/match", router).all((_, res) => {
   res.setHeader("content-type", "application/json");
