@@ -1,14 +1,17 @@
-const Models = require('../model/matchPotential');
+const { createMatchedModel, createMatchPotentialModel } = require('../model');
 const {
     DuplicateMatchPotentialError,
     InvalidMatchPotentialError,
-    NoMatchPotentialError
+    NoMatchPotentialError,
+    DuplicateMatchedError,
+    NoMatchedError
 } = require('../utils/errors');
 
 class MatchController {
 
     constructor(sequelize) {
-      Models(sequelize);
+    createMatchedModel(sequelize);
+    createMatchPotentialModel(sequelize);
       this.client = sequelize;
       this.models = sequelize.models;
     }
@@ -47,6 +50,38 @@ class MatchController {
             throw new NoMatchPotentialError();
         }
         return matches;
+    }
+
+    async hasMatchedId(matchedId) {
+        const matched = await this.models.Matched.findOne({ where: { matchedId } });
+        return !(matched === null || matched.length === 0)
+    }
+
+    async checkIsUserMatched(userId) {
+        const matched = await this.models.Matched.findAll({
+            where: {
+                [Op.or]: [
+                    { userId1: userId },
+                    { userId2: userId }
+                ]
+            }
+        });
+        return !(matched.length === 0);
+    }
+
+    async createMatched({ userId1, userId2, level }) {
+        if (checkIsMatched(userId1) || this.checkIsUserMatched(userId2)) {
+            throw new DuplicateMatchedError();
+        }
+        return await this.models.Matched.create({ userId1, userId2, level });
+    }
+
+    async removeMatched(matchedId) {
+        if (!hasMatchedId(matchedId)) {
+            throw new NoMatchedError();
+        }
+        await this.models.Matched.destroy({ where: { matchedId } });
+        return true;
     }
 
 }

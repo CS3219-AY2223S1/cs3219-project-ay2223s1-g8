@@ -19,4 +19,6 @@ module.exports = (sequelize) => {
     // creates a table if it does not exist
     // { force: true } - new db in each initialization)
     sequelize.sync();
+    console.log('[Database] Match Potential Model initialized');
+    return MatchPotential;
 }
