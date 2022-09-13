@@ -16,9 +16,13 @@ class MatchController {
       this.models = sequelize.models;
     }
 
+    async hasMatchPotential(userId) {
+        const matchPotentials = await this.models.MatchPotential.findOne({ where: { userId } });
+        return !(matchPotentials === null || matchPotentials.length === 0);
+    }
+
     async createMatchPotential({ userId, level }) {
-        const conflictingMatchPotential = await this.models.MatchPotential.findOne({ where: { userId } });
-        if (conflictingMatchPotential != null) {
+        if (this.hasMatchPotential(userId)) {
             throw new DuplicateMatchPotentialError();
         }
         return await this.models.MatchPotential.create({ userId, level });
@@ -33,8 +37,7 @@ class MatchController {
     }
 
     async deleteMatchPotential(userId) {
-        const matchPotential = await this.models.MatchPotential.findOne({ where: { userId } });
-        if (matchPotential === null) {
+        if (!this.hasMatchPotential(userId)) {
             throw new InvalidMatchPotentialError();
         }
         await this.models.MatchPotential.destroy({ where: { userId } });
@@ -54,7 +57,7 @@ class MatchController {
 
     async hasMatchedId(matchedId) {
         const matched = await this.models.Matched.findOne({ where: { matchedId } });
-        return !(matched === null || matched.length === 0)
+        return !(matched === null || matched.length === 0);
     }
 
     async checkIsUserMatched(userId) {
@@ -70,14 +73,14 @@ class MatchController {
     }
 
     async createMatched({ userId1, userId2, level }) {
-        if (checkIsMatched(userId1) || this.checkIsUserMatched(userId2)) {
+        if (this.checkIsMatched(userId1) || this.checkIsUserMatched(userId2)) {
             throw new DuplicateMatchedError();
         }
         return await this.models.Matched.create({ userId1, userId2, level });
     }
 
     async removeMatched(matchedId) {
-        if (!hasMatchedId(matchedId)) {
+        if (!this.hasMatchedId(matchedId)) {
             throw new NoMatchedError();
         }
         await this.models.Matched.destroy({ where: { matchedId } });
