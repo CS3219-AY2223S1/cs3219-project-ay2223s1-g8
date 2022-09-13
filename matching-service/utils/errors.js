@@ -22,8 +22,26 @@ class NoMatchPotentialError extends Error {
     }
 }
 
+class DuplicateMatchedError extends Error {
+    constructor(message = "DuplicateMatchedError") {
+        super(message);
+        this.name = "DuplicateMatchedError";
+        this.statusCode = 409;
+    }
+}
+
+class NoMatchedError extends Error {
+    constructor(message = "NoMatchedError") {
+        super(message);
+        this.name = "NoMatchedError";
+        this.statusCode = 404;
+    }
+}
+
 module.exports = {
     DuplicateMatchPotentialError,
     InvalidMatchPotentialError,
     NoMatchPotentialError,
+    DuplicateMatchedError,
+    NoMatchedError,
 }
