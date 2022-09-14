@@ -1,12 +1,12 @@
 const createUserModel = require("./user-model");
 const User = createUserModel();
-const { DuplicateUsernameError, InvalidUserError } = require("../errors");
+const { DbDuplicateUsernameError, DbInvalidUserError } = require("../errors");
 
 async function createUser(username, password) {
   await User.sync();
   const conflictingUser = await User.findOne({ where: { username } });
   if (conflictingUser != null) {
-    throw new DuplicateUsernameError();
+    throw new DbDuplicateUsernameError();
   }
   return await User.create({ username, password });
 }
@@ -14,7 +14,7 @@ async function createUser(username, password) {
 async function getUser(username) {
   const user = await User.findOne({ where: { username } });
   if (user === null) {
-    throw new InvalidUserError();
+    throw new DbInvalidUserError();
   }
   return user;
 }
@@ -24,7 +24,7 @@ async function updateUser(username, newPassword) {
     where: { username },
   });
   if (user === null) {
-    throw new InvalidUserError();
+    throw new DbInvalidUserError();
   }
   return await User.update(
     { password: newPassword },
@@ -39,7 +39,7 @@ async function deleteUser(username) {
     where: { username },
   });
   if (user === null) {
-    throw new InvalidUserError();
+    throw new DbInvalidUserError();
   }
   await User.destroy({ where: { username } });
   return true;
