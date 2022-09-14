@@ -1,17 +1,53 @@
-import UserModel from './user-model.js';
-import 'dotenv/config'
+const createUserModel = require("./user-model");
+const User = createUserModel();
+const { DuplicateUsernameError, InvalidUserError } = require("../errors");
 
-//Set up mongoose connection
-import mongoose from 'mongoose';
-
-let mongoDB = process.env.ENV == "PROD" ? process.env.DB_CLOUD_URI : process.env.DB_LOCAL_URI;
-
-mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true});
-
-let db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-
-export async function createUser(params) { 
-  return new UserModel(params)
+async function createUser(username, password) {
+  await User.sync();
+  const conflictingUser = await User.findOne({ where: { username } });
+  if (conflictingUser != null) {
+    throw new DuplicateUsernameError();
+  }
+  return await User.create({ username, password });
 }
 
+async function getUser(username) {
+  const user = await User.findOne({ where: { username } });
+  if (user === null) {
+    throw new InvalidUserError();
+  }
+  return user;
+}
+
+async function updateUser(username, newPassword) {
+  const user = await User.findOne({
+    where: { username },
+  });
+  if (user === null) {
+    throw new InvalidUserError();
+  }
+  return await User.update(
+    { password: newPassword },
+    {
+      where: { username },
+    }
+  );
+}
+
+async function deleteUser(username) {
+  const user = await User.findOne({
+    where: { username },
+  });
+  if (user === null) {
+    throw new InvalidUserError();
+  }
+  await User.destroy({ where: { username } });
+  return true;
+}
+
+module.exports = {
+  createUser,
+  getUser,
+  updateUser,
+  deleteUser,
+};
