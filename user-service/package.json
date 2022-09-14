@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "USER=postgres DB_NAME=peerprep nodemon index.js",
+    "dev": "nodemon index.js",
     "start": "node index.js",
-    "test": "cross-env NODE_ENV=test USER=postgres DB_NAME=peerpreptest jest --testTimeout=10000",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
     "pretest": "cross-env NODE_ENV=test npm run migrate:reset",
     "migrate:reset": "npx sequelize-cli db:migrate:undo:all && npm run migrate",
     "migrate": "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
