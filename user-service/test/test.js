@@ -7,18 +7,9 @@ const createUserModel = require("../model/user-model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const jwtDecode = require("jwt-decode");
+const config = require("../config/config")[process.env.NODE_ENV || "test"];
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.USER,
-  process.env.PASSWORD,
-  {
-    host: process.env.HOST,
-    port: process.env.PORT,
-    dialect: "postgres",
-    logging: false,
-  }
-);
+const sequelize = new Sequelize(config);
 
 const TestUser = createUserModel(sequelize);
 
