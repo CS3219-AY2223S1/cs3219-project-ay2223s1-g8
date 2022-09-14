@@ -1,19 +1,22 @@
-import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
-import SignupPage from './components/SignupPage';
-import {Box} from "@mui/material";
+import "bootstrap/dist/css/bootstrap.min.css"
+import React from "react"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import LoginPage from "./components/LoginPage"
+import LandingPage from "./components/LandingPage"
+import MatchingPage from "./components/MatchingPage"
+import RoomPage from "./components/RoomPage"
+import "./App.css"
 
 function App() {
     return (
-        <div className="App">
-            <Box display={"flex"} flexDirection={"column"} padding={"4rem"}>
-                <Router>
-                    <Routes>
-                        <Route exact path="/" element={<Navigate replace to="/signup" />}></Route>
-                        <Route path="/signup" element={<SignupPage/>}/>
-                    </Routes>
-                </Router>
-            </Box>
-        </div>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/login" element={<LoginPage />}/>
+                <Route path="/match" element={<MatchingPage />} />
+                <Route path="/room-1" element={<RoomPage />} />
+            </Routes>
+        </BrowserRouter>
     );
 }
 
