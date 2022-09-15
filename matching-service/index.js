@@ -10,13 +10,14 @@ config.postgres.client = database.connectToPostgres();
 console.log(config.postgres.client);
 
 const app = express();
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors()); // config cors so that front-end can use
 app.options("*", cors());
 
 const MatchController = require("./controller/matchController");
-const matchController = new MatchController(config.postgres.client);
+module.exports = new MatchController(config.postgres.client);
 
 app.get("/", (req, res) => {
   res.send("Hello World from matching-service");
@@ -31,7 +32,51 @@ const io = new Server(httpServer, {
 
 io.on("connection", (socket) => {
   console.log(`SocketIO connection created, socketID=${socket.id}`);
-  socket.on("match")
+
+  // Handle match event
+  socket.on("find match", (req) => {
+    console.log(`User socketID=${socket.id} finding match`);
+    findMatch(req).then((resp) => {
+      if (resp.status == "Match Found") {
+        socket.join(resp.matchId);
+        io.sockets.sockets.get(resp.matchedUserId).join(resp.matchId);
+        io.to(resp.matchId).emit("match found", resp);
+      } else {
+        socket.emit("Match Not Found", resp);
+      }
+    });
+  });
+
+  // Handle cancel match event
+  socket.on("cancel match", (req) => {
+    console.log(`User socketID=${socket.id} cancel match`);
+    socket.rooms.forEach((matchId) => {
+      // Leave all rooms except for default room
+      if (matchId != socket.id) {
+        io.to(matchId).emit("match cancelled");
+        io.socketsLeave(matchId); // Remove all sockets from matched rooms
+      }
+    });
+
+    // Cancels any existing match and all waiting matches
+    cancelMatch(req).then((resp) => {
+      console.log(resp);
+    });
+  });
+
+  socket.on("disconnect", (reason) => {
+    console.log(`User socketID=${socket.id} disconnected, reason=${reason}`);
+  });
+});
+
+const { findMatch, cancelMatch } = require("./controller/match");
+
+const router = express.Router();
+router.post("/", findMatch);
+router.delete("/", cancelMatch);
+app.use("/api/match", router).all((_, res) => {
+  res.setHeader("content-type", "application/json");
+  res.setHeader("Access-Control-Allow-Origin", "*");
 });
 
 const port = process.env.PORT || 8001;
