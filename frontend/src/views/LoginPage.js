@@ -1,7 +1,7 @@
-import InputBox from "./InputBox";
+import InputBox from "../components/InputBox";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function LoginPage(props) {
+function LoginPage() {
   return (
     <div className="Auth-form-container">
       <form className="Auth-form">

@@ -1,7 +1,7 @@
 import Button from "react-bootstrap/Button";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function LandingPage(props) {
+function LandingPage() {
   return (
     <>
       <Button variant="outline-primary" href="/login">
