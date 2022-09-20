@@ -19,13 +19,12 @@ $light: #5646ff;
 @import "../../node_modules/bootstrap/scss/variables";
 
 $custom-theme-colors: (
-    "altlight": #f2ebfa,
-    "altdark": #522192
+  "altlight": #f2ebfa,
+  "altdark": #522192,
 );
 
 // adding new variables to the theme-colors
 $theme-colors: map-merge($custom-theme-colors, $theme-colors);
 
 // import bootstrap
-@import '../../node_modules/bootstrap/scss/bootstrap.scss';
- 
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
