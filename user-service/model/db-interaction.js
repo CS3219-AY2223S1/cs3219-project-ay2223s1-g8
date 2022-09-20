@@ -19,9 +19,17 @@ async function getUser(username) {
   return user;
 }
 
-async function updateUser(username, newPassword) {
+async function getUserById(userId) {
+  const user = await User.findOne({ where: { userId } });
+  if (user === null) {
+    throw new DbInvalidUserError();
+  }
+  return user;
+}
+
+async function updateUserById(userId, newPassword) {
   const user = await User.findOne({
-    where: { username },
+    where: { userId },
   });
   if (user === null) {
     throw new DbInvalidUserError();
@@ -29,25 +37,26 @@ async function updateUser(username, newPassword) {
   return await User.update(
     { password: newPassword },
     {
-      where: { username },
+      where: { userId },
     }
   );
 }
 
-async function deleteUser(username) {
+async function deleteUserById(userId) {
   const user = await User.findOne({
-    where: { username },
+    where: { userId },
   });
   if (user === null) {
     throw new DbInvalidUserError();
   }
-  await User.destroy({ where: { username } });
+  await User.destroy({ where: { userId } });
   return true;
 }
 
 module.exports = {
   createUser,
   getUser,
-  updateUser,
-  deleteUser,
+  getUserById,
+  updateUserById,
+  deleteUserById,
 };

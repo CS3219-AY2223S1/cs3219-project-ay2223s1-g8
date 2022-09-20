@@ -23,6 +23,8 @@ async function createUser(req, res) {
     console.log(`Created new user ${username} successfully!`);
     return res.status(201).json(resp);
   } catch (err) {
+    console.log(err);
+
     if (err instanceof DbDuplicateUsernameError) {
       return res.status(409).json({ message: "Duplicate username detected!" });
     } else if (err instanceof ValidationError) {
@@ -49,6 +51,8 @@ async function getUser(req, res) {
     console.log(`Fetched user ${username} successfully!`);
     return res.status(200).json(resp);
   } catch (err) {
+    console.log(err);
+
     if (err instanceof DbInvalidUserError) {
       return res
         .status(400)
@@ -81,6 +85,8 @@ async function updateUser(req, res) {
       message: `Password for user updated successfully!`,
     });
   } catch (err) {
+    console.log(err);
+
     if (err instanceof ValidationError) {
       return res
         .status(400)
@@ -109,6 +115,8 @@ async function deleteUser(req, res) {
     console.log(`Deleted user successfully!`);
     return res.status(200).json({ message: `Deleted user successfully!` });
   } catch (err) {
+    console.log(err);
+
     if (err instanceof ValidationError) {
       return res.status(400).json({ message: "Token is missing!" });
     } else if (err instanceof DbInvalidUserError) {

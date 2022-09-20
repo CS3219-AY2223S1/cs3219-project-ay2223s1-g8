@@ -1,8 +1,9 @@
 const {
   createUser,
   getUser,
-  updateUser,
-  deleteUser,
+  getUserById,
+  updateUserById,
+  deleteUserById,
 } = require("./db-interaction");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -16,11 +17,16 @@ async function ormCreateUser(username, password) {
 
   const user = await createUser(username, encryptedPassword);
 
-  const token = jwt.sign({ username }, process.env.TOKEN_KEY, {
-    expiresIn: "2h",
-  });
+  const token = jwt.sign(
+    { id: user.dataValues.userId },
+    process.env.TOKEN_KEY,
+    {
+      expiresIn: "2h",
+    }
+  );
   const res = {
     username: user.dataValues.username,
+    userId: user.dataValues.userId,
     token,
   };
   return res;
@@ -34,19 +40,24 @@ async function ormGetUser(username, password) {
   ) {
     throw new DbInvalidUserError();
   }
-  const token = jwt.sign({ username }, process.env.TOKEN_KEY, {
-    expiresIn: "2h",
-  });
+  const token = jwt.sign(
+    { id: user.dataValues.userId },
+    process.env.TOKEN_KEY,
+    {
+      expiresIn: "2h",
+    }
+  );
   const res = {
     username: user.dataValues.username,
+    userId: user.dataValues.userId,
     token,
   };
   return res;
 }
 
 async function ormUpdateUser(token, currPassword, newPassword) {
-  const username = jwtDecode(token).username;
-  const user = await getUser(username);
+  const userId = jwtDecode(token).id;
+  const user = await getUserById(userId);
   if (
     user === null ||
     !(await bcrypt.compare(currPassword, user.dataValues.password))
@@ -55,16 +66,16 @@ async function ormUpdateUser(token, currPassword, newPassword) {
   }
   const saltRounds = 10;
   const encryptedPassword = await bcrypt.hash(newPassword, saltRounds);
-  return updateUser(username, encryptedPassword);
+  return updateUserById(userId, encryptedPassword);
 }
 
 async function ormDeleteUser(token) {
-  const username = jwtDecode(token).username;
-  const user = await getUser(username);
+  const userId = jwtDecode(token).id;
+  const user = await getUserById(userId);
   if (user === null) {
     throw new DbInvalidUserError();
   }
-  return await deleteUser(username);
+  return await deleteUserById(userId);
 }
 
 module.exports = {
