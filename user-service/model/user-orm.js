@@ -58,10 +58,7 @@ async function ormGetUser(username, password) {
 async function ormUpdateUser(token, currPassword, newPassword) {
   const userId = jwtDecode(token).id;
   const user = await getUserById(userId);
-  if (
-    user === null ||
-    !(await bcrypt.compare(currPassword, user.dataValues.password))
-  ) {
+  if (!(await bcrypt.compare(currPassword, user.dataValues.password))) {
     throw new DbInvalidUserError();
   }
   const saltRounds = 10;
@@ -71,10 +68,7 @@ async function ormUpdateUser(token, currPassword, newPassword) {
 
 async function ormDeleteUser(token) {
   const userId = jwtDecode(token).id;
-  const user = await getUserById(userId);
-  if (user === null) {
-    throw new DbInvalidUserError();
-  }
+  await getUserById(userId);
   return await deleteUserById(userId);
 }
 

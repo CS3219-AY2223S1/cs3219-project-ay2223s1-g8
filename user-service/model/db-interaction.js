@@ -31,12 +31,6 @@ async function getUserById(userId) {
 
 async function updateUserById(userId, newPassword) {
   await User.sync();
-  const user = await User.findOne({
-    where: { userId },
-  });
-  if (user === null) {
-    throw new DbInvalidUserError();
-  }
   return await User.update(
     { password: newPassword },
     {
@@ -47,12 +41,6 @@ async function updateUserById(userId, newPassword) {
 
 async function deleteUserById(userId) {
   await User.sync();
-  const user = await User.findOne({
-    where: { userId },
-  });
-  if (user === null) {
-    throw new DbInvalidUserError();
-  }
   await User.destroy({ where: { userId } });
   return true;
 }
