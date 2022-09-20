@@ -1,3 +1,5 @@
+@import "../../scss/theme.scss";
+
 .Auth-form-container {
   display: flex;
   justify-content: center;
@@ -26,4 +28,15 @@
   font-size: 24px;
   color: rgb(34, 34, 34);
   font-weight: 800;
+}
+
+.error-message {
+  color: $danger;
+  padding: 0.2em 0.2em;
+  font-size: 0.8em;
+}
+
+.btn-toggle-password-visibility {
+  border-width: 0em;
+  // position: absolute;
 }
