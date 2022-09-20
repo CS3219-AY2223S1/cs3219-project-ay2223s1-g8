@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
-import { Link } from "react-router-dom";
+import Spinner from "react-bootstrap/Spinner";
+import { Link, useNavigate } from "react-router-dom";
 // form validation libraries
 import { Formik } from "formik";
 import * as Yup from "yup";
+// redux
+import { useDispatch, useSelector } from "react-redux";
+import { clearState, signupUser, userSelector } from "../../stores/user";
 // style
 import "./SignupPage.scss";
 
@@ -17,9 +21,11 @@ const initialValues = {
 
 const signUpSchema = Yup.object().shape({
   username: Yup.string()
+    .required("Username is required")
     .min(2, "Too Short! - should be 4 characters minimum")
-    .max(50, "Too Long! - should be 50 characters maximum")
-    .required("Username is required"),
+    .max(50, "Too Long! - should be 50 characters maximum"),
+  // TODO: check for unique username from database
+  // .test("username", "This username has already been taken", (username) => checkAvailabilityUsername(username));
 
   password: Yup.string()
     .required("Password is required")
@@ -35,8 +41,11 @@ const signUpSchema = Yup.object().shape({
 });
 
 function SignupPage() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [passwordType, setPasswordType] = useState("password");
   const [confirmPasswordType, setConfirmPasswordType] = useState("password");
+  const { isFetching, isSuccess, isError, errorMessage } = useSelector(userSelector);
 
   const togglePassword = () => {
     if (passwordType === "password") {
@@ -55,11 +64,25 @@ function SignupPage() {
   };
 
   const submitForm = (values) => {
-    console.log("submit form function");
-    console.log(values);
-    // TODO: check for unique username
-    // TODO: send data to userService
+    dispatch(signupUser(values));
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearState());
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(clearState());
+      navigate("/");
+    }
+    if (isError) {
+      console.log(errorMessage);
+      dispatch(clearState());
+    }
+  }, [isSuccess, isError]);
 
   return (
     <Formik initialValues={initialValues} validationSchema={signUpSchema} onSubmit={submitForm}>
@@ -117,7 +140,7 @@ function SignupPage() {
                 <Form.Label>Confirm Password</Form.Label>
                 <InputGroup controlId="confirmPassword">
                   <Form.Control
-                    type={passwordType}
+                    type={confirmPasswordType}
                     name="confirmPassword"
                     placeholder="Retype password"
                     value={values.confirmPassword}
@@ -144,7 +167,14 @@ function SignupPage() {
 
               <div className="d-grid gap-2 mt-3">
                 <Button className="btn btn-primary" variant="primary" type="submit">
-                  Sign Up
+                  {isFetching ? (
+                    <>
+                      <Spinner animation="border" size="sm" role="status" aria-hidden="true" />
+                      Signing up
+                    </>
+                  ) : (
+                    <>Sign Up</>
+                  )}
                 </Button>
               </div>
             </div>
