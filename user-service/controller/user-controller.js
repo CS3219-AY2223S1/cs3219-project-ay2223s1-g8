@@ -64,7 +64,7 @@ async function getUser(req, res) {
     } else {
       return res
         .status(500)
-        .json({ message: "Database failure when creating new user!" });
+        .json({ message: "Database failure when fetching new user!" });
     }
   }
 }
