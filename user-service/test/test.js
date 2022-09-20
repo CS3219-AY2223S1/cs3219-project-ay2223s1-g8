@@ -109,6 +109,7 @@ describe("User Endpoint", () => {
       expect(res.status).toEqual(200);
       expect(res.body).toHaveProperty("username", "TestUsername");
       expect(res.body).toHaveProperty("token");
+      expect(res.body).toHaveProperty("userId");
       const { count } = await TestUser.findAndCountAll();
       expect(count).toBe(1);
     });
