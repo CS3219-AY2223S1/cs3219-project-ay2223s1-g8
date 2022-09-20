@@ -1,29 +1,38 @@
-class DuplicateUsernameError extends Error {
-  constructor(message = "DuplicateUsernameError") {
+class DbDuplicateUsernameError extends Error {
+  constructor(message = "DbDuplicateUsernameError") {
     super(message);
-    this.name = "DuplicateUsernameError";
+    this.name = "DbDuplicateUsernameError";
     this.statusCode = 409;
   }
 }
 
-class InvalidUserError extends Error {
-  constructor(message = "InvalidUserError") {
+class DbInvalidUserError extends Error {
+  constructor(message = "DbInvalidUserError") {
     super(message);
-    this.name = "InvalidUserError";
+    this.name = "DbInvalidUserError";
     this.statusCode = 400;
   }
 }
 
 class PasswordUnchangedError extends Error {
-  constructor(message = "PasswordUnchangedError") {
+  constructor(message = "DbPasswordUnchangedError") {
     super(message);
-    this.name = "PasswordUnchangedError";
+    this.name = "DbPasswordUnchangedError";
+    this.statusCode = 400;
+  }
+}
+
+class ValidationError extends Error {
+  constructor(message = "ValidationError") {
+    super(message);
+    this.name = "ValidationError";
     this.statusCode = 400;
   }
 }
 
 module.exports = {
-  DuplicateUsernameError,
-  InvalidUserError,
+  DbDuplicateUsernameError,
+  DbInvalidUserError,
   PasswordUnchangedError,
+  ValidationError,
 };

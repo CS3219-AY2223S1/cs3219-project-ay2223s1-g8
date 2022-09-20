@@ -1,53 +1,54 @@
 const createUserModel = require("./user-model");
 const User = createUserModel();
-const { DuplicateUsernameError, InvalidUserError } = require("../errors");
+const { DbDuplicateUsernameError, DbInvalidUserError } = require("../errors");
 
 async function createUser(username, password) {
   await User.sync();
   const conflictingUser = await User.findOne({ where: { username } });
   if (conflictingUser != null) {
-    throw new DuplicateUsernameError();
+    throw new DbDuplicateUsernameError();
   }
   return await User.create({ username, password });
 }
 
 async function getUser(username) {
+  await User.sync();
   const user = await User.findOne({ where: { username } });
   if (user === null) {
-    throw new InvalidUserError();
+    throw new DbInvalidUserError();
   }
   return user;
 }
 
-async function updateUser(username, newPassword) {
-  const user = await User.findOne({
-    where: { username },
-  });
+async function getUserById(userId) {
+  await User.sync();
+  const user = await User.findOne({ where: { userId } });
   if (user === null) {
-    throw new InvalidUserError();
+    throw new DbInvalidUserError();
   }
+  return user;
+}
+
+async function updateUserById(userId, newPassword) {
+  await User.sync();
   return await User.update(
     { password: newPassword },
     {
-      where: { username },
+      where: { userId },
     }
   );
 }
 
-async function deleteUser(username) {
-  const user = await User.findOne({
-    where: { username },
-  });
-  if (user === null) {
-    throw new InvalidUserError();
-  }
-  await User.destroy({ where: { username } });
+async function deleteUserById(userId) {
+  await User.sync();
+  await User.destroy({ where: { userId } });
   return true;
 }
 
 module.exports = {
   createUser,
   getUser,
-  updateUser,
-  deleteUser,
+  getUserById,
+  updateUserById,
+  deleteUserById,
 };

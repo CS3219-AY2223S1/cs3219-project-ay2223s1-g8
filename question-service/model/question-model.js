@@ -2,40 +2,37 @@ const { Model, DataTypes } = require("sequelize");
 const { Sequelize } = require("./database.js");
 const sequelize = require("./database.js");
 
-class User extends Model {}
+class Question extends Model {}
 
-function createUserModel(s = sequelize) {
-  return User.init(
+function createQuestionModel(s = sequelize) {
+  return Question.init(
     {
-      userId: {
+      qid: {
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
         allowNull: false,
       },
-      username: {
+      difficulty: {
+        type: DataTypes.ENUM("EASY", "MEDIUM", "HARD"),
+        allowNull: false,
+      },
+      title: {
         type: DataTypes.STRING,
         unique: true,
         allowNull: false,
       },
-      password: {
-        type: DataTypes.STRING,
+      content: {
+        type: DataTypes.TEXT,
         allowNull: false,
-        validate: {
-          isLongEnough(val) {
-            if (val.length <= 7) {
-              throw new Error("Please choose a longer password");
-            }
-          },
-        },
       },
     },
     {
       sequelize: s,
-      modelName: "user",
+      modelName: "question",
       timestamps: false,
     }
   );
 }
 
-module.exports = createUserModel;
+module.exports = createQuestionModel;
