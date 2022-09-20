@@ -1,4 +1,3 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import PropTypes from "prop-types";
 
 function InputBox(props) {

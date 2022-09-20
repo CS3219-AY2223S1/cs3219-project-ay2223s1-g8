@@ -1,5 +1,4 @@
 import InputBox from "../components/InputBox";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 function LoginPage() {
   return (

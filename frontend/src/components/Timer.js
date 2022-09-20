@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { useNavigate } from "react-router-dom";
+import Button from "react-bootstrap/Button";
 
 class Timer extends Component {
   constructor(props) {
@@ -43,12 +44,12 @@ class Timer extends Component {
     return (
       <div>
         <h1>{this.state.seconds}</h1>
-        <button id="btn-start" onClick={this.timer}>
+        <Button id="btn-start" onClick={this.timer}>
           Find Match
-        </button>
-        <button id="btn-cancel" onClick={this.onCancel}>
+        </Button>
+        <Button id="btn-cancel" onClick={this.onCancel}>
           Cancel Match
-        </button>
+        </Button>
       </div>
     );
   }
