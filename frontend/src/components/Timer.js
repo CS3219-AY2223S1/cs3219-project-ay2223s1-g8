@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
+import io from "socket.io-client";
 
 class Timer extends Component {
   constructor(props) {
     super(props);
     this.state = { seconds: 5, matchFound: false };
   }
+  socket = io.connect("http://localhost:5000/test");
+
   onStart = () => {
     if (this.state.matchFound === true) {
       let navigate = useNavigate();
@@ -20,6 +23,7 @@ class Timer extends Component {
   };
 
   timer = () => {
+    this.socket.emit("Start_match", { message: "Starting match" });
     this.f = setInterval(this.onStart, 1000);
     document.getElementById("btn-start").disabled = true;
     document.getElementById("btn-cancel").disabled = false;
