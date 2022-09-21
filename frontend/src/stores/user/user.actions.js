@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { URL_USER_SVC } from "../../utils/configs";
-import { storeToken } from "../../utils/tokenUtils";
+import { getToken, storeToken } from "../../utils/tokenUtils";
 
 export const signupUser = createAsyncThunk(
   "users/signupUser",
@@ -38,6 +38,29 @@ export const loginUser = createAsyncThunk(
       // }
       storeToken("sampe-token");
       return { username, userId: "userid12334", password };
+    } catch (e) {
+      console.log("Error: Unable to login user", e.response.data);
+      return thunkAPI.rejectWithValue(e.response.data);
+    }
+  },
+);
+
+export const changePassword = createAsyncThunk(
+  "users/changePassword",
+  async ({ currPassword, newPassword }, thunkAPI) => {
+    try {
+      const response = await axios.patch(URL_USER_SVC, {
+        token: getToken(),
+        currPassword,
+        newPassword,
+      });
+      const data = response.data;
+
+      if (response.status === 200) {
+        return data;
+      } else {
+        return thunkAPI.rejectWithValue(data);
+      }
     } catch (e) {
       console.log("Error: Unable to login user", e.response.data);
       return thunkAPI.rejectWithValue(e.response.data);

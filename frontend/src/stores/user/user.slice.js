@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { deleteToken } from "../../utils/tokenUtils";
-import { signupUser, loginUser } from "./user.actions";
+import { signupUser, loginUser, changePassword } from "./user.actions";
 
 const initialState = {
   username: "",
@@ -53,6 +53,18 @@ export const userSlice = createSlice({
       state.isFetching = true;
     },
     [loginUser.rejected]: (state, { payload }) => {
+      state.isFetching = false;
+      state.isError = true;
+      state.errorMessage = payload.message;
+    },
+    [changePassword.fulfilled]: (state) => {
+      state.isFetching = false;
+      state.isSuccess = true;
+    },
+    [changePassword.pending]: (state) => {
+      state.isFetching = true;
+    },
+    [changePassword.rejected]: (state, { payload }) => {
       state.isFetching = false;
       state.isError = true;
       state.errorMessage = payload.message;
