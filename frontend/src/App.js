@@ -8,6 +8,7 @@ import LandingPage from "./views/LandingPage";
 import MatchingPage from "./views/MatchingPage";
 import RoomPage from "./views/RoomPage";
 import "./App.scss";
+import ForgotPasswordPage from "./views/forgotPassword/ForgotPasswordPage";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/forgotPassword" element={<ForgotPasswordPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
