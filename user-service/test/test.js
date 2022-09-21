@@ -7,18 +7,9 @@ const createUserModel = require("../model/user-model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const jwtDecode = require("jwt-decode");
+const config = require("../config/config")[process.env.NODE_ENV || "test"];
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.USER,
-  process.env.PASSWORD,
-  {
-    host: process.env.HOST,
-    port: process.env.PORT,
-    dialect: "postgres",
-    logging: false,
-  }
-);
+const sequelize = new Sequelize(config);
 
 const TestUser = createUserModel(sequelize);
 
@@ -36,7 +27,7 @@ describe("User Endpoint", () => {
       expect(res.status).toEqual(201);
       expect(res.body).toHaveProperty("username", "TestUsername");
       expect(res.body).toHaveProperty("token");
-      expect(jwtDecode(res.body.token).username).toBe("TestUsername");
+      expect(jwtDecode(res.body.token).id).toBeTruthy();
       const user = await TestUser.findOne({
         where: { username: "TestUsername" },
       });
@@ -118,6 +109,7 @@ describe("User Endpoint", () => {
       expect(res.status).toEqual(200);
       expect(res.body).toHaveProperty("username", "TestUsername");
       expect(res.body).toHaveProperty("token");
+      expect(res.body).toHaveProperty("userId");
       const { count } = await TestUser.findAndCountAll();
       expect(count).toBe(1);
     });
@@ -178,13 +170,12 @@ describe("User Endpoint", () => {
       });
 
       // Act
-      const token = jwt.sign(
-        { username: "TestUsername" },
-        process.env.TOKEN_KEY,
-        {
-          expiresIn: "2h",
-        }
-      );
+      const addedUser = await TestUser.findOne({
+        where: { username: "TestUsername" },
+      });
+      const token = jwt.sign({ id: addedUser.userId }, process.env.TOKEN_KEY, {
+        expiresIn: "2h",
+      });
       const res = await requestWithSupertest.patch("/api/user").send({
         token,
         currPassword: "TestPassword",
@@ -212,13 +203,12 @@ describe("User Endpoint", () => {
       });
 
       // Act
-      const token = jwt.sign(
-        { username: "TestUsername" },
-        process.env.TOKEN_KEY,
-        {
-          expiresIn: "2h",
-        }
-      );
+      const addedUser = await TestUser.findOne({
+        where: { username: "TestUsername" },
+      });
+      const token = jwt.sign({ id: addedUser.userId }, process.env.TOKEN_KEY, {
+        expiresIn: "2h",
+      });
       const res = await requestWithSupertest.patch("/api/user").send({
         token,
         currPassword: "TestPassword",
@@ -239,13 +229,9 @@ describe("User Endpoint", () => {
       });
 
       // Act
-      const token = jwt.sign(
-        { username: "TestUsername1" },
-        process.env.TOKEN_KEY,
-        {
-          expiresIn: "2h",
-        }
-      );
+      const token = jwt.sign({ id: null }, process.env.TOKEN_KEY, {
+        expiresIn: "2h",
+      });
       const res = await requestWithSupertest.patch("/api/user").send({
         token,
         currPassword: "TestPassword",
@@ -271,13 +257,12 @@ describe("User Endpoint", () => {
       });
 
       // Act
-      const token = jwt.sign(
-        { username: "TestUsername" },
-        process.env.TOKEN_KEY,
-        {
-          expiresIn: "2h",
-        }
-      );
+      const addedUser = await TestUser.findOne({
+        where: { username: "TestUsername" },
+      });
+      const token = jwt.sign({ id: addedUser.userId }, process.env.TOKEN_KEY, {
+        expiresIn: "2h",
+      });
       const res = await requestWithSupertest.patch("/api/user").send({
         token,
         currPassword: "TestPassword1",
@@ -307,13 +292,12 @@ describe("User Endpoint", () => {
       });
 
       // Act
-      const token = jwt.sign(
-        { username: "TestUsername" },
-        process.env.TOKEN_KEY,
-        {
-          expiresIn: "2h",
-        }
-      );
+      const addedUser = await TestUser.findOne({
+        where: { username: "TestUsername" },
+      });
+      const token = jwt.sign({ id: addedUser.userId }, process.env.TOKEN_KEY, {
+        expiresIn: "2h",
+      });
       const res = await requestWithSupertest
         .delete("/api/user")
         .send({ token });
@@ -337,13 +321,9 @@ describe("User Endpoint", () => {
       });
 
       // Act
-      const token = jwt.sign(
-        { username: "TestUsername2" },
-        process.env.TOKEN_KEY,
-        {
-          expiresIn: "2h",
-        }
-      );
+      const token = jwt.sign({ id: null }, process.env.TOKEN_KEY, {
+        expiresIn: "2h",
+      });
       const res = await requestWithSupertest
         .delete("/api/user")
         .send({ token });
