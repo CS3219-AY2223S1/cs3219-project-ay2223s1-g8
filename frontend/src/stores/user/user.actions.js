@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { URL_USER_SVC } from "../../utils/configs";
-import { getToken, storeToken } from "../../utils/tokenUtils";
+import { deleteToken, getToken, storeToken } from "../../utils/tokenUtils";
 
 export const signupUser = createAsyncThunk(
   "users/signupUser",
@@ -62,8 +62,29 @@ export const changePassword = createAsyncThunk(
         return thunkAPI.rejectWithValue(data);
       }
     } catch (e) {
-      console.log("Error: Unable to login user", e.response.data);
+      console.log("Error: Unable to change password", e.response.data);
       return thunkAPI.rejectWithValue(e.response.data);
     }
   },
 );
+
+export const deleteUser = createAsyncThunk("users/deleteUser", async (thunkAPI) => {
+  try {
+    const response = await axios.delete(URL_USER_SVC, {
+      data: {
+        token: getToken(),
+      },
+    });
+    const data = response.data;
+
+    if (response.status === 200) {
+      deleteToken();
+      return data;
+    } else {
+      return thunkAPI.rejectWithValue(data);
+    }
+  } catch (e) {
+    console.log("Error: Unable to delete user", e.response.data);
+    return thunkAPI.rejectWithValue(e.response.data);
+  }
+});

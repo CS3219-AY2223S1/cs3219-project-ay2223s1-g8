@@ -8,20 +8,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logoutUser, userSelector } from "../../stores/user";
 import "./styles.scss";
+import DeleteAccountModal from "../DeleteAccountModal";
 
 function NavBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { username } = useSelector(userSelector);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
 
   const handleChangePassword = () => {
-    console.log("Handle change password");
     setShowChangePasswordModal(true);
   };
 
   const handleDeleteUser = () => {
-    console.log("Handle delete user");
+    setShowDeleteAccountModal(true);
   };
 
   const handleLogout = () => {
@@ -53,6 +54,10 @@ function NavBar() {
       <ChangePasswordModal
         show={showChangePasswordModal}
         handleClose={() => setShowChangePasswordModal(false)}
+      />
+      <DeleteAccountModal
+        show={showDeleteAccountModal}
+        handleClose={() => setShowDeleteAccountModal(false)}
       />
     </>
   );

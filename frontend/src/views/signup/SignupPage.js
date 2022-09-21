@@ -76,7 +76,7 @@ function SignupPage() {
   useEffect(() => {
     if (isSuccess) {
       dispatch(clearState());
-      navigate("/");
+      navigate("/match");
     }
     if (isError) {
       console.log(errorMessage);
