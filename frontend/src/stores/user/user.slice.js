@@ -1,23 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { deleteToken } from "../../utils/tokenUtils";
 import { signupUser, loginUser } from "./user.actions";
+
+const initialState = {
+  username: "",
+  userId: "",
+  isFetching: false,
+  isSuccess: false,
+  isError: false,
+  errorMessage: "",
+};
 
 export const userSlice = createSlice({
   name: "user",
-  initialState: {
-    username: "",
-    userId: "",
-    password: "",
-    isFetching: false,
-    isSuccess: false,
-    isError: false,
-    errorMessage: "",
-  },
+  initialState,
   reducers: {
     clearState: (state) => {
       state.isError = false;
       state.isSuccess = false;
       state.isFetching = false;
 
+      return state;
+    },
+    logoutUser: (state) => {
+      state = initialState;
+      deleteToken();
       return state;
     },
   },
@@ -37,17 +44,15 @@ export const userSlice = createSlice({
       state.errorMessage = payload.message;
     },
     [loginUser.fulfilled]: (state, { payload }) => {
-      state.userId = payload.userId;
-      state.username = payload.name;
       state.isFetching = false;
       state.isSuccess = true;
-      return state;
+      state.userId = payload.userId;
+      state.username = payload.username;
     },
     [loginUser.pending]: (state) => {
       state.isFetching = true;
     },
     [loginUser.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.isFetching = false;
       state.isError = true;
       state.errorMessage = payload.message;
@@ -57,6 +62,6 @@ export const userSlice = createSlice({
 
 export const userSelector = (state) => state.user;
 
-export const { clearState } = userSlice.actions;
+export const { clearState, logoutUser } = userSlice.actions;
 
 export default userSlice.reducer;

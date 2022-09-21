@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { URL_USER_SVC } from "../../utils/configs";
+import { storeToken } from "../../utils/tokenUtils";
 
 export const signupUser = createAsyncThunk(
   "users/signupUser",
@@ -9,7 +10,7 @@ export const signupUser = createAsyncThunk(
       const response = await axios.post(URL_USER_SVC, { username, password });
       const data = response.data;
       if (response.status === 201) {
-        localStorage.setItem("token", data.token);
+        storeToken(data.token);
         return data;
       } else {
         return thunkAPI.rejectWithValue(data);
@@ -30,12 +31,12 @@ export const loginUser = createAsyncThunk(
       // const data = response.data;
 
       // if (response.status === 200) {
-      //   localStorage.setItem("token", data.token);
+      //   storeToken(data.token);
       //   return data;
       // } else {
       //   return thunkAPI.rejectWithValue(data);
       // }
-      localStorage.setItem("token", "sampe-token");
+      storeToken("sampe-token");
       return { username, userId: "userid12334", password };
     } catch (e) {
       console.log("Error: Unable to login user", e.response.data);

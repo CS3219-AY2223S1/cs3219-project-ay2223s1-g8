@@ -66,7 +66,7 @@ function LoginPage() {
           <Form className="Auth-form" noValidate onSubmit={handleSubmit}>
             <div className="Auth-form-content">
               <h3 className="Auth-form-title">Log In</h3>
-              <Form.Group className="mb-3" controlId="username">
+              <Form.Group className="mb-3">
                 <Form.Label>Username</Form.Label>
                 <Form.Control
                   type="text"
@@ -84,7 +84,7 @@ function LoginPage() {
 
               <div className="mb-3">
                 <Form.Label>Password</Form.Label>
-                <InputGroup controlId="password">
+                <InputGroup>
                   <Form.Control
                     type={passwordType}
                     name="password"

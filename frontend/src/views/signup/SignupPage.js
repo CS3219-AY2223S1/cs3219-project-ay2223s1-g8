@@ -91,7 +91,7 @@ function SignupPage() {
           <Form className="Auth-form" noValidate onSubmit={handleSubmit}>
             <div className="Auth-form-content">
               <h3 className="Auth-form-title">Sign Up</h3>
-              <Form.Group className="mb-3" controlId="username">
+              <Form.Group className="mb-3">
                 <Form.Label>Username</Form.Label>
                 <Form.Control
                   type="text"
@@ -109,7 +109,7 @@ function SignupPage() {
 
               <div className="mb-3">
                 <Form.Label>Password</Form.Label>
-                <InputGroup controlId="password">
+                <InputGroup>
                   <Form.Control
                     type={passwordType}
                     name="password"
@@ -138,7 +138,7 @@ function SignupPage() {
 
               <div className="mb-3">
                 <Form.Label>Confirm Password</Form.Label>
-                <InputGroup controlId="confirmPassword">
+                <InputGroup>
                   <Form.Control
                     type={confirmPasswordType}
                     name="confirmPassword"
