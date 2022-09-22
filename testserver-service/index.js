@@ -5,16 +5,21 @@ let server = http.createServer(app)
 const socket = require('socket.io')(server, {
     cors: {
       origin: "*",
+      methods: ["POST", "GET"]
     },
 });
 
-
 socket.on('connection', (socketConn) => {
     console.log(socketConn.id)
-    socket.on("Start_match", (data) => {
-        console.log(data)
+
+    socketConn.on('start match', (data) => {
+        console.log(data);
+        setTimeout(() => { socketConn.emit("match found", {roomId: 5}); }, 5000);
+        
     })
 })
+
+
 
 server.listen(5000, () => {
     console.log("Server is up and running at port: 5000")
