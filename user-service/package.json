@@ -3,13 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-<<<<<<< HEAD
-  "type": "module",
-  "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-=======
   "scripts": {
     "dev": "cross-env NODE_ENV=dev nodemon index.js",
     "start": "cross-env NODE_ENV=dev node index.js",
@@ -17,21 +10,11 @@
     "pretest": "cross-env NODE_ENV=test npm run migrate:reset",
     "migrate:reset": "npx sequelize-cli db:migrate:undo:all && npm run migrate",
     "migrate": "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
->>>>>>> frontend/socket
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-<<<<<<< HEAD
-    "nodemon": "^2.0.19"
-  },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.1",
-    "express": "^4.18.1",
-    "mongoose": "^6.4.5"
-=======
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "cross-env": "^7.0.3",
     "eslint": "^8.23.0",
@@ -64,6 +47,5 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/"
     ]
->>>>>>> frontend/socket
   }
 }
