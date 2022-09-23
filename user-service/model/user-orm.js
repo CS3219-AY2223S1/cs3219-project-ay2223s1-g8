@@ -9,6 +9,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const jwtDecode = require("jwt-decode");
 const { DbInvalidUserError } = require("../errors");
+const e = require("express");
 require("dotenv/config");
 
 async function ormCreateUser(username, password) {
@@ -55,6 +56,19 @@ async function ormGetUser(username, password) {
   return res;
 }
 
+async function ormCheckUsername(username) {
+  try {
+    await getUser(username);
+    return true;
+  } catch (err) {
+    if (err instanceof DbInvalidUserError) {
+      return false;
+    } else {
+      throw e;
+    }
+  }
+}
+
 async function ormUpdateUser(token, currPassword, newPassword) {
   const userId = jwtDecode(token).id;
   const user = await getUserById(userId);
@@ -77,4 +91,5 @@ module.exports = {
   ormGetUser,
   ormUpdateUser,
   ormDeleteUser,
+  ormCheckUsername,
 };

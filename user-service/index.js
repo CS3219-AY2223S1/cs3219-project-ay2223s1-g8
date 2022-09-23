@@ -13,17 +13,19 @@ const {
   getUser,
   updateUser,
   deleteUser,
+  checkUsername,
 } = require("./controller/user-controller.js");
 
 const router = express.Router();
 
 // Controller will contain all the User-defined Routes
-router.get("/", getUser);
-router.post("/", createUser);
-router.patch("/", updateUser);
-router.delete("/", deleteUser);
+router.post("/user", createUser);
+router.post("/session", getUser);
+router.patch("/user", updateUser);
+router.delete("/user", deleteUser);
+router.post("/username", checkUsername);
 
-app.use("/api/user", router).all((_, res) => {
+app.use("/api", router).all((_, res) => {
   res.setHeader("content-type", "application/json");
   res.setHeader("Access-Control-Allow-Origin", "*");
 });
