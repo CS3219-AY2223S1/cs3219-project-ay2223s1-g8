@@ -24,12 +24,12 @@ class MatchController {
     return !(matchPotentials === null || matchPotentials.length === 0);
   }
 
-  async createMatchPotential(userId, level) {
+  async createMatchPotential(userId, level, socketId) {
     const hasMatchPotential = await this.hasMatchPotential(userId);
     if (hasMatchPotential) {
       throw new DuplicateMatchPotentialError();
     }
-    return await this.models.MatchPotential.create({ userId, level });
+    return await this.models.MatchPotential.create({ userId, level, socketId });
   }
 
   async findOneMatchPotential(userId) {

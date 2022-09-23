@@ -9,69 +9,67 @@ const {
 } = require("../utils/errors");
 const Mutex = require("async-mutex").Mutex;
 
-async function findMatch(req, res) {
-  const { userId, level } = req.body;
+async function findMatch(req, socketId) {
+  const { userId, difficulty } = req;
   var resp = {};
   const mutex = new Mutex();
-
+  const release = await mutex.acquire();
   try {
-    const release = await mutex.acquire();
-
     // Check if user has found a match
     const hasFoundMatch = await matchController.checkIsUserMatched(userId);
     if (hasFoundMatch) {
       console.log(`User with userId=${userId} has already found a match`);
-      resp.status = MatchState.MatchFound;
-      //return resp;
+      resp.status = MatchState.MatchExists;
       release();
-      console.log(resp);
-      return res.status(200).json({ message: "user has found match already" });
+      return resp;
+      //return res.status(200).json({ message: "user has found match already" });
     }
 
     // Check if user is waiting for a match
     const isWaitingMatch = await matchController.hasMatchPotential(userId);
     if (isWaitingMatch) {
       console.log(`User with userId=${userId} is waiting for a match`);
+      resp.userId = userId;
       resp.status = MatchState.MatchWaiting;
       release();
-      console.log(resp);
-      return res
-        .status(200)
-        .json({ message: "user is currently waiting for match" });
+      return resp;
+      // .status(200)
+      //  .json({ message: "user is currently waiting for match" });
       //return resp;
     }
 
     // Check if user can find a match
-    const match = await matchController.findMatchesWhereLevel(level);
+    const match = await matchController.findMatchesWhereLevel(difficulty);
     if (match === null) {
       console.log(`User with userId=${userId} was unable to find a match`);
       const waitingMatch = await matchController.createMatchPotential(
         userId,
-        level
+        difficulty,
+        socketId
       );
       resp.status = MatchState.MatchWaiting;
-      //return resp;
-      console.log(resp);
       release();
-      return res.status(200).json({ message: "no match found" });
+      return resp;
+      //return res.status(200).json({ message: "no match found" });
     } else {
       console.log(`User with userId=${userId} has found a match`);
       const matchedUserId = match.dataValues.userId;
+      const matchedUserSocketId = match.dataValues.socketId;
       const removeMatchedUser = await matchController.deleteMatchPotential(
         matchedUserId
       );
       const newMatch = await matchController.createMatched(
         userId,
         matchedUserId,
-        level
+        difficulty
       );
       resp.status = MatchState.MatchFound;
       resp.matchId = newMatch.dataValues.matchedId;
       resp.matchedUserId = matchedUserId;
-      console.log(resp);
+      resp.matchedUserSocketId = matchedUserSocketId;
       release();
-      // return resp;
-      return res.status(200).json({ message: "match found" });
+      return resp;
+      //return res.status(200).json({ message: "match found" });
     }
   } catch (err) {
     if (err instanceof DuplicateMatchPotentialError) {
@@ -86,15 +84,15 @@ async function findMatch(req, res) {
     }
     console.log(err);
     release();
-    return res.status(400);
+    //return res.status(400);
   }
 }
 
-async function cancelMatch(req, res) {
+async function cancelMatch(req) {
   const mutex = new Mutex();
   const release = await mutex.acquire();
   var resp = {};
-  const { userId } = req.body;
+  const { userId } = req;
   try {
     // Remove any existing match
     const match = await matchController.findMatchedWhereUserId(userId);
@@ -107,8 +105,9 @@ async function cancelMatch(req, res) {
     const deleteMatchPotential = await matchController.deleteMatchPotential(
       userId
     );
+    resp.status = MatchState.MatchedCancelled;
     release();
-    return res.status(200).json({ message: "all matches removed" });
+    return resp;
   } catch (err) {
     if (err instanceof NoMatchedError) {
       console.log(err);
@@ -119,7 +118,6 @@ async function cancelMatch(req, res) {
     }
     console.log(err);
     release();
-    return res.status(400);
   }
 }
 

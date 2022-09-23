@@ -1,24 +1,32 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-    const MatchPotential = sequelize.define('MatchPotential', {
-        userId: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            primaryKey: true,
-        },
-        level: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-    }, {
-        timestamps: true,
-        updatedAt: false,
-    });
+  const MatchPotential = sequelize.define(
+    "MatchPotential",
+    {
+      userId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        primaryKey: true,
+      },
+      level: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      socketId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+    },
+    {
+      timestamps: true,
+      updatedAt: false,
+    }
+  );
 
-    // creates a table if it does not exist
-    // { force: true } - new db in each initialization)
-    sequelize.sync();
-    console.log('[Database] Match Potential Model initialized');
-    return MatchPotential;
-}
+  // creates a table if it does not exist
+  // { force: true } - new db in each initialization)
+  sequelize.sync();
+  console.log("[Database] Match Potential Model initialized");
+  return MatchPotential;
+};

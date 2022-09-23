@@ -5,6 +5,7 @@ const MatchState = {
   MatchNotFound: "Match Not Found",
   MatchWaiting: "Match Waiting",
   MatchExists: "Match Already Exists",
+  MatchedCancelled: "Match Cancelled",
 };
 
 // Generate unique match id

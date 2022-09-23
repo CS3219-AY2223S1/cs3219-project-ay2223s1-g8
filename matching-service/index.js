@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const http = require("http");
 const database = require("./database");
-const { Server } = require("socket.io");
 
 const config = require("./config")[process.env.NODE_ENV || "development"];
 
@@ -24,9 +23,10 @@ app.get("/", (req, res) => {
 });
 
 const httpServer = http.createServer(app);
-const io = new Server(httpServer, {
+const io = require("socket.io")(httpServer, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
+    methods: ["POST", "GET"],
   },
 });
 
@@ -36,13 +36,18 @@ io.on("connection", (socket) => {
   // Handle match event
   socket.on("find match", (req) => {
     console.log(`User socketID=${socket.id} finding match`);
-    findMatch(req).then((resp) => {
+    findMatch(req, socket.id).then((resp) => {
+      console.log(resp);
       if (resp.status == "Match Found") {
         socket.join(resp.matchId);
-        io.sockets.sockets.get(resp.matchedUserId).join(resp.matchId);
+        io.sockets.sockets.get(resp.matchedUserSocketId).join(resp.matchId);
         io.to(resp.matchId).emit("match found", resp);
+        // new
+        socket.rooms.forEach((roomId) => {
+          console.log(roomId);
+        });
       } else {
-        socket.emit("Match Not Found", resp);
+        socket.emit("waiting match", resp);
       }
     });
   });
@@ -50,17 +55,17 @@ io.on("connection", (socket) => {
   // Handle cancel match event
   socket.on("cancel match", (req) => {
     console.log(`User socketID=${socket.id} cancel match`);
-    socket.rooms.forEach((matchId) => {
-      // Leave all rooms except for default room
-      if (matchId != socket.id) {
-        io.to(matchId).emit("match cancelled");
-        io.socketsLeave(matchId); // Remove all sockets from matched rooms
-      }
-    });
-
     // Cancels any existing match and all waiting matches
     cancelMatch(req).then((resp) => {
-      console.log(resp);
+      socket.rooms.forEach((matchId) => {
+        // Leave all rooms except for default room
+        console.log(matchId);
+        if (matchId != socket.id) {
+          console.log("HERE");
+          io.to(matchId).emit("match cancelled", resp);
+          io.socketsLeave(matchId); // Remove all sockets from matched rooms
+        }
+      });
     });
   });
 
