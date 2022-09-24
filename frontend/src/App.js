@@ -4,7 +4,7 @@ import PrivateRoutes from "./routes/PrivateRoutes";
 import PublicRoutes from "./routes/PublicRoutes";
 import LoginPage from "./views/login/LoginPage";
 import SignupPage from "./views/signup/SignupPage";
-import LandingPage from "./views/LandingPage";
+import LandingPage from "./views/landing/LandingPage";
 import MatchingPage from "./views/MatchingPage";
 import RoomPage from "./views/RoomPage";
 import "./App.scss";
