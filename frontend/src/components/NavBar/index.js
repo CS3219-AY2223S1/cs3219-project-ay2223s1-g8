@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { logoutUser, userSelector } from "../../stores/user";
 import logo from "../../assets/logo-white.png";
 import "./styles.scss";
+import { hasToken } from "../../utils/tokenUtils";
 
 function NavBar() {
   const dispatch = useDispatch();
@@ -31,10 +32,23 @@ function NavBar() {
     navigate("/login");
   };
 
+  if (!hasToken()) {
+    return (
+      <Navbar bg="light" fixed="top">
+        <Container>
+          <Navbar.Brand href="/" className="Navbar-peerprep text-white">
+            <img alt="" src={logo} width="30" height="30" className="d-inline-block align-top" />{" "}
+            PeerPrep
+          </Navbar.Brand>
+        </Container>
+      </Navbar>
+    );
+  }
+
   return (
     <>
-      <Navbar bg="light" expand="lg" fixed="top">
-        <Container fluid className="Navbar-container">
+      <Navbar bg="light" fixed="top">
+        <Container>
           <Navbar.Brand href="/match" className="Navbar-peerprep text-white">
             <img alt="" src={logo} width="30" height="30" className="d-inline-block align-top" />{" "}
             PeerPrep

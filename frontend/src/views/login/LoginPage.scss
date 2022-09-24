@@ -1,9 +1,12 @@
+@import "../../scss/theme.scss";
+
 .Auth-form-container {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
   height: 100vh;
+  background-color: $bg-light;
 }
 
 .Auth-form {
