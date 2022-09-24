@@ -13,15 +13,22 @@
 // fonts
 @import url("https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300;400;500;600;700&display=swap");
 
+// colors
+$grullo: #a99985;
+$bone: #dad2bc;
+$isabelline: #f5f1ed;
+$slate-grey: #70798c;
+$raisin-black: #252323;
+
 // custom variables
-$primary: #5a352a;
-$secondary: #fee9e1;
+$primary: $grullo;
+$secondary: $bone;
 $info: #fad4c0;
 $success: #64b6ac;
-$light: #9d847d;
-$dark: #03312e;
+$light: $grullo;
+$dark: $raisin-black;
 
-$bg-light: #fff9f6;
+$bg-light: $isabelline;
 
 $font-overpass-mono: "Overpass Mono", monospace;
 

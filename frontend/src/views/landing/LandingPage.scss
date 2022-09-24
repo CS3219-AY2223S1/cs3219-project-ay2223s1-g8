@@ -12,6 +12,7 @@
   justify-content: center;
   align-items: center;
   padding: 2em;
+  height: 100%;
 }
 
 .text-peerprep {
@@ -19,12 +20,20 @@
   font-weight: 700;
 }
 
+.desc-container {
+  width: 80%;
+}
+
 .text-peerprep-desc {
   font-family: $font-overpass-mono;
   text-align: center;
 }
 
-.button-container {
+.btn-container {
   display: flex;
   gap: 4em;
+}
+
+.landing-btn {
+  min-width: 10em;
 }
