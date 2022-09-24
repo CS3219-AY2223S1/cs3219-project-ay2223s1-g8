@@ -35,7 +35,7 @@ function NavBar() {
   if (!hasToken()) {
     return (
       <Navbar bg="light" fixed="top">
-        <Container>
+        <Container fluid>
           <Navbar.Brand href="/" className="Navbar-peerprep text-white">
             <img alt="" src={logo} width="30" height="30" className="d-inline-block align-top" />{" "}
             PeerPrep
@@ -48,7 +48,7 @@ function NavBar() {
   return (
     <>
       <Navbar bg="light" fixed="top">
-        <Container>
+        <Container fluid>
           <Navbar.Brand href="/match" className="Navbar-peerprep text-white">
             <img alt="" src={logo} width="30" height="30" className="d-inline-block align-top" />{" "}
             PeerPrep
