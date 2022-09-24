@@ -14,6 +14,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300;400;500;600;700&display=swap");
 
 // colors
+$shadow: #998670;
 $grullo: #a99985;
 $bone: #dad2bc;
 $isabelline: #f5f1ed;
@@ -25,7 +26,7 @@ $primary: $grullo;
 $secondary: $bone;
 $info: #fad4c0;
 $success: #64b6ac;
-$light: $grullo;
+$light: $shadow;
 $dark: $raisin-black;
 
 $bg-light: $isabelline;

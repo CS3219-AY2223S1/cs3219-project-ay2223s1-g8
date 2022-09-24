@@ -166,7 +166,7 @@ function SignupPage() {
               </div>
 
               <div className="d-grid gap-2 mt-3">
-                <Button className="btn btn-primary" variant="primary" type="submit">
+                <Button className="btn btn-primary text-white" variant="primary" type="submit">
                   {isFetching ? (
                     <>
                       <Spinner animation="border" size="sm" role="status" aria-hidden="true" />

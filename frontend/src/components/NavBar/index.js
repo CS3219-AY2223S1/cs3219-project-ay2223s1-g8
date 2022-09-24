@@ -4,11 +4,12 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import ChangePasswordModal from "../ChangePasswordModal";
+import DeleteAccountModal from "../DeleteAccountModal";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logoutUser, userSelector } from "../../stores/user";
+import logo from "../../assets/logo-white.png";
 import "./styles.scss";
-import DeleteAccountModal from "../DeleteAccountModal";
 
 function NavBar() {
   const dispatch = useDispatch();
@@ -32,14 +33,17 @@ function NavBar() {
 
   return (
     <>
-      <Navbar bg="dark" variant="dark">
-        <Container fluid className="Nav-bar-container">
-          <Navbar.Brand href="#home">PeerPrep</Navbar.Brand>
+      <Navbar bg="light" expand="lg" fixed="top">
+        <Container fluid className="Navbar-container">
+          <Navbar.Brand href="/match" className="Navbar-peerprep text-white">
+            <img alt="" src={logo} width="30" height="30" className="d-inline-block align-top" />{" "}
+            PeerPrep
+          </Navbar.Brand>
           <Nav>
             <NavDropdown
               title={`Welcome, ${username || "user"}`}
-              id="basic-nav-dropdown"
-              className="Nav-bar-dropdown"
+              id="Navbar-dropdown-text"
+              align="end"
             >
               <NavDropdown.Item onClick={handleChangePassword}>Change password</NavDropdown.Item>
               <NavDropdown.Item onClick={handleDeleteUser}>Delete account</NavDropdown.Item>
