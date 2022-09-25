@@ -14,19 +14,21 @@ const {
 
 async function getQuestionByDifficulty(req, res) {
   try {
-    const { difficulty } = req.body;
+    const { matchId, difficulty } = req.body;
 
-    if (!difficulty) {
+    if (!matchId || !difficulty) {
       throw new ValidationError();
     }
 
-    const resp = await ormGetQuestionByDifficulty(difficulty);
+    const resp = await ormGetQuestionByDifficulty(matchId, difficulty);
     return res.status(200).json(resp);
   } catch (err) {
     console.log(err);
 
     if (err instanceof ValidationError) {
-      return res.status(400).json({ message: "Difficulty missing!" });
+      return res
+        .status(400)
+        .json({ message: "Match id or Difficulty missing!" });
     } else if (err instanceof DbInvalidDifficultyError) {
       return res.status(400).json({ message: "Invalid difficulty!" });
     } else if (err instanceof DbNoMatchingQuestionsError) {
