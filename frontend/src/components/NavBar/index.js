@@ -5,17 +5,16 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import ChangePasswordModal from "../ChangePasswordModal";
 import DeleteAccountModal from "../DeleteAccountModal";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logoutUser, userSelector } from "../../stores/user";
+import { logoutUser } from "../../stores/user";
+import { getUsername, hasToken } from "../../utils/localStorageUtils";
 import logo from "../../assets/logo-white.png";
 import "./styles.scss";
-import { hasToken } from "../../utils/tokenUtils";
 
 function NavBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { username } = useSelector(userSelector);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
 
@@ -55,7 +54,7 @@ function NavBar() {
           </Navbar.Brand>
           <Nav>
             <NavDropdown
-              title={`Welcome, ${username || "user"}`}
+              title={`Welcome, ${getUsername() || "user"}`}
               id="Navbar-dropdown-text"
               align="end"
             >
