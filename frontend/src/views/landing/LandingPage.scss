@@ -1,0 +1,38 @@
+@import "../../scss/theme.scss";
+@import url("https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300;400;500;600;700&display=swap");
+
+.landing-container {
+  display: flex;
+  flex-direction: column;
+  background-color: $bg-light;
+  justify-content: center;
+  align-items: center;
+  padding: 4vh;
+  height: 100vh;
+  padding-top: 40px;
+}
+
+.img-pair-prog {
+  margin-top: 14vh;
+  margin-bottom: 4vh;
+}
+
+.text-peerprep {
+  font-family: $font-overpass-mono;
+  font-weight: 700;
+}
+
+.desc-container {
+  width: 80%;
+}
+
+.text-peerprep-desc {
+  font-family: $font-overpass-mono;
+  text-align: center;
+}
+
+.landing-btn {
+  min-width: 16vw;
+  margin-left: 2vw;
+  margin-right: 2vw;
+}

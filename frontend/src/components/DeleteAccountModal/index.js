@@ -7,6 +7,7 @@ import ToastContainer from "react-bootstrap/ToastContainer";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { clearState, deleteUser, userSelector } from "../../stores/user";
+import "./styles.scss";
 
 const DeleteAccountModal = ({ show, handleClose }) => {
   const dispatch = useDispatch();
@@ -80,7 +81,7 @@ const DeleteAccountModal = ({ show, handleClose }) => {
         </Modal.Header>
         <Modal.Body>Be careful!! This will erase all your user data.</Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose} variant="secondary">
+          <Button onClick={handleClose} variant="outline-primary">
             Cancel
           </Button>
           <Button onClick={handleDelete} variant="danger">
