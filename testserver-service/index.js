@@ -17,6 +17,10 @@ socket.on('connection', (socketConn) => {
         setTimeout(() => { socketConn.emit("match found", {roomId: 5}); }, 5000);
         
     })
+
+    socketConn.on("Cancel match search", (data) => {
+        console.log("Cancel event detected")
+    });
 })
 
 
