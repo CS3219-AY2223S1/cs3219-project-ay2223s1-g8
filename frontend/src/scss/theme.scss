@@ -10,9 +10,28 @@
 //   "dark":       $dark
 // );
 
+// fonts
+@import url("https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300;400;500;600;700&display=swap");
+
+// colors
+$shadow: #998670;
+$grullo: #a99985;
+$bone: #dad2bc;
+$isabelline: #f5f1ed;
+$slate-grey: #70798c;
+$raisin-black: #252323;
+
 // custom variables
-$primary: #5646ff;
-$light: #5646ff;
+$primary: $grullo;
+$secondary: $bone;
+$info: #fad4c0;
+$success: #64b6ac;
+$light: $shadow;
+$dark: $raisin-black;
+
+$bg-light: $isabelline;
+
+$font-overpass-mono: "Overpass Mono", monospace;
 
 // import functions and variables
 @import "../../node_modules/bootstrap/scss/functions";
@@ -21,7 +40,6 @@ $light: #5646ff;
 $custom-theme-colors: (
   "altlight": #f2ebfa,
   "altdark": #522192,
-  "success": $teal-500,
 );
 
 // adding new variables to the theme-colors

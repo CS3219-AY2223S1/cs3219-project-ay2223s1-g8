@@ -1,4 +1,11 @@
-.Nav-bar-container {
-  padding-left: 2em;
-  padding-right: 2em;
+@import "../../scss/theme.scss";
+@import url("https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300;400;500;600;700&display=swap");
+
+.Navbar-peerprep {
+  font-family: $font-overpass-mono;
+}
+
+#Navbar-dropdown-text {
+  color: white;
+  font-weight: bold;
 }

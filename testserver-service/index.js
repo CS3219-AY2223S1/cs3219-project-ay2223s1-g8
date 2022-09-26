@@ -9,8 +9,20 @@ const socket = require("socket.io")(server, {
   },
 });
 
-socket.on("connection", (socketConn) => {
-  console.log(socketConn.id);
+socket.on('connection', (socketConn) => {
+    console.log(socketConn.id)
+
+    socketConn.on('start match', (data) => {
+        console.log(data);
+        setTimeout(() => { socketConn.emit("match found", {roomId: 5}); }, 5000);
+        
+    })
+
+    socketConn.on("Cancel match search", (data) => {
+        console.log("Cancel event detected")
+    });
+})
+
 
   socketConn.on("find match", (data) => {
     console.log(data);
