@@ -36,8 +36,6 @@ function MatchTimer() {
     console.log(data);
   });
 
-  socket.on;
-
   useEffect(() => {
     if (status) {
       navigate("/room-1");
