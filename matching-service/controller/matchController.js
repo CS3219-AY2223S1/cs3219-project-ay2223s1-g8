@@ -21,7 +21,8 @@ class MatchController {
     const matchPotentials = await this.models.MatchPotential.findOne({
       where: { userId },
     });
-    return !(matchPotentials === null || matchPotentials.length === 0);
+    console.log(matchPotentials);
+    return !(matchPotentials == null || matchPotentials.length === 0);
   }
 
   async createMatchPotential(userId, level, socketId) {
@@ -43,7 +44,8 @@ class MatchController {
   }
 
   async deleteMatchPotential(userId) {
-    if (!this.hasMatchPotential(userId)) {
+    const hasMatchPotential = await this.hasMatchPotential(userId);
+    if (!hasMatchPotential) {
       throw new InvalidMatchPotentialError();
     }
     await this.models.MatchPotential.destroy({ where: { userId } });
@@ -51,10 +53,19 @@ class MatchController {
   }
 
   async findMatchesWhereLevel(level) {
-    const matches = await this.models.MatchPotential.findOne({
-      where: { level },
-      order: [["createdAt", "ASC"]],
-    });
+    let matches;
+    if (level == "any") {
+      matches = await this.models.MatchPotential.findOne({
+        order: [["createdAt", "ASC"]],
+      });
+    } else {
+      matches = await this.models.MatchPotential.findOne({
+        where: {
+          [Op.or]: [{ level: level }, { level: "any" }],
+        },
+        order: [["createdAt", "ASC"]],
+      });
+    }
     if (matches === null || matches.length === 0) {
       //throw new NoMatchPotentialError();
       return null;
@@ -105,7 +116,8 @@ class MatchController {
   }
 
   async removeMatched(matchedId) {
-    if (!this.hasMatchedId(matchedId)) {
+    const hasMatchedId = await this.hasMatchedId(matchedId);
+    if (!hasMatchedId) {
       throw new NoMatchedError();
     }
     await this.models.Matched.destroy({ where: { matchedId } });
