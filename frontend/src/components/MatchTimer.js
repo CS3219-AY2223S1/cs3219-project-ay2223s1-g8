@@ -68,14 +68,10 @@ function MatchTimer() {
   };
 
   const cancelTimer = () => {
-    socket.emit("cancel match", {
-      message: "cancel a match",
-      userId: "tester1",
-    });
     clearInterval(intervalId);
     setCount(10);
     setStart(false);
-    socket.emit("Cancel match search", { userId: "tester1" });
+    socket.emit("cancel match", { userId: "tester1" });
     closePopUp();
   };
 
