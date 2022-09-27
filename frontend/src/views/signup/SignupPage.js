@@ -5,6 +5,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Spinner from "react-bootstrap/Spinner";
 import NavBar from "../../components/NavBar";
 import { Link, useNavigate } from "react-router-dom";
+import { checkUsernameAvailability } from "../../utils/authUtils";
 // form validation libraries
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -24,9 +25,12 @@ const signUpSchema = Yup.object().shape({
   username: Yup.string()
     .required("Username is required")
     .min(2, "Too Short! - should be 4 characters minimum")
-    .max(50, "Too Long! - should be 50 characters maximum"),
-  // TODO: check for unique username from database
-  // .test("username", "This username has already been taken", (username) => checkAvailabilityUsername(username));
+    .max(50, "Too Long! - should be 50 characters maximum")
+    .test(
+      "username",
+      "This username has already been taken",
+      async (username) => await checkUsernameAvailability(username),
+    ),
 
   password: Yup.string()
     .required("Password is required")

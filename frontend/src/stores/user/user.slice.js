@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { deleteToken } from "../../utils/tokenUtils";
+import { deleteToken } from "../../utils/localStorageUtils";
 import { signupUser, loginUser, changePassword, deleteUser } from "./user.actions";
 
 const initialState = {
