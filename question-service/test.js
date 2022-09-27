@@ -3,15 +3,29 @@ const server = require("./index.js");
 const supertest = require("supertest");
 const requestWithSupertest = supertest(server.app);
 const { Sequelize } = require("sequelize");
-const createQuestionModel = require("./model/question-model");
+const {
+  createQuestionModel,
+  createAssignedQuestionsModel,
+} = require("./model/question-model");
 const config = require("./config/config")[process.env.NODE_ENV || "test"];
 
 const sequelize = new Sequelize(config);
 
 const TestQuestion = createQuestionModel(sequelize);
+const TestAssignedQuestions = createAssignedQuestionsModel({
+  s: sequelize,
+  questionModel: TestQuestion,
+});
 
 describe("Question Service Endpoints", () => {
-  afterEach(async () => await TestQuestion.truncate());
+  beforeEach(async () => {
+    try {
+      await TestQuestion.sync({ force: true });
+      await TestAssignedQuestions.sync({ force: true });
+    } catch (e) {
+      expect(e).toBe({});
+    }
+  });
 
   describe("POST /question", () => {
     it("should successfully create a new user", async () => {
@@ -88,8 +102,8 @@ describe("Question Service Endpoints", () => {
     });
   });
 
-  describe("GET /question", () => {
-    it("should successfully fetch a question", async () => {
+  describe("POST /random-question", () => {
+    it("should successfully fetch a question when no question has been assigned", async () => {
       // Arrange
       await TestQuestion.create({
         difficulty: "EASY",
@@ -99,8 +113,8 @@ describe("Question Service Endpoints", () => {
 
       // Act
       const res = await requestWithSupertest
-        .get("/api/question")
-        .send({ difficulty: "EASY" });
+        .post("/api/random-question")
+        .send({ matchId: "some-match-id", difficulty: "EASY" });
 
       // Assert
       expect(res.status).toEqual(200);
@@ -108,8 +122,44 @@ describe("Question Service Endpoints", () => {
       expect(res.body).toHaveProperty("difficulty");
       expect(res.body).toHaveProperty("title");
       expect(res.body).toHaveProperty("content");
-      const { count } = await TestQuestion.findAndCountAll();
-      expect(count).toBe(1);
+      const { count: qn } = await TestQuestion.findAndCountAll();
+      expect(qn).toBe(1);
+      const { count: assigned } = await TestAssignedQuestions.findAndCountAll();
+      expect(assigned).toBe(1);
+    });
+
+    it("should successfully fetch a question when question has already been assigned", async () => {
+      try {
+        // Arrange
+        const qn = await TestQuestion.create({
+          difficulty: "EASY",
+          title: "Test title",
+          content: "Test content1",
+        });
+        await TestAssignedQuestions.create({
+          matchId: "some-match-id",
+          qid: qn.qid,
+        });
+
+        // Act
+        const res = await requestWithSupertest
+          .post("/api/random-question")
+          .send({ matchId: "some-match-id", difficulty: "EASY" });
+
+        // Assert
+        expect(res.status).toEqual(200);
+        expect(res.body).toHaveProperty("qid");
+        expect(res.body).toHaveProperty("difficulty");
+        expect(res.body).toHaveProperty("title");
+        expect(res.body).toHaveProperty("content");
+        const { count: qnCount } = await TestQuestion.findAndCountAll();
+        expect(qnCount).toBe(1);
+        const { count: assignedCount } =
+          await TestAssignedQuestions.findAndCountAll();
+        expect(assignedCount).toBe(1);
+      } catch (e) {
+        expect(e).toBe(null);
+      }
     });
 
     it("should throw error when difficulty is invalid", async () => {
@@ -122,8 +172,8 @@ describe("Question Service Endpoints", () => {
 
       // Act
       const res = await requestWithSupertest
-        .get("/api/question")
-        .send({ difficulty: "SUPER EASY" });
+        .post("/api/random-question")
+        .send({ matchId: "some-match-id", difficulty: "SUPER EASY" });
 
       // Assert
       expect(res.status).toEqual(400);
@@ -146,8 +196,8 @@ describe("Question Service Endpoints", () => {
 
       // Act
       const res = await requestWithSupertest
-        .get("/api/question")
-        .send({ difficulty: "MEDIUM" });
+        .post("/api/random-question")
+        .send({ matchId: "some-match-id", difficulty: "MEDIUM" });
 
       // Assert
       expect(res.status).toEqual(400);
@@ -162,7 +212,9 @@ describe("Question Service Endpoints", () => {
 
     it("should throw error when difficulty is not provided", async () => {
       // Act
-      const res = await requestWithSupertest.get("/api/question").send({});
+      const res = await requestWithSupertest
+        .post("/api/random-question")
+        .send({});
 
       // Assert
       expect(res.status).toEqual(400);

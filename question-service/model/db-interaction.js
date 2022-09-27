@@ -1,5 +1,11 @@
-const createQuestionModel = require("./question-model");
+const {
+  createQuestionModel,
+  createAssignedQuestionsModel,
+} = require("./question-model");
 const Question = createQuestionModel();
+const AssignedQuestions = createAssignedQuestionsModel({
+  questionModel: Question,
+});
 const {
   DbDuplicateTitleError,
   DbInvalidIdError,
@@ -14,6 +20,18 @@ async function createQuestion(difficulty, title, content) {
     throw new DbDuplicateTitleError();
   }
   return await Question.create({ difficulty, title, content });
+}
+
+async function getAssignedQuestion(matchId) {
+  await AssignedQuestions.sync();
+  const assignment = await AssignedQuestions.findOne({ where: { matchId } });
+  console.log("assign", assignment);
+  return assignment;
+}
+
+async function assignQuestion(matchId, qid) {
+  await AssignedQuestions.sync();
+  return await AssignedQuestions.create({ matchId, qid });
 }
 
 async function getAllQuestionByDifficulty(difficulty) {
@@ -68,4 +86,6 @@ module.exports = {
   getAllQuestions,
   getQuestionById,
   deleteQuestionById,
+  getAssignedQuestion,
+  assignQuestion,
 };

@@ -8,6 +8,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors()); // config cors so that front-end can use
 app.options("*", cors());
+
 const {
   createQuestion,
   getQuestionByDifficulty,
@@ -18,7 +19,7 @@ const {
 const router = express.Router();
 
 // Controller will contain all the Question-related Routes
-router.get("/question", getQuestionByDifficulty);
+router.post("/random-question", getQuestionByDifficulty);
 router.get("/questions", getAllQuestions);
 router.post("/question", createQuestion);
 router.delete("/question", deleteQuestion);
