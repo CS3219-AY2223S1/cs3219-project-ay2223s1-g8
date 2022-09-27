@@ -1,4 +1,6 @@
-// token expiries in 2h
+/*
+ * handles token (token expiries in 2h)
+ */
 const tokenExpiryMin = 120;
 const tokenExpiryMs = tokenExpiryMin * 60000;
 
@@ -32,4 +34,21 @@ export const deleteToken = () => {
   if (hasToken()) {
     localStorage.removeItem(TOKEN);
   }
+};
+
+/*
+ * handles username
+ */
+const USERNAME = "username";
+
+export const storeUsername = (username) => {
+  localStorage.setItem(USERNAME, username);
+};
+
+export const getUsername = () => {
+  return localStorage.getItem(USERNAME);
+};
+
+export const deleteUsername = () => {
+  localStorage.removeItem(USERNAME);
 };

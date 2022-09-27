@@ -9,6 +9,7 @@ const {
   ormGetUser,
   ormUpdateUser,
   ormDeleteUser,
+  ormCheckUsername,
 } = require("../model/user-orm.js");
 
 async function createUser(req, res) {
@@ -68,6 +69,30 @@ async function getUser(req, res) {
     }
   }
 }
+
+async function checkUsername(req, res) {
+  try {
+    const { username } = req.body;
+
+    if (!username) {
+      throw new ValidationError();
+    }
+
+    const isInDb = await ormCheckUsername(username);
+    return res.status(200).json(isInDb);
+  } catch (err) {
+    console.log(err);
+
+    if (err instanceof ValidationError) {
+      return res.status(400).json({ message: "Username missing!" });
+    } else {
+      return res
+        .status(500)
+        .json({ message: "Database failure when fetching new user!" });
+    }
+  }
+}
+
 async function updateUser(req, res) {
   try {
     const { token, currPassword, newPassword } = req.body;
@@ -93,7 +118,10 @@ async function updateUser(req, res) {
         .json({ message: "Token and/or Passwords are missing!" });
     } else if (err instanceof PasswordUnchangedError) {
       return res.status(202).json({ message: "Password unchanged" });
-    } else if (err instanceof DbInvalidUserError) {
+    } else if (
+      err instanceof DbInvalidUserError ||
+      err.name === "InvalidTokenError"
+    ) {
       return res.status(400).json({ message: "Incorrect token or password!" });
     } else {
       return res
@@ -119,7 +147,10 @@ async function deleteUser(req, res) {
 
     if (err instanceof ValidationError) {
       return res.status(400).json({ message: "Token is missing!" });
-    } else if (err instanceof DbInvalidUserError) {
+    } else if (
+      err instanceof DbInvalidUserError ||
+      err.name === "InvalidTokenError"
+    ) {
       return res.status(400).json({ message: "Incorrect token!" });
     } else {
       return res
@@ -134,4 +165,5 @@ module.exports = {
   getUser,
   updateUser,
   deleteUser,
+  checkUsername,
 };
