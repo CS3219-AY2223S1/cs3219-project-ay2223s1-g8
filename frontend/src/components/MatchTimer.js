@@ -30,7 +30,7 @@ function MatchTimer() {
 
   useEffect(() => {
     if (status) {
-      navigate("/room-1");
+      navigate("/room");
     }
     if (start) {
       if (count >= 0) {

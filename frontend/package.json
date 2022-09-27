@@ -15,14 +15,22 @@
     "bootstrap-icons": "^1.9.1",
     "formik": "^2.2.9",
     "prop-types": "^15.8.1",
+    "quill": "^1.3.7",
+    "quill-cursors": "^4.0.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.2",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
+    "rich-text": "^4.1.0",
+    "sass": "^1.55.0",
+    "sharedb": "^3.1.0",
     "socket.io-client": "^4.5.1",
     "web-vitals": "^2.1.4",
+    "ws": "^7.3.1",
+    "y-quill": "^0.1.5",
+    "y-webrtc": "^10.2.3",
     "yup": "^0.32.11"
   },
   "scripts": {
@@ -33,7 +41,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
     "format-mac": "prettier --write './**/*.{js,jsx,ts,tsx,css,scss,sass,md,json}' --config ./.prettierrc",
-    "format-windows": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,scss,sass,md,json}\" --config ./.prettierrc"
+    "format-windows": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,scss,sass,md,json}\" --config ./.prettierrc",
+    "start": "react-scripts start"
   },
   "eslintConfig": {
     "extends": [
