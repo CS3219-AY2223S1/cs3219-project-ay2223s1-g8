@@ -4,7 +4,7 @@ import io from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import "./MatchTimer.css";
 import Modal from "react-bootstrap/Modal";
-const socket = io.connect("http://localhost:5000");
+const socket = io.connect("http://localhost:8001");
 
 function MatchTimer() {
   const [count, setCount] = useState(10);
@@ -28,6 +28,14 @@ function MatchTimer() {
     setStatus(true);
   });
 
+  socket.on("waiting match", (data) => {
+    console.log(data);
+  });
+
+  socket.on("match cancelled", (data) => {
+    console.log(data);
+  });
+
   useEffect(() => {
     if (status) {
       navigate("/room-1");
@@ -44,7 +52,7 @@ function MatchTimer() {
   }, [start, count]);
 
   const startTimer = () => {
-    socket.emit("start match", {
+    socket.emit("find match", {
       message: "finding a match",
       userId: "tester1",
       difficulty: filters,
@@ -61,7 +69,7 @@ function MatchTimer() {
     clearInterval(intervalId);
     setCount(10);
     setStart(false);
-    socket.emit("Cancel match search", { userId: "tester1" });
+    socket.emit("cancel match", { userId: "tester1" });
     closePopUp();
   };
 
