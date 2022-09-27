@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: peerprep-dev # cluster name
+spec:
+  selector:
+    matchLabels:
+      app: user-service-app
+  template:
+    metadata:
+      labels:
+        app: user-service-app
+    spec:
+      serviceAccountName: cs3219-group8
+      containers:
+      - name: user-service-app
+        image: us-central1-docker.pkg.dev/peerprep-363807/user-service-dev/gke-sql:latest
+        # This app listens on port 8000 for web traffic.
+        ports:
+        - containerPort: 8000
+        env:
+        - name: NODE_ENV
+          value: "dev"
+        - name: USER
+          valueFrom:
+            secretKeyRef:
+              name: gke-cloud-sql-secrets
+              key: username
+        - name: HOST
+          value: "127.0.0.1"
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: gke-cloud-sql-secrets
+              key: password
+        - name: PORT
+          value: "5432"
+        - name: DEV_DB
+          valueFrom:
+            secretKeyRef:
+              name: gke-cloud-sql-secrets
+              key: database
+        - name: TOKEN_KEY
+          valueFrom:
+            secretKeyRef:
+              name: gke-cloud-sql-secrets
+              key: jwt
+      - name: cloud-sql-proxy
+        image: gcr.io/cloudsql-docker/gce-proxy:latest
+        command:
+          - "/cloud_sql_proxy"
+          - "-instances=peerprep-363807:us-central1:user-service=tcp:5432"
+        securityContext:
+          runAsNonRoot: true
