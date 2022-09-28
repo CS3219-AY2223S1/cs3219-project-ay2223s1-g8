@@ -4,6 +4,8 @@ const {
   getAllQuestions,
   getQuestionById,
   deleteQuestionById,
+  getAssignedQuestion,
+  assignQuestion,
 } = require("./db-interaction");
 const { DbInvalidIdError } = require("../errors");
 require("dotenv/config");
@@ -20,10 +22,17 @@ async function ormCreateQuestion(difficulty, title, content) {
   return res;
 }
 
-async function ormGetQuestionByDifficulty(difficulty) {
-  const questions = await getAllQuestionByDifficulty(difficulty);
-  const randomIndex = Math.round(Math.random() * (questions.length - 1));
-  const question = questions[randomIndex];
+async function ormGetQuestionByDifficulty(matchId, difficulty) {
+  let question = {};
+  const assignment = await getAssignedQuestion(matchId);
+  if (assignment != null) {
+    question = await getQuestionById(assignment.dataValues.qid);
+  } else {
+    const questions = await getAllQuestionByDifficulty(difficulty);
+    const randomIndex = Math.round(Math.random() * (questions.length - 1));
+    question = questions[randomIndex];
+    await assignQuestion(matchId, question.qid);
+  }
   const res = {
     qid: question.qid,
     difficulty: question.difficulty,

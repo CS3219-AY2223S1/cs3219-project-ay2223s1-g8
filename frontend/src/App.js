@@ -5,6 +5,7 @@ import PublicRoutes from "./routes/PublicRoutes";
 import LoginPage from "./views/login/LoginPage";
 import SignupPage from "./views/signup/SignupPage";
 import LandingPage from "./views/landing/LandingPage";
+import CollabPage from "./views/collab/CollabPage";
 import MatchingPage from "./views/MatchingPage";
 import RoomPage from "./views/room/RoomPage";
 import "./App.scss";
@@ -19,7 +20,8 @@ function App() {
         <Route path="/room2" element={<Room2 />} />
         <Route element={<PrivateRoutes />}>
           <Route path="/match" element={<MatchingPage />} />
-          {/* <Route path="/room" element={<RoomPage />} /> */}
+          <Route path="/room1" element={<RoomPage />} />
+          <Route path="/collab/:roomId" element={<CollabPage />} />
         </Route>
         <Route element={<PublicRoutes />}>
           <Route path="/" element={<LandingPage />} />
