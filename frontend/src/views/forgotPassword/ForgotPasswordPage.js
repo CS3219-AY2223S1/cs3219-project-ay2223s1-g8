@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import Spinner from "react-bootstrap/Spinner";
 import Toast from "react-bootstrap/esm/Toast";
 import ToastContainer from "react-bootstrap/esm/ToastContainer";
+import NavBar from "../../components/NavBar";
 import { Link, useNavigate } from "react-router-dom";
 // form validation libraries
 import { Formik } from "formik";
@@ -66,6 +67,7 @@ function ForgotPasswordPage() {
 
   return (
     <>
+      <NavBar />
       <Formik initialValues={initialValues} validationSchema={loginSchema} onSubmit={submitForm}>
         {({ values, handleChange, handleSubmit, handleBlur, errors, touched }) => (
           <div className="Auth-form-container">
@@ -88,7 +90,7 @@ function ForgotPasswordPage() {
                 </Form.Group>
 
                 <div className="d-grid gap-2 mt-4">
-                  <Button className="btn btn-primary" variant="primary" type="submit">
+                  <Button className="btn btn-primary text-white" variant="primary" type="submit">
                     {isFetching ? (
                       <Spinner animation="border" size="sm" role="status" aria-hidden="true" />
                     ) : (

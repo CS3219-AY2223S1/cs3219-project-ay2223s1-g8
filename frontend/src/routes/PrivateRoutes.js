@@ -1,5 +1,5 @@
 import { Outlet, Navigate } from "react-router-dom";
-import { hasToken } from "../utils/tokenUtils";
+import { hasToken } from "../utils/localStorageUtils";
 
 const PrivateRoutes = () => {
   return hasToken() ? <Outlet /> : <Navigate to="/login" />;
