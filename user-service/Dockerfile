@@ -1,5 +1,5 @@
 FROM node:16.14.2
-ENV NODE_ENV=dev
+ENV NODE_ENV=prod
 
 WORKDIR /user-service
 
