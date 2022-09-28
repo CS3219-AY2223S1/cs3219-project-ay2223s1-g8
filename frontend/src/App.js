@@ -11,17 +11,18 @@ import RoomPage from "./views/room/RoomPage";
 import "./App.scss";
 import ForgotPasswordPage from "./views/forgotPassword/ForgotPasswordPage";
 import Room2 from "./views/room/Room2";
+import CollabPageV2 from "./views/collab/CollabPageV2";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/room" element={<RoomPage />} />
-        <Route path="/room2" element={<Room2 />} />
+        <Route path="/collabTemp" element={<CollabPageV2 />} />
         <Route element={<PrivateRoutes />}>
           <Route path="/match" element={<MatchingPage />} />
           <Route path="/room1" element={<RoomPage />} />
-          <Route path="/collab/:roomId" element={<CollabPage />} />
+          <Route path="/room2" element={<Room2 />} />
+          <Route path="/collab" element={<CollabPage />} />
         </Route>
         <Route element={<PublicRoutes />}>
           <Route path="/" element={<LandingPage />} />

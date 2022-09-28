@@ -16,9 +16,9 @@ function RoomPage() {
     const editor = ref.current;
     editor.addEventListener("keyup", () => {
       const text = editor.value;
-      socket.emit("to server", { message: text, roomId: matchId });
+      socket.emit("client to server", { message: text, roomId: matchId });
     });
-    socket.on("to client", (data) => {
+    socket.on("server to client", (data) => {
       if (data["roomId"] === matchId) {
         editor.value = data["message"];
       }
