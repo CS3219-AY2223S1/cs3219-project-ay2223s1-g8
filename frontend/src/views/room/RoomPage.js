@@ -1,9 +1,13 @@
 import { useRef, useEffect } from "react";
 const io = require("socket.io-client");
+import { useSelector } from "react-redux";
+import { matchSelector } from "../../stores/match/match.slice";
 
 function RoomPage() {
+  const { matchId } = useSelector(matchSelector);
+  console.log(matchId);
   var socket = io("http://localhost:9000", {
-    query: { roomId: "room-1" },
+    query: { roomId: matchId },
   });
   // const l = console.log;
   const ref = useRef(null);
@@ -12,10 +16,12 @@ function RoomPage() {
     const editor = ref.current;
     editor.addEventListener("keyup", () => {
       const text = editor.value;
-      socket.emit("to server", { message: text, roomId: "room-1" });
+      socket.emit("to server", { message: text, roomId: matchId });
     });
     socket.on("to client", (data) => {
-      editor.value = data["message"];
+      if (data["roomId"] === matchId) {
+        editor.value = data["message"];
+      }
     });
   });
 

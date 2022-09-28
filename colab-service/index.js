@@ -10,12 +10,14 @@ const port = 9000
 http.listen(port, () => log(`server listening on port: ${port}`))
 io.on('connection', (socket) => {
     log(socket.handshake.query.roomId)
+    // log(socket.adapter.rooms)
     const roomId = socket.handshake.query.roomId;
     socket.join(roomId);
     socket.on('to server', (evt) => {
+      console.log(socket.adapter.rooms);
         log(evt)
         log(evt["roomId"])
-        socket.to(evt["roomId"]).emit("to client", { message: evt["message"] });
+        socket.to(evt["roomId"]).emit("to client", { message: evt["message"], roomId: roomId });
     })
 })
 io.on('disconnect', (evt) => {
