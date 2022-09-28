@@ -31,7 +31,7 @@ const io = require("socket.io")(httpServer, {
 });
 
 io.on("connection", (socket) => {
-  console.log("Connected");
+  console.log(socket.id + " has connected");
   socket.on("find match", (req) => {
     findMatch(req, socket.id).then((resp) => {
       if (resp.status == "Match Found") {
@@ -66,7 +66,7 @@ io.on("connection", (socket) => {
 
 const { findMatch, cancelMatch } = require("./controller/match");
 
-const port = 8001;
+const port = process.env.PORT;
 httpServer.listen(port);
 console.log(
   `Matching-service listening on port ${port} in ${app.get("env")} mode.`

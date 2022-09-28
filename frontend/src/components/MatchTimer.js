@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
-import io from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import "./MatchTimer.css";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { userSelector } from "../stores/user";
 import { addMatchId } from "../stores/match/match.slice";
-const socket = io.connect("http://localhost:8001");
+import PropTypes from "prop-types";
 
-function MatchTimer() {
+function MatchTimer(props) {
+  const socket = props.sock;
   const [count, setCount] = useState(10);
   const [start, setStart] = useState(false);
   const [intervalId, setIntervalId] = useState();
@@ -128,5 +128,9 @@ function MatchTimer() {
     </div>
   );
 }
+
+MatchTimer.propTypes = {
+  sock: PropTypes.object,
+};
 
 export default MatchTimer;
