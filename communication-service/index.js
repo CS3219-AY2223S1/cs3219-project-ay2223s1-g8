@@ -19,8 +19,13 @@ const io = require("socket.io")(httpServer, {
 
 io.on("connection", (socket) => {
   console.log(`SocketIO connection created, socketID=${socket.id}`);
+  socket.on("send message", (req) => {
+    io.to(req.roomId).emit();
+  });
 
-  
+  socket.on("disconnect", (reason) => {
+    console.log(`User socketID=${socket.id} disconnected, reason=${reason}`);
+  });
 });
 
 const port = process.env.PORT || 8005;
