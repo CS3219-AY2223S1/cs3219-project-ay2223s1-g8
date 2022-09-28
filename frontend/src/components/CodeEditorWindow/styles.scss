@@ -1,0 +1,28 @@
+.TextEditor-container {
+  width: 90vw;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+}
+
+.editor-header-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.editor-options-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.editor-dropdown-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.user-pills-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
