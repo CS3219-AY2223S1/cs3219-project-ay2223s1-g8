@@ -34,53 +34,64 @@ export const userSlice = createSlice({
       state.isSuccess = true;
       state.userId = payload.userId;
       state.username = payload.username;
+      return state;
     },
     [signupUser.pending]: (state) => {
       state.isFetching = true;
+      return state;
     },
     [signupUser.rejected]: (state, { payload }) => {
       state.isFetching = false;
       state.isError = true;
       state.errorMessage = payload.message;
+      return state;
     },
     [loginUser.fulfilled]: (state, { payload }) => {
       state.isFetching = false;
       state.isSuccess = true;
       state.userId = payload.userId;
       state.username = payload.username;
+      return state;
     },
     [loginUser.pending]: (state) => {
       state.isFetching = true;
+      return state;
     },
     [loginUser.rejected]: (state, { payload }) => {
       state.isFetching = false;
       state.isError = true;
       state.errorMessage = payload.message;
+      return state;
     },
     [changePassword.fulfilled]: (state) => {
       state.isFetching = false;
       state.isSuccess = true;
+      return state;
     },
     [changePassword.pending]: (state) => {
       state.isFetching = true;
+      return state;
     },
     [changePassword.rejected]: (state, { payload }) => {
       state.isFetching = false;
       state.isError = true;
       state.errorMessage = payload.message;
+      return state;
     },
     [deleteUser.fulfilled]: (state) => {
       state.isFetching = false;
       state.isSuccess = true;
+      return state;
     },
     [deleteUser.pending]: (state) => {
       state.isFetching = true;
+      return state;
     },
     [deleteUser.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.isFetching = false;
       state.isError = true;
       state.errorMessage = payload.message;
+      return state;
     },
   },
 });

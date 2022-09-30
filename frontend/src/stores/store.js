@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./user/user.slice";
+import matchReducer from "./match/match.slice";
 
 const saveToLocalStorage = (state) => {
   try {
@@ -24,6 +25,7 @@ const persistedStore = loadFromLocalStorage();
 const store = configureStore({
   reducer: {
     user: userReducer,
+    match: matchReducer,
   },
   preloadedState: persistedStore,
 });

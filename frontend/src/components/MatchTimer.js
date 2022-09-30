@@ -3,6 +3,9 @@ import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 import "./MatchTimer.css";
 import Modal from "react-bootstrap/Modal";
+import { useDispatch, useSelector } from "react-redux";
+import { userSelector } from "../stores/user";
+import { addMatchId } from "../stores/match/match.slice";
 import PropTypes from "prop-types";
 
 function MatchTimer(props) {
@@ -14,6 +17,8 @@ function MatchTimer(props) {
   const navigate = useNavigate();
   const [filters, setFilters] = useState("any");
   const [show, setShow] = useState(false);
+  const dispatch = useDispatch();
+  const { userId } = useSelector(userSelector);
 
   const showPopUp = () => {
     setShow(true);
@@ -25,6 +30,8 @@ function MatchTimer(props) {
   socket.on("match found", (data) => {
     // matching-service need to change the event name that they are sending
     console.log(data);
+    console.log(data["roomId"]);
+    dispatch(addMatchId(data["roomId"]));
     setStatus(true);
   });
 
@@ -38,7 +45,7 @@ function MatchTimer(props) {
 
   useEffect(() => {
     if (status) {
-      navigate("/room-1");
+      navigate("/collab");
     }
     if (start) {
       if (count >= 0) {
@@ -54,7 +61,7 @@ function MatchTimer(props) {
   const startTimer = () => {
     socket.emit("find match", {
       message: "finding a match",
-      userId: "tester1",
+      userId: userId,
       difficulty: filters,
     }); // matching service need to change the event name and request body if needed
     console.log("Start timer");
@@ -69,7 +76,7 @@ function MatchTimer(props) {
     clearInterval(intervalId);
     setCount(10);
     setStart(false);
-    socket.emit("cancel match", { userId: "tester1" });
+    socket.emit("cancel match", { userId });
     closePopUp();
   };
 
