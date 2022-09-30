@@ -5,7 +5,7 @@ const io = require('socket.io')(http, {
     methods: ["GET", "POST"],
   },
 });
-const port = 9000
+const port = 8003;
 http.listen(port, () => console.log(`server listening on port: ${port}`))
 io.on('connection', (socket) => {
   console.log(socket.id + " has connected");
