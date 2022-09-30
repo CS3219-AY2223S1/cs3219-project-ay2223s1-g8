@@ -1,18 +1,28 @@
+# -- BUILD --
 FROM node:16.14.2 as build
-ENV NODE_ENV=prod
 
 WORKDIR /frontend
 
 COPY package*.json ./
 COPY package-lock.json* ./
-RUN npm install
-
 COPY . .
 
+RUN npm install
 RUN npm run build
 
-FROM nginx
-WORKDIR /frontend
-COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
-COPY --from=build frontend/build /usr/share/nginx/html
+# -- RELEASE --
+FROM nginx:stable-alpine as release
+
+COPY --from=build /frontend/build /usr/share/nginx/html
+COPY --from=build /frontend/.env /usr/share/nginx/html/.env
+COPY --from=build /frontend/nginx/nginx.conf /etc/nginx/nginx.conf
+
+RUN apk add --update nodejs
+RUN apk add --update npm
+RUN npm install -g runtime-env-cra@0.2.2
+
+WORKDIR /usr/share/nginx/html
+
 EXPOSE 3000
+
+CMD ["/bin/sh", "-c", "runtime-env-cra && nginx -g \"daemon off;\""]

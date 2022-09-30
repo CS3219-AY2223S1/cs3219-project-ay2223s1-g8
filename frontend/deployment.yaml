@@ -16,13 +16,9 @@ spec:
       - name: frontend
         image: us-central1-docker.pkg.dev/peerprep-363807/frontend/frontend-image:latest
         imagePullPolicy: Always
-        resources: {}
         # This app listens on port 3000 for web traffic.
         ports:
         - containerPort: 3000
         env:
-        - name: URI_USER_SVC
-          valueFrom:
-            secretKeyRef:
-              name: peerprep-secrets
-              key: uri_user_svc
+        - name: REACT_APP_URI_USER_SVC
+          value: "http://<IP_ADDR>:<PORT>"
