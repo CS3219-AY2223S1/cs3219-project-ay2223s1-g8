@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import { matchSelector } from "../../stores/match/match.slice";
 
 const io = require("socket.io-client");
-const socket = io("https://collab-server-cs3219.herokuapp.com/");
+const socket = io("http://localhost:9000");
 
 const CodeEditorWindow = ({
   onChange,
