@@ -31,7 +31,7 @@
   "scripts": {
     "start-windows": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,scss,sass,md,json}\" --config ./.prettierrc && react-scripts start",
     "start-mac": "prettier --write './**/*.{js,jsx,ts,tsx,css,scss,sass,md,json}' --config ./.prettierrc && react-scripts start",
-    "build": "react-scripts build",
+    "build": "prettier --write './**/*.{js,jsx,ts,tsx,css,scss,sass,md,json}' --config ./.prettierrc && react-scripts build",
     "test": "react-scripts test",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
