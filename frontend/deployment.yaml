@@ -22,3 +22,5 @@ spec:
         env:
         - name: REACT_APP_URI_USER_SVC
           value: "http://<IP_ADDR>:<PORT>"
+        - name: REACT_APP_URI_MATCH_SVC
+          value: "http://<IP_ADDR>:<PORT>"
