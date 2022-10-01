@@ -7,7 +7,6 @@ import SignupPage from "./views/signup/SignupPage";
 import LandingPage from "./views/landing/LandingPage";
 import CollabPage from "./views/collab/CollabPage";
 import MatchingPage from "./views/MatchingPage";
-import RoomPage from "./views/RoomPage";
 import "./App.scss";
 import ForgotPasswordPage from "./views/forgotPassword/ForgotPasswordPage";
 
@@ -17,8 +16,7 @@ function App() {
       <Routes>
         <Route element={<PrivateRoutes />}>
           <Route path="/match" element={<MatchingPage />} />
-          <Route path="/room-1" element={<RoomPage />} />
-          <Route path="/collab/:roomId" element={<CollabPage />} />
+          <Route path="/collab" element={<CollabPage />} />
         </Route>
         <Route element={<PublicRoutes />}>
           <Route path="/" element={<LandingPage />} />

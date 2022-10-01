@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend # deployment name
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      serviceAccountName: cs3219-group8
+      containers:
+      - name: frontend
+        image: us-central1-docker.pkg.dev/peerprep-363807/frontend/frontend-image:latest
+        imagePullPolicy: Always
+        # This app listens on port 3000 for web traffic.
+        ports:
+        - containerPort: 3000
+        env:
+        - name: REACT_APP_URI_USER_SVC
+          value: "http://<IP_ADDR>:<PORT>"
+        - name: REACT_APP_URI_MATCH_SVC
+          value: "http://<IP_ADDR>:<PORT>"

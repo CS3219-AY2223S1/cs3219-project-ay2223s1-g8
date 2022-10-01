@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matching-service
+spec:
+  selector:
+    matchLabels:
+      app: matching-service-app
+  template:
+    metadata:
+      labels:
+        app: matching-service-app
+    spec:
+      serviceAccountName: cs3219-group8
+      containers:
+      - name: matching-service-app
+        image: us-central1-docker.pkg.dev/peerprep-363807/matching-service/matching-service-image:latest
+        # This app listens on port 8001 for web traffic.
+        ports:
+        - containerPort: 8001
+        env:
+        - name: NODE_ENV
+          value: "prod"
+        - name: PORT
+          value: "8001"
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: peerprep-secrets
+              key: username
+        - name: DB_PROD_HOST
+          value: "127.0.0.1"
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: peerprep-secrets
+              key: password
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_PROD_NAME
+          valueFrom:
+            secretKeyRef:
+              name: peerprep-secrets
+              key: database
+      - name: cloud-sql-proxy
+        image: gcr.io/cloudsql-docker/gce-proxy:latest
+        command:
+          - "/cloud_sql_proxy"
+          - "-instances=peerprep-363807:us-central1:matching-service=tcp:5432"
+        securityContext:
+          runAsNonRoot: true
