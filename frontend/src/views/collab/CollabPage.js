@@ -4,6 +4,7 @@ import CodeEditorWindow from "../../components/CodeEditorWindow";
 import LeaveRoomModal from "../../components/LeaveRoomModal";
 import NavBar from "../../components/NavBar";
 import QuestionCard from "../../components/QuestionCard";
+import ChatWindow from "../../components/ChatWindow";
 
 import { languageOptions } from "../../utils/codeEditorUtils/languageOptions";
 import { defineTheme } from "../../utils/codeEditorUtils/defineTheme";
@@ -58,14 +59,17 @@ function CollabPage() {
       <div className="Collab-container">
         <NavBar />
         <QuestionCard />
-        <CodeEditorWindow
-          code={code}
-          onChange={onChange}
-          language={language}
-          theme={theme}
-          handleLanguageChange={handleLanguageChange}
-          handleThemeChange={handleThemeChange}
-        />
+        <div className="Editor-chat-container">
+          <CodeEditorWindow
+            code={code}
+            onChange={onChange}
+            language={language}
+            theme={theme}
+            handleLanguageChange={handleLanguageChange}
+            handleThemeChange={handleThemeChange}
+          />
+          <ChatWindow />
+        </div>
         <div className="Collab-actions-container p-3">
           <Button
             className="btn-leave-room"

@@ -19,8 +19,15 @@ const io = require("socket.io")(httpServer, {
 
 io.on("connection", (socket) => {
   console.log(`SocketIO connection created, socketID=${socket.id}`);
+
+  socket.on("join chat", (req) => {
+    console.log(req);
+    socket.join(req.roomId);
+  });
+
   socket.on("send message", (req) => {
-    io.to(req.roomId).emit();
+    console.log(req);
+    io.to(req.roomId).emit("receive message", req);
   });
 
   socket.on("disconnect", (reason) => {
@@ -28,7 +35,7 @@ io.on("connection", (socket) => {
   });
 });
 
-const port = process.env.PORT || 8003;
+const port = process.env.PORT || 8005;
 httpServer.listen(port);
 console.log(
   `Communication-service listening on port ${port} in ${app.get("env")} mode.`
