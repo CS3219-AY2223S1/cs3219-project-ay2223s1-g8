@@ -14,6 +14,7 @@ const {
   getQuestionByDifficulty,
   getAllQuestions,
   deleteQuestion,
+  getQuestionById,
 } = require("./controller/question-controller.js");
 
 const router = express.Router();
@@ -22,6 +23,7 @@ const router = express.Router();
 router.post("/random-question", getQuestionByDifficulty);
 router.get("/questions", getAllQuestions);
 router.post("/question", createQuestion);
+router.post("/question-by-id", getQuestionById);
 router.delete("/question", deleteQuestion);
 
 app.use("/api", router).all((_, res) => {
