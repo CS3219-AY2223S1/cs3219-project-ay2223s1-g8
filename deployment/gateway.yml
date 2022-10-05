@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gateway
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /user-api/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: user-service
+            port:
+              number: 8000
+      - path: /matching-api/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: matching-service
+            port:
+              number: 8001
+      # - path: /question-api/*
+      #   pathType: ImplementationSpecific
+      #   backend:
+      #     service:
+      #       name: question-service
+      #       port:
+      #         number: 8002
