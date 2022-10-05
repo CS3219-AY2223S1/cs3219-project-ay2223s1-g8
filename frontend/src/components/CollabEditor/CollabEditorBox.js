@@ -25,7 +25,7 @@ function CollabEditorBox() {
     // A Yjs document holds the shared data
     const ydoc = new Y.Doc();
     console.log(matchId);
-    const provider = new WebsocketProvider("ws://localhost:8003", matchId, ydoc);
+    const provider = new WebsocketProvider("wss://demos.yjs.dev", matchId, ydoc);
 
     // Define a shared text type on the document
     const ytext = ydoc.getText("quill");
