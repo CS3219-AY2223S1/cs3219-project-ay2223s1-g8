@@ -24,6 +24,7 @@ app.get("/", (req, res) => {
 
 const httpServer = http.createServer(app);
 const io = require("socket.io")(httpServer, {
+  path: "/matching-api/",
   cors: {
     origin: "*",
     methods: ["POST", "GET"],
@@ -67,7 +68,7 @@ io.on("connection", (socket) => {
 const { findMatch, cancelMatch } = require("./controller/match");
 
 const port = process.env.PORT;
-httpServer.listen(port);
+httpServer.listen(port || 8001);
 console.log(
   `Matching-service listening on port ${port} in ${app.get("env")} mode.`
 );

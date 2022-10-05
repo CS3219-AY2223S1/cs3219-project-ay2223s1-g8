@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 
-module.exports = (sequelize) => {
+module.exports = async (sequelize) => {
   const MatchPotential = sequelize.define(
     "MatchPotential",
     {
@@ -26,7 +26,7 @@ module.exports = (sequelize) => {
 
   // creates a table if it does not exist
   // { force: true } - new db in each initialization)
-  sequelize.sync();
+  await sequelize.sync();
   console.log("[Database] Match Potential Model initialized");
   return MatchPotential;
 };
