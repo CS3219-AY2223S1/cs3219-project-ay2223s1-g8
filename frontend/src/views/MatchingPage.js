@@ -1,11 +1,13 @@
 import NavBar from "../components/NavBar";
 import MatchTimer from "../components/MatchTimer";
 import io from "socket.io-client";
-import { MATCH_SVC_BASE_URL } from "../utils/configs";
+import { API_URL } from "../utils/configs";
 
 function MatchingPage() {
   console.log("MatchPage");
-  const socket = io.connect(MATCH_SVC_BASE_URL);
+  const socket = io.connect(API_URL, {
+      path: "/matching-api/",
+  });
   socket.on("connect_error", (data) => {
     console.log(data);
     socket.disconnect();

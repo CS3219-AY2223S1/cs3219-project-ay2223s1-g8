@@ -1,13 +1,13 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { USER_SVC_BASE_URL } from "../../utils/configs";
+import { API_URL } from "../../utils/configs";
 import { deleteToken, getToken, storeToken, storeUsername } from "../../utils/localStorageUtils";
 
 export const signupUser = createAsyncThunk(
   "users/signupUser",
   async ({ username, password }, thunkAPI) => {
     try {
-      const response = await axios.post(`${USER_SVC_BASE_URL}/api/user`, { username, password });
+      const response = await axios.post(`${API_URL}/user-api/user`, { username, password });
       const data = response.data;
       if (response.status === 201) {
         storeUsername(username);
@@ -27,7 +27,7 @@ export const loginUser = createAsyncThunk(
   "users/loginUser",
   async ({ username, password }, thunkAPI) => {
     try {
-      const response = await axios.post(`${USER_SVC_BASE_URL}/api/session`, { username, password });
+      const response = await axios.post(`${API_URL}/user-api/session`, { username, password });
       const data = response.data;
 
       if (response.status === 200) {
@@ -48,7 +48,7 @@ export const changePassword = createAsyncThunk(
   "users/changePassword",
   async ({ currPassword, newPassword }, thunkAPI) => {
     try {
-      const response = await axios.patch(`${USER_SVC_BASE_URL}/api/user`, {
+      const response = await axios.patch(`${API_URL}/user-api/user`, {
         token: getToken(),
         currPassword,
         newPassword,
@@ -69,7 +69,7 @@ export const changePassword = createAsyncThunk(
 
 export const deleteUser = createAsyncThunk("users/deleteUser", async (thunkAPI) => {
   try {
-    const response = await axios.delete(`${USER_SVC_BASE_URL}/api/user`, {
+    const response = await axios.delete(`${API_URL}/user-api/user`, {
       data: {
         token: getToken(),
       },
