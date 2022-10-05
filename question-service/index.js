@@ -24,7 +24,7 @@ router.get("/questions", getAllQuestions);
 router.post("/question", createQuestion);
 router.delete("/question", deleteQuestion);
 
-app.use("/api", router).all((_, res) => {
+app.use("/question-api", router).all((_, res) => {
   res.setHeader("content-type", "application/json");
   res.setHeader("Access-Control-Allow-Origin", "*");
 });
