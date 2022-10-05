@@ -15,7 +15,7 @@ function createQuestionModel(s = sequelize) {
         allowNull: false,
       },
       difficulty: {
-        type: DataTypes.ENUM("EASY", "MEDIUM", "HARD", "ANY"),
+        type: DataTypes.ENUM("EASY", "MEDIUM", "HARD"),
         allowNull: false,
       },
       title: {
