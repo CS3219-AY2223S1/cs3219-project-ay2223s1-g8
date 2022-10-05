@@ -263,6 +263,58 @@ describe("Question Service Endpoints", () => {
     });
   });
 
+  describe("POST /question-by-id", () => {
+    it("should successfully fetch question by id", async () => {
+      // Arrange
+      await TestQuestion.create({
+        difficulty: "EASY",
+        title: "Test title",
+        content: "Test content1",
+      });
+      const addedQn = await TestQuestion.findOne({
+        where: { title: "Test title" },
+      });
+
+      // Act
+      const res = await requestWithSupertest
+        .post("/api/question-by-id")
+        .send({ qid: addedQn.qid });
+
+      // Assert
+      expect(res.status).toEqual(200);
+      expect(res.body).toHaveProperty("qid");
+      expect(res.body).toHaveProperty("difficulty");
+      expect(res.body).toHaveProperty("title");
+      expect(res.body).toHaveProperty("content");
+      const { count } = await TestQuestion.findAndCountAll();
+      expect(count).toBe(1);
+    });
+
+    it("should throw error when no ID is provided", async () => {
+      // Act
+      const res = await requestWithSupertest.post("/api/question-by-id").send();
+
+      // Assert
+      expect(res.status).toEqual(400);
+      expect(res.body.message.toLowerCase().includes("missing")).toBeTruthy();
+      const { count } = await TestQuestion.findAndCountAll();
+      expect(count).toBe(0);
+    });
+
+    it("should throw error when invalid ID is provided", async () => {
+      // Act
+      const res = await requestWithSupertest
+        .post("/api/question-by-id")
+        .send({ qid: "invalid id" });
+
+      // Assert
+      expect(res.status).toEqual(400);
+      expect(res.body.message.toLowerCase().includes("invalid")).toBeTruthy();
+      const { count } = await TestQuestion.findAndCountAll();
+      expect(count).toBe(0);
+    });
+  });
+
   describe("DELETE /question", () => {
     it("should successfully delete question", async () => {
       // Arrange
