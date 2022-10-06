@@ -109,7 +109,7 @@ class MatchController {
     }
   }
 
-  async createMatched(userId1, userId2, level) {
+  async createMatched(userId1, userId2, level, socketId1, socketId2) {
     const isUserId1Matched = await this.checkIsUserMatched(userId1);
     const isUserId2Matched = await this.checkIsUserMatched(userId2);
     if (isUserId1Matched || isUserId2Matched) {
@@ -121,6 +121,8 @@ class MatchController {
       userId1,
       userId2,
       level,
+      socketId1,
+      socketId2,
     });
   }
 

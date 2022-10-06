@@ -52,7 +52,9 @@ async function findMatch(req, socketId) {
       const newMatch = await matchController.createMatched(
         userId,
         matchedUserId,
-        difficulty
+        difficulty,
+        socketId,
+        matchedUserSocketId
       );
       resp.status = MatchState.MatchFound;
       resp.roomId = newMatch.dataValues.matchedId;
