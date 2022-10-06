@@ -22,6 +22,14 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      socketId1: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      socketId2: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
     {
       tableName: "Matched",
