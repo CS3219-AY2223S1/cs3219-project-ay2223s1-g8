@@ -6,6 +6,7 @@ import io from "socket.io-client";
 
 import { useSelector } from "react-redux";
 import { userSelector } from "../../stores/user";
+import { matchSelector } from "../../stores/match/match.slice";
 
 const socket = io.connect("http://localhost:8005");
 
@@ -13,9 +14,12 @@ const ChatWindow = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const { userId } = useSelector(userSelector);
+  const { matchId } = useSelector(matchSelector);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
+    console.log("HERE");
+    console.log(matchId);
     socket.emit("send message", {
       userId: userId,
       message: message,
