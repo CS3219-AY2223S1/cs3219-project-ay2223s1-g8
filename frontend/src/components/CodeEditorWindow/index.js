@@ -10,8 +10,8 @@ import "./styles.scss";
 import { useSelector } from "react-redux";
 import { matchSelector } from "../../stores/match/match.slice";
 
-const io = require("socket.io-client");
-const socket = io("http://localhost:8003");
+// const io = require("socket.io-client");
+// const socket = io("http://localhost:8003");
 
 const CodeEditorWindow = ({
   onChange,
@@ -27,26 +27,26 @@ const CodeEditorWindow = ({
   const handleEditorChange = (value) => {
     setValue(value);
     onChange("code", value);
-    socket.emit("client to server", { message: value, roomId: room });
+    // socket.emit("client to server", { message: value, roomId: room });
   };
 
   const { matchId } = useSelector(matchSelector);
-  console.log(matchId);
+  matchId;
 
   if (room === "empty") {
     setRoom("Room 1");
     // setRoom(matchId);
-    socket.emit("join room", { roomId: "Room 1" });
+    // socket.emit("join room", { roomId: "Room 1" });
   }
 
-  socket.on("server to client", (data) => {
-    // console.log(data);
-    const incomingRoomId = data["roomId"];
-    const incomingCode = data["message"];
-    if (room === incomingRoomId) {
-      setValue(incomingCode);
-    }
-  });
+  // socket.on("server to client", (data) => {
+  //   // console.log(data);
+  //   const incomingRoomId = data["roomId"];
+  //   const incomingCode = data["message"];
+  //   if (room === incomingRoomId) {
+  //     setValue(incomingCode);
+  //   }
+  // });
 
   return (
     <div className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl TextEditor-container">

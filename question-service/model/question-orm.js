@@ -33,17 +33,26 @@ async function ormGetQuestionByDifficulty(matchId, difficulty) {
     question = questions[randomIndex];
     await assignQuestion(matchId, question.qid);
   }
-  const res = {
+  return {
     qid: question.qid,
     difficulty: question.difficulty,
     title: question.title,
     content: question.content,
   };
-  return res;
 }
 
 async function ormGetAllQuestions() {
-  return getAllQuestions();
+  return await getAllQuestions();
+}
+
+async function ormGetQuestionById(qid) {
+  const question = await getQuestionById(qid);
+  return {
+    qid: question.qid,
+    difficulty: question.difficulty,
+    title: question.title,
+    content: question.content,
+  };
 }
 
 async function ormDeleteQuestion(id) {
@@ -59,4 +68,5 @@ module.exports = {
   ormGetQuestionByDifficulty,
   ormGetAllQuestions,
   ormDeleteQuestion,
+  ormGetQuestionById,
 };

@@ -10,6 +10,7 @@ const {
   ormGetQuestionByDifficulty,
   ormGetAllQuestions,
   ormDeleteQuestion,
+  ormGetQuestionById,
 } = require("../model/question-orm.js");
 
 async function getQuestionByDifficulty(req, res) {
@@ -34,9 +35,7 @@ async function getQuestionByDifficulty(req, res) {
     } else if (err instanceof DbNoMatchingQuestionsError) {
       return res.status(400).json({ message: "No matching questions found!" });
     } else {
-      return res
-        .status(500)
-        .json({ message: "Database failure when fetching question!" });
+      return res.status(500).json({ message: "Database failure!" });
     }
   }
 }
@@ -47,9 +46,7 @@ async function getAllQuestions(req, res) {
     return res.status(200).json(resp);
   } catch (err) {
     console.log(err);
-    return res
-      .status(500)
-      .json({ message: "Database failure when creating new user!" });
+    return res.status(500).json({ message: "Database failure!" });
   }
 }
 
@@ -58,7 +55,6 @@ async function createQuestion(req, res) {
     const { difficulty, title, content } = req.body;
 
     if (!difficulty || !title || !content) {
-      console.log(difficulty, title, content);
       throw new ValidationError();
     }
 
@@ -74,9 +70,27 @@ async function createQuestion(req, res) {
         .status(400)
         .json({ message: "Difficulty, title or question missing!" });
     } else {
-      return res
-        .status(500)
-        .json({ message: "Database failure when creating new question!" });
+      return res.status(500).json({ message: "Database failure!" });
+    }
+  }
+}
+
+async function getQuestionById(req, res) {
+  try {
+    const { qid } = req.body;
+    if (!qid) {
+      throw new ValidationError();
+    }
+    const resp = await ormGetQuestionById(qid);
+    return res.status(200).json(resp);
+  } catch (err) {
+    console.log(err);
+    if (err instanceof ValidationError) {
+      return res.status(400).json({ message: "Question ID missing!" });
+    } else if (err instanceof DbInvalidIdError) {
+      return res.status(400).json({ message: "Invalid ID!" });
+    } else {
+      return res.status(500).json({ message: "Database failure!" });
     }
   }
 }
@@ -94,13 +108,11 @@ async function deleteQuestion(req, res) {
     console.log(err);
 
     if (err instanceof ValidationError) {
-      return res.status(400).json({ message: "Id is missing!" });
+      return res.status(400).json({ message: "ID is missing!" });
     } else if (err instanceof DbInvalidIdError) {
-      return res.status(400).json({ message: "Invalid id!" });
+      return res.status(400).json({ message: "Invalid ID!" });
     } else {
-      return res
-        .status(500)
-        .json({ message: "Database failure when deleting question!" });
+      return res.status(500).json({ message: "Database failure!" });
     }
   }
 }
@@ -110,4 +122,5 @@ module.exports = {
   getQuestionByDifficulty,
   getAllQuestions,
   deleteQuestion,
+  getQuestionById,
 };
