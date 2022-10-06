@@ -78,6 +78,15 @@ class MatchController {
     return !(matched === null || matched.length === 0);
   }
 
+  async hasMatchedSocketId(socketId) {
+    const matched = await this.models.Matched.findOne({
+      where: {
+        [Op.or]: [{ socketId1: socketId }, { socketId2: socketId }],
+      },
+    });
+    return !(matched === null || matched.length === 0);
+  }
+
   async checkIsUserMatched(userId) {
     const matched = await this.models.Matched.findAll({
       where: {
@@ -115,12 +124,25 @@ class MatchController {
     });
   }
 
-  async removeMatched(matchedId) {
+  async removeMatchedByMatchId(matchedId) {
     const hasMatchedId = await this.hasMatchedId(matchedId);
     if (!hasMatchedId) {
       throw new NoMatchedError();
     }
     await this.models.Matched.destroy({ where: { matchedId } });
+    return true;
+  }
+
+  async removeMatchedBySocketId(socketId) {
+    const hasMatchedSocketId = await this.hasMatchedSocketId(socketId);
+    if (!hasMatchedSocketId) {
+      throw new NoMatchedError();
+    }
+    await this.models.Matched.destroy({
+      where: {
+        [Op.or]: [{ socketId1: socketId }, { socketId2: socketId }],
+      },
+    });
     return true;
   }
 }
