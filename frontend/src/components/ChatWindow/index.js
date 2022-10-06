@@ -13,17 +13,15 @@ const socket = io.connect("http://localhost:8005");
 const ChatWindow = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const { userId } = useSelector(userSelector);
+  const { username } = useSelector(userSelector);
   const { matchId } = useSelector(matchSelector);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    console.log("HERE");
-    console.log(matchId);
     socket.emit("send message", {
-      userId: userId,
+      username: username,
       message: message,
-      roomId: "test-room-id",
+      roomId: matchId,
     });
     setMessage("");
   };
@@ -41,12 +39,11 @@ const ChatWindow = () => {
 
   socket.on("receive message", (req) => {
     setMessages([...messages, req]);
-    //scrollToBottom();
   });
 
   useEffect(() => {
     socket.emit("join chat", {
-      roomId: "test-room-id",
+      roomId: matchId,
     });
   }, []);
 
@@ -57,7 +54,7 @@ const ChatWindow = () => {
       </div>
       <div ref={messageEnd} className="Chatbox-container">
         {messages.map((message) =>
-          message.userId === userId ? (
+          message.username === username ? (
             <div className="Chat-messages" key={message.id}>
               <p className="Sender-name">You</p>
               <div className="Message-sender">
@@ -66,7 +63,7 @@ const ChatWindow = () => {
             </div>
           ) : (
             <div className="Chat-messages" key={message.id}>
-              <p className="Recipient-name">{message.userId}</p>
+              <p className="Recipient-name">{message.username}</p>
               <div className="Message-recipient">
                 <p>{message.message}</p>
               </div>

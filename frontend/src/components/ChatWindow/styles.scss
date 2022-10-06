@@ -35,6 +35,8 @@
   border: 1px solid #ddd;
   outline: none;
   padding: 15px;
+  margin-top: 2px;
+  margin-bottom: 2px;
 }
 
 .Chat-btn {
@@ -70,8 +72,10 @@
 .Sender-name {
   text-align: right;
   padding-right: 2vh;
+  margin-bottom: 1px;
 }
 
 .Recipient-name {
   padding-left: 1vh;
+  margin-bottom: 1px;
 }

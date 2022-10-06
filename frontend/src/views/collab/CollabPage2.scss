@@ -18,7 +18,13 @@ body {
 
 .Collab-actions-container {
   width: 100%;
-  display: flex;
+  display: flex;  
   flex-direction: row;
   justify-content: flex-end;
+}
+
+.Editor-chat-container {
+  display: flex;
+  flex-direction: row;
+  width: 90vw;
 }
