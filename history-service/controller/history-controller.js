@@ -30,9 +30,8 @@ const getAllUserHistory = async (req, res) => {
 };
 
 const getUserHistory = async (req, res) => {
+  const { uid } = req.body;
   try {
-    const { uid } = req.body;
-
     if (!uid) {
       throw new ValidationError();
     }
@@ -43,7 +42,6 @@ const getUserHistory = async (req, res) => {
       data,
     });
   } catch (err) {
-    console.log(err);
     if (err instanceof ValidationError) {
       return res.status(400)
         .json({ message: "Uid is missing from request body!" });
@@ -61,9 +59,8 @@ const getUserHistory = async (req, res) => {
 };
 
 const getUserAttempt = async (req, res) => {
+  const { uid, qid } = req.body;
   try {
-    const { uid, qid } = req.body;
-
     if (!uid || !qid) {
       throw new ValidationError();
     }
@@ -74,7 +71,6 @@ const getUserAttempt = async (req, res) => {
       data,
     });
   } catch (err) {
-    console.log(err);
     if (err instanceof ValidationError) {
       return res.status(400)
         .json({ message: "Uid or qid missing from request body!" });
@@ -92,9 +88,8 @@ const getUserAttempt = async (req, res) => {
 };
 
 const createUserHistory = async (req, res) => {
+  const { uid, attempts } = req.body;
   try {
-    const { uid, attempts } = req.body;
-
     if (!uid || !attempts) {
       throw new ValidationError();
     }
@@ -111,7 +106,6 @@ const createUserHistory = async (req, res) => {
       data,
     });
   } catch (err) {
-    console.log(err);
     if (err instanceof ValidationError) {
       return res.status(400)
         .json({ message: "Uid or attempts missing from request body!" });
@@ -119,7 +113,7 @@ const createUserHistory = async (req, res) => {
       return res.status(409)
         .json({ message: "Duplicate user history detected!" });
     } else if (err instanceof InvalidAttemptObjError) {
-      return res.status(409)
+      return res.status(400)
         .json({ message: "Attempts has the wrong format!" });
     } else {
       return res.status(500)
@@ -129,9 +123,8 @@ const createUserHistory = async (req, res) => {
 };
 
 const addUserAttempt = async (req, res) => {
+  const { uid, attempt } = req.body;
   try {
-    const { uid, attempt } = req.body;
-
     if (!uid || !attempt) {
       throw new ValidationError();
     }
@@ -146,12 +139,11 @@ const addUserAttempt = async (req, res) => {
       data,
     });
   } catch (err) {
-    console.log(err);
     if (err instanceof ValidationError) {
       return res.status(400)
         .json({ message: "Uid or attempt missing from request body!" });
     } else if (err instanceof InvalidAttemptObjError) {
-      return res.status(409)
+      return res.status(400)
         .json({ message: "Attempt has the wrong format!" });
     } else {
       return res.status(500)
@@ -161,9 +153,8 @@ const addUserAttempt = async (req, res) => {
 };
 
 const deleteUserHistory = async (req, res) => {
+  const { uid } = req.body;
   try {
-    const { uid } = req.body;
-
     if (!uid) {
       throw new ValidationError();
     }
@@ -174,7 +165,6 @@ const deleteUserHistory = async (req, res) => {
       data,
     });
   } catch (err) {
-    console.log(err);
     if (err instanceof ValidationError) {
       return res.status(400)
         .json({ message: "Uid missing from request body!" });
@@ -196,7 +186,6 @@ const deleteAllUserHistory = async (req, res) => {
       data,
     });
   } catch (err) {
-    console.log(err);
     return res.status(500).json({ message: "Database failure!" });
   }
 };

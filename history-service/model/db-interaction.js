@@ -23,7 +23,7 @@ const getAllUserHistory = async () => {
 };
 
 const getUserHistory = async (uid) => {
-  const history = await History.find({ uid }).lean();
+  const history = await History.findOne({ uid });
   if (!history) {
     throw new NoHistoryFoundError();
   }

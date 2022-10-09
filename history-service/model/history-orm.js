@@ -19,7 +19,7 @@ const ormGetAllUserHistory = async (uid) => {
 
 const ormGetUserHistory = async (uid) => {
   const history = await getUserHistory(uid);
-  if (!history || history.length === 0) {
+  if (!history) {
     throw new NoHistoryFoundError();
   }
   return history;
