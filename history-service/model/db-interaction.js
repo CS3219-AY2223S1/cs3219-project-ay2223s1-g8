@@ -7,12 +7,13 @@ const {
 
 const createUserHistory = async (uid, attempts = []) => {
   try {
+    const existingHistory = await History.findOne({ uid });
+    if (existingHistory) {
+      throw new DuplicateHistoryError();
+    }
     const history = new History({ uid, attempts });
     return await history.save();
   } catch (err) {
-    if (err.code === 11000) {
-      throw new DuplicateHistoryError();
-    }
     throw err;
   }
 };
