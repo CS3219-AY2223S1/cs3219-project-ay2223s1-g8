@@ -20,7 +20,7 @@ npm ci
 npm run dev
 ```
 
-Access the server at [http://localhost:8003/]().
+Access the server at [http://localhost:8004/]().
 
 4. To run the tests, use the following command:
 
@@ -30,7 +30,7 @@ npm test
 
 ### Endpoints
 
-#### `GET /api/history/all`
+#### `GET /history-api/history/all`
 
 Returns all the histories in the database.
 
@@ -63,7 +63,7 @@ _Example response:_
 }
 ```
 
-#### `GET /api/history`
+#### `GET /history-api/history`
 
 Returns the user's history in the database.
 
@@ -94,7 +94,7 @@ _Example response:_
 }
 ```
 
-#### `GET /api/history/attempt`
+#### `GET /history-api/history/attempt`
 Returns the user's __latest__ attempt to the question.
 
 _Example request:_
@@ -117,7 +117,7 @@ _Example response:_
 }
 ```
 
-#### `POST /api/history`
+#### `POST /history-api/history`
 Creates a new user history.
 
 _Example request:_
@@ -150,7 +150,7 @@ _Example response:_
 }
 ```
 
-#### `POST /api/history/attempt`
+#### `POST /history-api/history/attempt`
 Updates the user's attempt for a question.
 
 _Example request:_
@@ -181,7 +181,7 @@ _Example response:_
 }
 ```
 
-#### `DELETE /api/history/all`
+#### `DELETE /history-api/history/all`
 Deletes all user histories in the database.
 
 _Example response:_
@@ -195,7 +195,7 @@ _Example response:_
 }
 ```
 
-#### `DELETE /api/history`
+#### `DELETE /history-api/history`
 Deletes a user history.
 
 _Example request:_
