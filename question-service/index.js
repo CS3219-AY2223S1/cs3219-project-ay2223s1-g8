@@ -11,22 +11,32 @@ app.options("*", cors());
 
 const {
   createQuestion,
+  createQuestionsInBulk,
   getQuestionByDifficulty,
   getAllQuestions,
   deleteQuestion,
+  deleteAssignedQuestion,
   getQuestionById,
 } = require("./controller/question-controller.js");
 
 const router = express.Router();
 
 // Controller will contain all the Question-related Routes
+app.get("/", (req, res) => {
+  res.send("Ok");
+}); // for health check
+
 router.post("/random-question", getQuestionByDifficulty);
+router.post("/question-by-id", getQuestionById);
+router.delete("/assigned-question", deleteAssignedQuestion);
+
+// For internal use
 router.get("/questions", getAllQuestions);
 router.post("/question", createQuestion);
-router.post("/question-by-id", getQuestionById);
+router.post("/questions", createQuestionsInBulk);
 router.delete("/question", deleteQuestion);
 
-app.use("/api", router).all((_, res) => {
+app.use("/question-api", router).all((_, res) => {
   res.setHeader("content-type", "application/json");
   res.setHeader("Access-Control-Allow-Origin", "*");
 });

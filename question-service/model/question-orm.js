@@ -4,6 +4,7 @@ const {
   getAllQuestions,
   getQuestionById,
   deleteQuestionById,
+  deleteAssignedQuestionById,
   getAssignedQuestion,
   assignQuestion,
 } = require("./db-interaction");
@@ -63,10 +64,19 @@ async function ormDeleteQuestion(id) {
   return await deleteQuestionById(id);
 }
 
+async function ormDeleteAssignedQuestion(matchId) {
+  const question = await getAssignedQuestion(matchId);
+  if (question === null) {
+    throw new DbInvalidIdError();
+  }
+  return await deleteAssignedQuestionById(matchId);
+}
+
 module.exports = {
   ormCreateQuestion,
   ormGetQuestionByDifficulty,
   ormGetAllQuestions,
   ormDeleteQuestion,
+  ormDeleteAssignedQuestion,
   ormGetQuestionById,
 };

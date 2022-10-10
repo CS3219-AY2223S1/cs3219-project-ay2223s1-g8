@@ -84,12 +84,19 @@ async function deleteQuestionById(qid) {
   return true;
 }
 
+async function deleteAssignedQuestionById(matchId) {
+  await AssignedQuestions.sync();
+  await AssignedQuestions.destroy({ where: { matchId } });
+  return true;
+}
+
 module.exports = {
   createQuestion,
   getAllQuestionByDifficulty,
   getAllQuestions,
   getQuestionById,
   deleteQuestionById,
+  deleteAssignedQuestionById,
   getAssignedQuestion,
   assignQuestion,
 };
