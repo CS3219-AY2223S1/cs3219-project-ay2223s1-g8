@@ -28,21 +28,21 @@ afterAll(async () => closeDatabase());
 //                 GET REQUESTS
 // --------------------------------------------
 
-describe("GET /api/history/all", () => {
+describe("GET /history-api/history/all", () => {
   it("should return 200 with all user histories", async () => {
-    const res = await request(app).get("/api/history/all");
+    const res = await request(app).get("/history-api/history/all");
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("All history retrieved successfully!");
     expect(res.body.data).toStrictEqual([]);
   });
 });
 
-describe("GET /api/history", () => {
+describe("GET /history-api/history", () => {
   it("should return 200 with the user history", async () => {
     const newHistory = new History(validUserHistory1);
     await newHistory.save();
 
-    const res = await request(app).get("/api/history").send({ uid: validUserHistory1.uid });
+    const res = await request(app).get("/history-api/history").send({ uid: validUserHistory1.uid });
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("User history retrieved successfully!");
     expect(res.body.data.uid).toBe(validUserHistory1.uid);
@@ -58,24 +58,24 @@ describe("GET /api/history", () => {
     const newHistory = new History(validUserHistory1);
     await newHistory.save();
 
-    const res = await request(app).get("/api/history").send({});
+    const res = await request(app).get("/history-api/history").send({});
     expect(res.statusCode).toBe(400);
     expect(res.body.message).toBe("Uid is missing from request body!");
   });
 
   it("should return 404 when uid is not found", async () => {
-  const res = await request(app).get("/api/history").send({ uid: validUserHistory1.uid });
+  const res = await request(app).get("/history-api/history").send({ uid: validUserHistory1.uid });
     expect(res.statusCode).toBe(404);
     // expect(res.body.message).toBe(`Unable to find user history with uid ${validUserHistory1.uid}.`);
   });
 });
 
-describe("GET /api/history/attempt", () => {
+describe("GET /history-api/history/attempt", () => {
   it("should return 200 with the user's attempt to the qid", async () => {
     const newHistory = new History(validUserHistory1);
     await newHistory.save();
 
-    const res = await request(app).get("/api/history/attempt")
+    const res = await request(app).get("/history-api/history/attempt")
       .send({
         uid: validUserHistory1.uid,
         qid: validUserHistory1.attempts[0].qid,
@@ -90,7 +90,7 @@ describe("GET /api/history/attempt", () => {
     const newHistory = new History(validUserHistory1);
     await newHistory.save();
 
-    const res = await request(app).get("/api/history/attempt")
+    const res = await request(app).get("/history-api/history/attempt")
       .send({
         qid: validUserHistory1.attempts[0].qid,
       });
@@ -102,7 +102,7 @@ describe("GET /api/history/attempt", () => {
     const newHistory = new History(validUserHistory1);
     await newHistory.save();
 
-    const res = await request(app).get("/api/history/attempt")
+    const res = await request(app).get("/history-api/history/attempt")
       .send({
         uid: validUserHistory1.uid,
       });
@@ -114,13 +114,13 @@ describe("GET /api/history/attempt", () => {
     const newHistory = new History(validUserHistory1);
     await newHistory.save();
 
-    const res = await request(app).get("/api/history/attempt").send({});
+    const res = await request(app).get("/history-api/history/attempt").send({});
     expect(res.statusCode).toBe(400);
     expect(res.body.message).toBe("Uid or qid missing from request body!");
   });
 
   it("should return 404 when uid is not found", async () => {
-    const res = await request(app).get("/api/history/attempt")
+    const res = await request(app).get("/history-api/history/attempt")
       .send({
         uid: validUserHistory1.uid,
         qid: validUserHistory1.attempts[0].qid,
@@ -133,7 +133,7 @@ describe("GET /api/history/attempt", () => {
     const newHistory = new History(validUserHistory1);
     await newHistory.save();
 
-    const res = await request(app).get("/api/history/attempt")
+    const res = await request(app).get("/history-api/history/attempt")
       .send({
         uid: validUserHistory1.uid,
         qid: "question-3",
@@ -148,9 +148,9 @@ describe("GET /api/history/attempt", () => {
 //                 POST REQUESTS
 // --------------------------------------------
 
-describe("POST /api/history", () => {
+describe("POST /history-api/history", () => {
   it("should return 200 and create a new user history", async () => {
-    const res = await request(app).post("/api/history").send(validUserHistory1);
+    const res = await request(app).post("/history-api/history").send(validUserHistory1);
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("User history created successfully!");
     expect(res.body.data.uid).toBe(validUserHistory1.uid);
@@ -164,7 +164,7 @@ describe("POST /api/history", () => {
   });
 
   it("should return 200 with empty array for attempts", async () => {
-    const res = await request(app).post("/api/history").send(validUserHistory3_emptyAttemptsArray);
+    const res = await request(app).post("/history-api/history").send(validUserHistory3_emptyAttemptsArray);
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("User history created successfully!");
     expect(res.body.data.uid).toBe(validUserHistory3_emptyAttemptsArray.uid);
@@ -172,7 +172,7 @@ describe("POST /api/history", () => {
   });
 
   it("should return 400 with no uid", async () => {
-    const res = await request(app).post("/api/history")
+    const res = await request(app).post("/history-api/history")
       .send({
         attempts: validUserHistory1.attempts,
       });
@@ -181,7 +181,7 @@ describe("POST /api/history", () => {
   });
 
   it("should return 400 with no attempts", async () => {
-    const res = await request(app).post("/api/history")
+    const res = await request(app).post("/history-api/history")
       .send({
         uid: validUserHistory1.uid,
       });
@@ -193,27 +193,27 @@ describe("POST /api/history", () => {
     const newHistory = new History(validUserHistory1);
     await newHistory.save();
 
-    const res = await request(app).post("/api/history").send(validUserHistory1);
+    const res = await request(app).post("/history-api/history").send(validUserHistory1);
     expect(res.statusCode).toBe(409);
     expect(res.body.message).toBe("Duplicate user history detected!");
   });
 
   it("should return 400 when attempts has missing qid", async () => {
-    const res = await request(app).post("/api/history").send(invalidUserAttempts_missingQid);
+    const res = await request(app).post("/history-api/history").send(invalidUserAttempts_missingQid);
     expect(res.statusCode).toBe(400);
     expect(res.body.message).toBe("Attempts has the wrong format!");
   });
 
   it("should return 400 when attempts has missing content", async () => {
-    const res = await request(app).post("/api/history").send(invalidUserAttempts_missingContent);
+    const res = await request(app).post("/history-api/history").send(invalidUserAttempts_missingContent);
     expect(res.statusCode).toBe(400);
     expect(res.body.message).toBe("Attempts has the wrong format!");
   });
 });
 
-describe("POST /api/history/attempt", () => {
+describe("POST /history-api/history/attempt", () => {
   it("should return 200 and create a new user history with the attempt added to the history", async () => {
-    const res = await request(app).post("/api/history/attempt").send(validAddAttemptRequest);
+    const res = await request(app).post("/history-api/history/attempt").send(validAddAttemptRequest);
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("User attempt added successfully!");
     expect(res.body.data.uid).toBe(validAddAttemptRequest.uid);
@@ -228,7 +228,7 @@ describe("POST /api/history/attempt", () => {
     const newHistory = new History(validUserHistory1);
     await newHistory.save();
 
-    const res = await request(app).post("/api/history/attempt").send(validAddAttemptRequest);
+    const res = await request(app).post("/history-api/history/attempt").send(validAddAttemptRequest);
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("User attempt added successfully!");
     expect(res.body.data.uid).toBe(validAddAttemptRequest.uid);
@@ -242,13 +242,13 @@ describe("POST /api/history/attempt", () => {
   });
 
   it("should return 400 when attempt has missing qid", async () => {
-    const res = await request(app).post("/api/history/attempt").send(invalidAddAttemptRequest_missingQid);
+    const res = await request(app).post("/history-api/history/attempt").send(invalidAddAttemptRequest_missingQid);
     expect(res.statusCode).toBe(400);
     expect(res.body.message).toBe("Attempt has the wrong format!");
   });
 
   it("should return 400 when attempts ha missing content", async () => {
-    const res = await request(app).post("/api/history/attempt").send(invalidAddAttemptRequest_missingContext);
+    const res = await request(app).post("/history-api/history/attempt").send(invalidAddAttemptRequest_missingContext);
     expect(res.statusCode).toBe(400);
     expect(res.body.message).toBe("Attempt has the wrong format!");
   });
@@ -258,25 +258,25 @@ describe("POST /api/history/attempt", () => {
 //                DELETE REQUESTS
 // --------------------------------------------
 
-describe("DELETE /api/history/all", () => {
+describe("DELETE /history-api/history/all", () => {
   it("should return 200 and delete all histories in the database", async () => {
     const newHistory1 = new History(validUserHistory1);
     await newHistory1.save();
     const newHistory2 = new History(validUserHistory2);
     await newHistory2.save();
 
-    const res = await request(app).delete("/api/history/all");
+    const res = await request(app).delete("/history-api/history/all");
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("All user history deleted successfully!");
   });
 });
 
-describe("DELETE /api/history", () => {
+describe("DELETE /history-api/history", () => {
   it("should return 200 and delete the history in the database", async () => {
     const newHistory = new History(validUserHistory1);
     await newHistory.save();
 
-    const res = await request(app).delete("/api/history").send(validDeleteUserHistoryRequest);
+    const res = await request(app).delete("/history-api/history").send(validDeleteUserHistoryRequest);
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("User history deleted successfully!");
     expect(res.body.data.uid).toBe(validUserHistory1.uid);
@@ -292,13 +292,13 @@ describe("DELETE /api/history", () => {
     const newHistory = new History(validUserHistory1);
     await newHistory.save();
 
-    const res = await request(app).delete("/api/history").send({});
+    const res = await request(app).delete("/history-api/history").send({});
     expect(res.statusCode).toBe(400);
     expect(res.body.message).toBe("Uid missing from request body!");
   });
 
   it("should return 404 when uid is not found", async () => {
-    const res = await request(app).delete("/api/history").send(validDeleteUserHistoryRequest);
+    const res = await request(app).delete("/history-api/history").send(validDeleteUserHistoryRequest);
     expect(res.statusCode).toBe(404);
     expect(res.body.message).toBe(`Unable to find user history with uid ${validDeleteUserHistoryRequest.uid}.`);
   });
