@@ -14,7 +14,7 @@ app.get("/", (req, res) => {
 
 const historyRoutes = require("./route/history-routes");
 
-app.use("/api/history", historyRoutes).all((_, res) => {
+app.use("/history-api/history", historyRoutes).all((_, res) => {
   res.setHeader("content-type", "application/json");
   res.setHeader("Access-Control-Allow-Origin", "*");
 });
