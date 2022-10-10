@@ -20,10 +20,10 @@ spec:
             name: matching-service
             port:
               number: 8001
-      # - path: /question-api/*
-      #   pathType: ImplementationSpecific
-      #   backend:
-      #     service:
-      #       name: question-service
-      #       port:
-      #         number: 8002
+      - path: /question-api/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: question-service
+            port:
+              number: 8002
