@@ -33,14 +33,24 @@ function NavBar() {
 
   if (!hasToken()) {
     return (
-      <Navbar bg="light" fixed="top">
-        <Container fluid>
-          <Navbar.Brand href="/" className="Navbar-peerprep text-white">
-            <img alt="" src={logo} width="30" height="30" className="d-inline-block align-top" />{" "}
-            PeerPrep
-          </Navbar.Brand>
-        </Container>
-      </Navbar>
+      <>
+        <Navbar bg="light" fixed="top">
+          <Container fluid>
+            <Navbar.Brand href="/" className="Navbar-peerprep text-white">
+              <img alt="" src={logo} width="30" height="30" className="d-inline-block align-top" />{" "}
+              PeerPrep
+            </Navbar.Brand>
+          </Container>
+        </Navbar>
+        <Navbar bg="light" style={{ opacity: 0 }}>
+          <Container fluid>
+            <Navbar.Brand className="Navbar-peerprep text-white">
+              <img alt="" src={logo} width="30" height="30" className="d-inline-block align-top" />{" "}
+              PeerPrep
+            </Navbar.Brand>
+          </Container>
+        </Navbar>
+      </>
     );
   }
 
@@ -62,6 +72,27 @@ function NavBar() {
               <NavDropdown.Item onClick={handleDeleteUser}>Delete account</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        </Container>
+      </Navbar>
+
+      <Navbar bg="light" style={{ opacity: 0 }}>
+        <Container fluid>
+          <Navbar.Brand className="Navbar-peerprep text-white">
+            <img alt="" src={logo} width="30" height="30" className="d-inline-block align-top" />{" "}
+            PeerPrep
+          </Navbar.Brand>
+          <Nav>
+            <NavDropdown
+              title={`Welcome, ${getUsername() || "user"}`}
+              id="Navbar-dropdown-text"
+              align="end"
+            >
+              <NavDropdown.Item>Change password</NavDropdown.Item>
+              <NavDropdown.Item>Delete account</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item>Logout</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Container>
