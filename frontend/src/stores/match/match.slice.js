@@ -2,19 +2,22 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   matchId: "",
+  difficulty: "",
 };
 
 export const matchSlice = createSlice({
   name: "match",
   initialState,
   reducers: {
-    clearState: (state) => {
-      state.matchId = "";
-      return state;
+    clearState: () => {
+      return initialState;
     },
     addMatchId: (state, { payload }) => {
-      console.log(payload);
       state.matchId = payload;
+      return state;
+    },
+    setDifficulty: (state, { payload }) => {
+      state.difficulty = payload;
       return state;
     },
   },
@@ -22,6 +25,6 @@ export const matchSlice = createSlice({
 
 export const matchSelector = (state) => state.match;
 
-export const { clearState, addMatchId } = matchSlice.actions;
+export const { clearState, addMatchId, setDifficulty } = matchSlice.actions;
 
 export default matchSlice.reducer;

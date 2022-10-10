@@ -36,15 +36,19 @@ async function assignQuestion(matchId, qid) {
 
 async function getAllQuestionByDifficulty(difficulty) {
   await Question.sync();
-  console.log(difficulty == "EASY");
   if (
     difficulty !== "EASY" &&
     difficulty !== "MEDIUM" &&
-    difficulty !== "HARD"
+    difficulty !== "HARD" &&
+    difficulty !== "ANY"
   ) {
     throw new DbInvalidDifficultyError();
   }
-  const questions = await Question.findAll({ where: { difficulty } });
+  let questions = {};
+  if (difficulty == "ANY") {
+    questions = await Question.findAll();
+  }
+  questions = await Question.findAll({ where: { difficulty } });
   if (questions.length == 0) {
     throw new DbNoMatchingQuestionsError();
   }
@@ -80,12 +84,19 @@ async function deleteQuestionById(qid) {
   return true;
 }
 
+async function deleteAssignedQuestionById(matchId) {
+  await AssignedQuestions.sync();
+  await AssignedQuestions.destroy({ where: { matchId } });
+  return true;
+}
+
 module.exports = {
   createQuestion,
   getAllQuestionByDifficulty,
   getAllQuestions,
   getQuestionById,
   deleteQuestionById,
+  deleteAssignedQuestionById,
   getAssignedQuestion,
   assignQuestion,
 };

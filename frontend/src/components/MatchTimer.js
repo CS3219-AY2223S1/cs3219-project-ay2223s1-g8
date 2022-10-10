@@ -5,7 +5,8 @@ import "./MatchTimer.css";
 import Modal from "react-bootstrap/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { userSelector } from "../stores/user";
-import { addMatchId } from "../stores/match/match.slice";
+import { addMatchId, setDifficulty, clearState } from "../stores/match/match.slice";
+import { QUESTION_DIFFICULTY } from "../utils/constants";
 import PropTypes from "prop-types";
 
 function MatchTimer(props) {
@@ -15,7 +16,7 @@ function MatchTimer(props) {
   const [intervalId, setIntervalId] = useState();
   const [status, setStatus] = useState(false);
   const navigate = useNavigate();
-  const [filters, setFilters] = useState("any");
+  const [level, setLevel] = useState(QUESTION_DIFFICULTY.EASY);
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
   const { userId } = useSelector(userSelector);
@@ -29,8 +30,6 @@ function MatchTimer(props) {
 
   socket.on("match found", (data) => {
     // matching-service need to change the event name that they are sending
-    console.log(data);
-    console.log(data["roomId"]);
     dispatch(addMatchId(data["roomId"]));
     setStatus(true);
   });
@@ -62,9 +61,10 @@ function MatchTimer(props) {
     socket.emit("find match", {
       message: "finding a match",
       userId: userId,
-      difficulty: filters,
+      difficulty: level,
     }); // matching service need to change the event name and request body if needed
-    console.log("Start timer");
+    dispatch(clearState());
+    dispatch(setDifficulty(level));
     setStart(true);
   };
 
@@ -80,9 +80,8 @@ function MatchTimer(props) {
     closePopUp();
   };
 
-  const filterOptionClick = (level) => {
-    setFilters(level);
-    console.log(level);
+  const handleLevel = (level) => {
+    setLevel(level);
   };
 
   return (
@@ -101,15 +100,24 @@ function MatchTimer(props) {
           </Button>
         </Modal.Footer>
       </Modal>
-      <h1>Difficulty Level: {filters}</h1>
+      <h1>Difficulty Level: {level}</h1>
       <div className="filter-box">
-        <Button className="filter-option-easy" onClick={() => filterOptionClick("easy")}>
+        <Button
+          className="filter-option-easy"
+          onClick={() => handleLevel(QUESTION_DIFFICULTY.EASY)}
+        >
           Easy
         </Button>
-        <Button className="filter-option-medium" onClick={() => filterOptionClick("medium")}>
+        <Button
+          className="filter-option-medium"
+          onClick={() => handleLevel(QUESTION_DIFFICULTY.MEDIUM)}
+        >
           Medium
         </Button>
-        <Button className="filter-option-hard" onClick={() => filterOptionClick("hard")}>
+        <Button
+          className="filter-option-hard"
+          onClick={() => handleLevel(QUESTION_DIFFICULTY.HARD)}
+        >
           Hard
         </Button>
       </div>

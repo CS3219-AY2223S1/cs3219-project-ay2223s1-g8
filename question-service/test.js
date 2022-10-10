@@ -30,16 +30,18 @@ describe("Question Service Endpoints", () => {
   describe("POST /question", () => {
     it("should successfully create a new user", async () => {
       // Act
-      const res = await requestWithSupertest.post("/api/question").send({
-        difficulty: "EASY",
-        title: "Two Sum",
-        content:
-          "Given an array of integers nums and an integer target, \
+      const res = await requestWithSupertest
+        .post("/question-api/question")
+        .send({
+          difficulty: "EASY",
+          title: "Two Sum",
+          content:
+            "Given an array of integers nums and an integer target, \
           return indices of the two numbers such that they add up to target. \
           \n\nYou may assume that each input would have exactly one solution, \
           and you may not use the same element twice.\n\nYou can return the \
           answer in any order.",
-      });
+        });
 
       // Assert
       expect(res.status).toEqual(201);
@@ -71,11 +73,13 @@ describe("Question Service Endpoints", () => {
       });
 
       // Act
-      const res = await requestWithSupertest.post("/api/question").send({
-        difficulty: "EASY",
-        title: "Test title",
-        content: "Test content2",
-      });
+      const res = await requestWithSupertest
+        .post("/question-api/question")
+        .send({
+          difficulty: "EASY",
+          title: "Test title",
+          content: "Test content2",
+        });
 
       // Assert
       expect(res.status).toEqual(409);
@@ -89,11 +93,142 @@ describe("Question Service Endpoints", () => {
 
     it("should fail when parameters are missing", async () => {
       // Act
-      const res = await requestWithSupertest.post("/api/question").send({
-        difficulty: "",
-        title: "",
-        content: "Test content2",
+      const res = await requestWithSupertest
+        .post("/question-api/question")
+        .send({
+          difficulty: "",
+          title: "",
+          content: "Test content2",
+        });
+
+      // Assert
+      expect(res.status).toEqual(400);
+      const { count } = await TestQuestion.findAndCountAll();
+      expect(count).toBe(0);
+    });
+  });
+
+  describe("POST /questions", () => {
+    it("should successfully create new questions in bulk", async () => {
+      // Act
+      const res = await requestWithSupertest
+        .post("/question-api/questions")
+        .send({
+          questions: [
+            {
+              difficulty: "EASY",
+              title: "Two Sum",
+              content: "Some content",
+            },
+            {
+              difficulty: "EASY",
+              title: "Two Sum2",
+              content: "Some content 2",
+            },
+          ],
+        });
+
+      // Assert
+      expect(res.status).toEqual(201);
+      expect(res.body.length).toBe(2);
+      expect(res.body[0]).toHaveProperty("qid");
+      expect(res.body[0]).toHaveProperty("difficulty", "EASY");
+      expect(res.body[0]).toHaveProperty("title", "Two Sum");
+      expect(res.body[0]).toHaveProperty("content", "Some content");
+      const { count } = await TestQuestion.findAndCountAll();
+      expect(count).toBe(2);
+    });
+
+    it("should throw error when title is duplicated in DB", async () => {
+      // Arrange
+      await TestQuestion.create({
+        difficulty: "EASY",
+        title: "Test title",
+        content: "Test content1",
       });
+
+      // Act
+      const res = await requestWithSupertest
+        .post("/question-api/questions")
+        .send({
+          questions: [
+            {
+              difficulty: "EASY",
+              title: "Test title",
+              content: "Test content1",
+            },
+            {
+              difficulty: "EASY",
+              title: "Test title1",
+              content: "Test content1",
+            },
+          ],
+        });
+
+      // Assert
+      expect(res.status).toEqual(409);
+      const { count } = await TestQuestion.findAndCountAll({
+        where: { title: "Test title", content: "Test content1" },
+      });
+      expect(count).toBe(1);
+      const { count: total } = await TestQuestion.findAndCountAll();
+      expect(total).toBe(2);
+    });
+
+    it("should throw error when title is duplicated in request", async () => {
+      // Act
+      const res = await requestWithSupertest
+        .post("/question-api/questions")
+        .send({
+          questions: [
+            {
+              difficulty: "EASY",
+              title: "Test title",
+              content: "Test content1",
+            },
+            {
+              difficulty: "EASY",
+              title: "Test title",
+              content: "Test content1",
+            },
+          ],
+        });
+
+      // Assert
+      expect(res.status).toEqual(409);
+      const { count: total } = await TestQuestion.findAndCountAll();
+      expect(total).toBe(1);
+    });
+
+    it("should fail when inside parameters are missing", async () => {
+      // Act
+      const res = await requestWithSupertest
+        .post("/question-api/questions")
+        .send({
+          questions: [
+            {
+              title: "Test title",
+              content: "Test content1",
+            },
+            {
+              difficulty: "EASY",
+              title: "Test title1",
+              content: "Test content1",
+            },
+          ],
+        });
+
+      // Assert
+      expect(res.status).toEqual(400);
+      const { count } = await TestQuestion.findAndCountAll();
+      expect(count).toBe(1);
+    });
+
+    it("should fail when outside parameters are missing", async () => {
+      // Act
+      const res = await requestWithSupertest
+        .post("/question-api/questions")
+        .send({});
 
       // Assert
       expect(res.status).toEqual(400);
@@ -113,7 +248,7 @@ describe("Question Service Endpoints", () => {
 
       // Act
       const res = await requestWithSupertest
-        .post("/api/random-question")
+        .post("/question-api/random-question")
         .send({ matchId: "some-match-id", difficulty: "EASY" });
 
       // Assert
@@ -143,7 +278,7 @@ describe("Question Service Endpoints", () => {
 
         // Act
         const res = await requestWithSupertest
-          .post("/api/random-question")
+          .post("/question-api/random-question")
           .send({ matchId: "some-match-id", difficulty: "EASY" });
 
         // Assert
@@ -172,7 +307,7 @@ describe("Question Service Endpoints", () => {
 
       // Act
       const res = await requestWithSupertest
-        .post("/api/random-question")
+        .post("/question-api/random-question")
         .send({ matchId: "some-match-id", difficulty: "SUPER EASY" });
 
       // Assert
@@ -196,7 +331,7 @@ describe("Question Service Endpoints", () => {
 
       // Act
       const res = await requestWithSupertest
-        .post("/api/random-question")
+        .post("/question-api/random-question")
         .send({ matchId: "some-match-id", difficulty: "MEDIUM" });
 
       // Assert
@@ -213,7 +348,7 @@ describe("Question Service Endpoints", () => {
     it("should throw error when difficulty is not provided", async () => {
       // Act
       const res = await requestWithSupertest
-        .post("/api/random-question")
+        .post("/question-api/random-question")
         .send({});
 
       // Assert
@@ -238,7 +373,9 @@ describe("Question Service Endpoints", () => {
       ]);
 
       // Act
-      const res = await requestWithSupertest.get("/api/questions").send();
+      const res = await requestWithSupertest
+        .get("/question-api/questions")
+        .send();
 
       // Assert
       expect(res.status).toEqual(200);
@@ -253,7 +390,9 @@ describe("Question Service Endpoints", () => {
 
     it("should succeed even when there are no questions", async () => {
       // Act
-      const res = await requestWithSupertest.get("/api/questions").send();
+      const res = await requestWithSupertest
+        .get("/question-api/questions")
+        .send();
 
       // Assert
       expect(res.status).toEqual(200);
@@ -277,7 +416,7 @@ describe("Question Service Endpoints", () => {
 
       // Act
       const res = await requestWithSupertest
-        .post("/api/question-by-id")
+        .post("/question-api/question-by-id")
         .send({ qid: addedQn.qid });
 
       // Assert
@@ -292,7 +431,9 @@ describe("Question Service Endpoints", () => {
 
     it("should throw error when no ID is provided", async () => {
       // Act
-      const res = await requestWithSupertest.post("/api/question-by-id").send();
+      const res = await requestWithSupertest
+        .post("/question-api/question-by-id")
+        .send();
 
       // Assert
       expect(res.status).toEqual(400);
@@ -304,7 +445,7 @@ describe("Question Service Endpoints", () => {
     it("should throw error when invalid ID is provided", async () => {
       // Act
       const res = await requestWithSupertest
-        .post("/api/question-by-id")
+        .post("/question-api/question-by-id")
         .send({ qid: "invalid id" });
 
       // Assert
@@ -329,7 +470,7 @@ describe("Question Service Endpoints", () => {
         where: { title: "Test title" },
       });
       const res = await requestWithSupertest
-        .delete("/api/question")
+        .delete("/question-api/question")
         .send({ qid: question.qid });
 
       // Assert
@@ -344,7 +485,7 @@ describe("Question Service Endpoints", () => {
     it("should throw error when qid is not found in database", async () => {
       // Act
       const res = await requestWithSupertest
-        .delete("/api/question")
+        .delete("/question-api/question")
         .send({ qid: "hello" });
 
       // Assert
@@ -355,7 +496,65 @@ describe("Question Service Endpoints", () => {
 
     it("should throw error when qid is not provided", async () => {
       // Act
-      const res = await requestWithSupertest.delete("/api/question").send();
+      const res = await requestWithSupertest
+        .delete("/question-api/question")
+        .send();
+
+      // Assert
+      expect(res.status).toEqual(400);
+      const { count } = await TestQuestion.findAndCountAll();
+      expect(count).toBe(0);
+    });
+  });
+
+  describe("DELETE /assigned-question", () => {
+    it("should successfully delete assigned question", async () => {
+      // Arrange
+      const qn = await TestQuestion.create({
+        difficulty: "EASY",
+        title: "Test title",
+        content: "Test content1",
+      });
+      await TestAssignedQuestions.create({
+        matchId: "valid-match-id",
+        qid: qn.qid,
+      });
+
+      // Act
+      const res = await requestWithSupertest
+        .delete("/question-api/assigned-question")
+        .send({ matchId: "valid-match-id" });
+
+      // Assert
+      expect(res.status).toEqual(200);
+      expect(
+        await TestAssignedQuestions.findOne({
+          where: { matchId: "valid-match-id" },
+        })
+      ).toBeNull();
+      const { count: tqCount } = await TestQuestion.findAndCountAll();
+      expect(tqCount).toBe(1);
+      const { count: taqCount } = await TestAssignedQuestions.findAndCountAll();
+      expect(taqCount).toBe(0);
+    });
+
+    it("should throw error when matchId is not found in database", async () => {
+      // Act
+      const res = await requestWithSupertest
+        .delete("/question-api/assigned-question")
+        .send({ matchId: "valid-match-id" });
+
+      // Assert
+      expect(res.status).toEqual(400);
+      const { count } = await TestAssignedQuestions.findAndCountAll();
+      expect(count).toBe(0);
+    });
+
+    it("should throw error when qid is not provided", async () => {
+      // Act
+      const res = await requestWithSupertest
+        .delete("/question-api/assigned-question")
+        .send();
 
       // Assert
       expect(res.status).toEqual(400);
