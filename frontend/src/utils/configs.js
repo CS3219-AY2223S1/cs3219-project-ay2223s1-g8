@@ -1,5 +1,3 @@
-import "dotenv/config";
-
 export default {
   development: {
     USER_SVC_BASE_URL: "http://localhost:8000",
