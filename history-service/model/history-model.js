@@ -23,4 +23,14 @@ const historySchema = new mongoose.Schema({
   }],
 });
 
+historySchema.methods.toJSON = function() {
+  var obj = this.toObject();
+  delete obj._id;
+  delete obj.__v;
+  obj.attempts.forEach((attempt) => {
+    delete attempt._id;
+  });
+  return obj;
+}
+
 module.exports = mongoose.model("History", historySchema);
