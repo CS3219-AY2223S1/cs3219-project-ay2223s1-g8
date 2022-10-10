@@ -40,30 +40,24 @@ _Example response:_
   "message": "All history retrieved successfully!",
   "data": [
     {
-      "_id": "6342e46c0ac274080f7d635c",
       "uid": "user-1",
       "attempts": [
         {
           "qid": "question-1",
           "content": "console.log(\"Hello world!\");",
-          "_id": "6342e46c0ac274080f7d635d",
           "attemptDate": "2022-10-09T15:10:36.244Z"
         }
-      ],
-      "__v": 0
+      ]
     },
     {
-      "_id": "6342e4700ac274080f7d6360",
       "uid": "user-2",
       "attempts": [
         {
           "qid": "question-1",
           "content": "console.log(\"Hello world!\");",
-          "_id": "6342e4700ac274080f7d6361",
           "attemptDate": "2022-10-09T15:10:40.480Z"
         }
-      ],
-      "__v": 0
+      ]
     }
   ]
 }
@@ -87,17 +81,14 @@ _Example response:_
   "message": "User history retrieved successfully!",
   "data": [
     {
-      "_id": "634290bafddace1b983d251a",
       "uid": "user-1",
       "attempts": [
         {
           "qid": "question-1",
           "content": "// NEW ATTEMPT console.log(\"Hello world!\");",
-          "_id": "634290bafddace1b983d251b",
           "attemptDate": "2022-10-09T09:14:46.064Z"
         }
-      ],
-      "__v": 0
+      ]
     }
   ]
 }
@@ -121,7 +112,6 @@ _Example response:_
   "data": {
     "qid": "question-1",
     "content": "console.log(\"Hello world!\");",
-    "_id": "634290bafddace1b983d251b",
     "attemptDate": "2022-10-09T09:13:30.696Z"
   }
 }
@@ -153,12 +143,9 @@ _Example response:_
       {
         "qid": "question-1",
         "content": "console.log(\"Hello world!\");",
-        "_id": "6342e4700ac274080f7d6361",
         "attemptDate": "2022-10-09T15:10:40.480Z"
       }
-    ],
-    "_id": "6342e4700ac274080f7d6360",
-    "__v": 0
+    ]
   }
 }
 ```
@@ -182,17 +169,14 @@ _Example response:_
 {
   "message": "User attempt added successfully!",
   "data": {
-    "_id": "634290bafddace1b983d251a",
     "uid": "user-1",
     "attempts": [
       {
         "qid": "question-1",
         "content": "// NEW ATTEMPT console.log(\"Hello world!\");",
-        "_id": "634290bafddace1b983d251b",
         "attemptDate": "2022-10-09T09:14:46.064Z"
       }
-    ],
-    "__v": 0
+    ]
   }
 }
 ```
@@ -226,17 +210,14 @@ _Example response:_
 {
   "message": "User history deleted successfully!",
   "data": {
-    "_id": "6342e4700ac274080f7d6360",
     "uid": "user-1",
     "attempts": [
       {
         "qid": "question-1",
         "content": "console.log(\"Hello world!\");",
-        "_id": "6342e4700ac274080f7d6361",
         "attemptDate": "2022-10-09T15:10:40.480Z"
       }
-    ],
-    "__v": 0
+    ]
   }
 }
 ```
