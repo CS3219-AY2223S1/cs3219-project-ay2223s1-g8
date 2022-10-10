@@ -5,6 +5,7 @@
   max-height: 60vh;
 }
 
-// .Qn-card-body-container {
-
-// }
+.Qn-card-body-container {
+  overflow-y: auto;
+  white-space: pre-wrap;
+}

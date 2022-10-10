@@ -52,7 +52,9 @@ async function findMatch(req, socketId) {
       const newMatch = await matchController.createMatched(
         userId,
         matchedUserId,
-        difficulty
+        difficulty,
+        socketId,
+        matchedUserSocketId
       );
       resp.status = MatchState.MatchFound;
       resp.roomId = newMatch.dataValues.matchedId;
@@ -81,7 +83,9 @@ async function cancelMatch(req) {
     const match = await matchController.findMatchedWhereUserId(userId);
     if (match !== null) {
       const matchedId = match.dataValues.matchedId;
-      const removeMatched = await matchController.removeMatched(matchedId);
+      const removeMatched = await matchController.removeMatchedByMatchId(
+        matchedId
+      );
     }
     resp.status = MatchState.MatchCancelled;
     release();
@@ -105,7 +109,34 @@ async function cancelMatch(req) {
   }
 }
 
+async function leaveMatchRoom(req) {
+  const mutex = new Mutex();
+  const release = await mutex.acquire();
+  var resp = {};
+  const { socketId } = req;
+  try {
+    const deleteMatchedBySocket = await matchController.removeMatchedBySocketId(
+      socketId
+    );
+    resp.status = MatchState.MatchDeleted;
+    release();
+    return resp;
+  } catch (err) {
+    if (err instanceof NoMatchedError) {
+      console.log(err);
+      resp.status = MatchState.MatchDeleted;
+      release();
+      return resp;
+    }
+    console.log(err);
+    release();
+    resp.error = err.message;
+    return resp;
+  }
+}
+
 module.exports = {
   findMatch,
   cancelMatch,
+  leaveMatchRoom,
 };

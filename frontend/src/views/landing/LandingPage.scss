@@ -3,13 +3,12 @@
 
 .landing-container {
   display: flex;
+  flex: 1;
   flex-direction: column;
   background-color: $bg-light;
   justify-content: center;
   align-items: center;
   padding: 4vh;
-  height: 100vh;
-  padding-top: 40px;
 }
 
 .img-pair-prog {

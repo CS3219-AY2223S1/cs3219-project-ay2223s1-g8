@@ -24,6 +24,7 @@ app.get("/", (req, res) => {
 
 const httpServer = http.createServer(app);
 const io = require("socket.io")(httpServer, {
+  path: "/matching-api",
   cors: {
     origin: "*",
     methods: ["POST", "GET"],
@@ -59,12 +60,27 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("leave room by close tab", (req) => {
+    leaveMatchRoom(req).then((resp) => {
+      console.log(resp.status);
+    });
+  });
+
+  socket.on("leave room by button", (req) => {
+    leaveMatchRoom(req).then((resp) => {});
+    console.log(resp.status);
+  });
+
   socket.on("disconnect", (reason) => {
     console.log(`User socketID=${socket.id} disconnected, reason=${reason}`);
   });
 });
 
-const { findMatch, cancelMatch } = require("./controller/match");
+const {
+  findMatch,
+  cancelMatch,
+  leaveMatchRoom,
+} = require("./controller/match");
 
 const port = process.env.PORT;
 httpServer.listen(port);
