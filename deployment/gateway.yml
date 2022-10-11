@@ -27,3 +27,17 @@ spec:
             name: question-service
             port:
               number: 8002
+      - path: /history-api/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: history-service
+            port:
+              number: 8004
+      - path: /communication-api/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: communication-service
+            port:
+              number: 8005
