@@ -5,7 +5,7 @@ const connectDB = require("./model/database");
 
 connectDB();
 
-const PORT = process.env.PORT || 8003;
+const PORT = process.env.PORT || 8004;
 
 mongoose.connection.once("open", () => {
   console.log("Connected to history MongoDB");
