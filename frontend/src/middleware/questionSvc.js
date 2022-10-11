@@ -5,7 +5,7 @@ const config = configs[process.env.NODE_ENV];
 
 export const getRandomQuestion = async ({ matchId, difficulty }) => {
   try {
-    const res = await axios.post(`${config.QUESTION_SVC_BASE_URL}/api/random-question`, {
+    const res = await axios.post(`${config.QUESTION_SVC_BASE_URL}/question-api/random-question`, {
       matchId,
       difficulty,
     });
