@@ -1,14 +1,14 @@
 import { useEffect, useState, useRef } from "react";
-// import PropTypes from "prop-types";
 import "./styles.scss";
 import io from "socket.io-client";
-// import { COMMUNICATION_SVC_BASE_URL } from "../../utils/configs";
-
 import { useSelector } from "react-redux";
 import { userSelector } from "../../stores/user";
 import { matchSelector } from "../../stores/match/match.slice";
+import { COMMUNICATION_SVC_BASE_URL } from "../../utils/configs";
 
-const socket = io.connect("http://localhost:8005");
+const socket = io.connect(COMMUNICATION_SVC_BASE_URL, {
+  path: "/communication-api",
+});
 
 const ChatWindow = () => {
   const [message, setMessage] = useState("");

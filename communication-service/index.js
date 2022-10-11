@@ -9,8 +9,13 @@ app.use(express.json());
 app.use(cors()); // config cors so that front-end can use
 app.options("*", cors());
 
+app.get("/", (req, res) => {
+  res.send("Hello World from communication-service");
+});
+
 const httpServer = http.createServer(app);
 const io = require("socket.io")(httpServer, {
+  path: "/communication-api",
   cors: {
     origin: "*",
     methods: ["POST", "GET"],
