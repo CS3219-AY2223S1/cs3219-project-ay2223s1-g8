@@ -10,6 +10,9 @@
 //   "dark":       $dark
 // );
 
+// constants
+@import "./constants.scss";
+
 // fonts
 @import url("https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300;400;500;600;700&display=swap");
 
@@ -17,6 +20,7 @@
 $shadow: #998670;
 $grullo: #a99985;
 $bone: #dad2bc;
+$alabaster: #e8e2d5;
 $isabelline: #f5f1ed;
 $slate-grey: #70798c;
 $raisin-black: #252323;
@@ -30,6 +34,9 @@ $light: $shadow;
 $dark: $raisin-black;
 
 $bg-light: $isabelline;
+
+$accent: $alabaster;
+$outline: $bone;
 
 $font-overpass-mono: "Overpass Mono", monospace;
 

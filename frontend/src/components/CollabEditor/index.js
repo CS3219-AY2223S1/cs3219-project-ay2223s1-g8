@@ -4,12 +4,15 @@ import { useEffect, useRef } from "react";
 import Quill from "quill";
 import QuillCursors from "quill-cursors";
 import { QuillBinding } from "y-quill";
-import "./CollabEditorBox.css";
 import { useSelector } from "react-redux";
 import { matchSelector } from "../../stores/match/match.slice";
-Quill.register("modules/cursors", QuillCursors);
 
-function CollabEditorBox() {
+const Delta = Quill.import("delta");
+
+Quill.register("modules/cursors", QuillCursors);
+import "./styles.scss";
+
+function CollabEditor() {
   const reff = useRef(null);
   const { matchId } = useSelector(matchSelector);
 
@@ -17,7 +20,25 @@ function CollabEditorBox() {
     const quill = new Quill(reff.current, {
       modules: {
         cursors: true,
+        toolbar: false,
+        // to remove text formatting when pasting in the editor
+        clipboard: {
+          matchers: [
+            [
+              Node.ELEMENT_NODE,
+              (node, delta) =>
+                delta.compose(
+                  new Delta().retain(delta.length(), {
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                  }),
+                ),
+            ],
+          ],
+        },
       },
+      formats: ["bold", "italic", "underline"],
       placeholder: "Start collaborating...",
       theme: "snow", // 'bubble' is also great
     });
@@ -38,4 +59,4 @@ function CollabEditorBox() {
   return <div ref={reff} />;
 }
 
-export default CollabEditorBox;
+export default CollabEditor;

@@ -2,7 +2,7 @@ export default {
   development: {
     USER_SVC_BASE_URL: "http://localhost:8000",
     MATCH_SVC_BASE_URL: "http://localhost:8001",
-    QUESTION_SVC_BASE_URL: "http://localhost:8001",
+    QUESTION_SVC_BASE_URL: "http://localhost:8002",
     COMMUNICATION_SVC_BASE_URL: "http://localhost:8005",
   },
   production: {

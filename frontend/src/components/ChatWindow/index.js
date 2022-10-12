@@ -1,10 +1,11 @@
 import { useEffect, useState, useRef } from "react";
-import "./styles.scss";
 import io from "socket.io-client";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../stores/user";
 import { matchSelector } from "../../stores/match/match.slice";
+import useAutosizeTextArea from "../../utils/useAutoSizedTextArea";
 import configs from "../../utils/configs";
+import "./styles.scss";
 
 const config = configs[process.env.NODE_ENV];
 
@@ -17,6 +18,18 @@ const ChatWindow = () => {
   const [messages, setMessages] = useState([]);
   const { username } = useSelector(userSelector);
   const { matchId } = useSelector(matchSelector);
+
+  const textAreaRef = useRef(null);
+  let formRef = useRef(null);
+
+  useAutosizeTextArea(textAreaRef.current, message);
+
+  const onEnterPress = (e) => {
+    if (e.keyCode == 13 && e.shiftKey == false) {
+      e.preventDefault();
+      formRef.requestSubmit();
+    }
+  };
 
   const handleSendMessage = (e) => {
     e.preventDefault();
@@ -50,39 +63,39 @@ const ChatWindow = () => {
   }, []);
 
   return (
-    <div className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl ChatWindow-container">
-      <div className="Chat-header-container">
-        <h2>ChatBox</h2>
+    <div className="overlay rounded-md overflow-hidden shadow-4xl" id="ChatWindow-container">
+      <div className="pt-2 pb-1" id="Chat-header-container">
+        Chat Box
       </div>
-      <div ref={messageEnd} className="Chatbox-container">
+      <div ref={messageEnd} className="p-2 h-100 overflow-auto" id="Chatbox-container">
         {messages.map((message) =>
           message.username === username ? (
             <div className="Chat-messages" key={message.id}>
               <p className="Sender-name">You</p>
-              <div className="Message-sender">
-                <p>{message.message}</p>
-              </div>
+              <div className="Message Message-sender">{message.message}</div>
             </div>
           ) : (
             <div className="Chat-messages" key={message.id}>
               <p className="Recipient-name">{message.username}</p>
-              <div className="Message-recipient">
-                <p>{message.message}</p>
-              </div>
+              <div className="Message Message-recipient">{message.message}</div>
             </div>
           ),
         )}
       </div>
-      <div className="chat__footer">
-        <form className="Chat-submit" onSubmit={handleSendMessage}>
-          <input
-            type="text"
-            placeholder="Type message"
-            className="Chat-message"
+      <div className="Chat-footer-container px-2">
+        <form className="Chat-submit" ref={(el) => (formRef = el)} onSubmit={handleSendMessage}>
+          <textarea
+            rows="1"
+            placeholder="Write a message..."
+            className="Chat-message-input m-2"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            ref={textAreaRef}
+            onKeyDown={onEnterPress}
           />
-          <button className="Chat-btn">Send</button>
+          <button type="submit" id="ChatWindow-btn">
+            <i className="bi bi-send-fill" />
+          </button>
         </form>
       </div>
     </div>
