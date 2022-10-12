@@ -3,7 +3,7 @@ import { QUESTION_SVC_BASE_URL } from "../utils/configs";
 
 export const getRandomQuestion = async ({ matchId, difficulty }) => {
   try {
-    const res = await axios.post(`${QUESTION_SVC_BASE_URL}/api/random-question`, {
+    const res = await axios.post(`${QUESTION_SVC_BASE_URL}/question-api/random-question`, {
       matchId,
       difficulty,
     });

@@ -1,3 +1,5 @@
+@import "../../scss/theme.scss";
+
 /*!
  * Quill Editor v1.3.6
  * https://quilljs.com/
@@ -42,6 +44,7 @@
   text-align: left;
   white-space: pre-wrap;
   word-wrap: break-word;
+  font-family: monospace;
 }
 .ql-editor > * {
   cursor: text;
@@ -408,7 +411,6 @@
   border: none;
   cursor: pointer;
   display: inline-block;
-  float: left;
   height: 24px;
   padding: 3px 5px;
   width: 28px;
@@ -645,7 +647,6 @@
 .ql-snow .ql-picker {
   color: #444;
   display: inline-block;
-  float: left;
   font-size: 14px;
   font-weight: 500;
   height: 24px;
@@ -942,5 +943,5 @@
   color: #06c;
 }
 .ql-container.ql-snow {
-  border: 1px solid #ccc;
+  border: 1px solid $outline;
 }

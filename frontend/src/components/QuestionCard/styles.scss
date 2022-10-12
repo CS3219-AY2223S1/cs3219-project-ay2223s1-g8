@@ -1,11 +1,23 @@
+@import "../../scss/theme.scss";
+
 .Qn-card-container {
-  flex: none;
-  width: 90vw;
-  padding: 2vw;
-  max-height: 60vh;
+  width: 100%;
+  padding: 0.2vw;
+  max-height: 50vh;
 }
 
 .Qn-card-body-container {
   overflow-y: auto;
   white-space: pre-wrap;
+}
+
+.Qn-card-body-container::-webkit-scrollbar {
+  background: none;
+  width: 0.8vw;
+  border-radius: 10px;
+}
+
+.Qn-card-body-container::-webkit-scrollbar-thumb {
+  background: $accent;
+  border-radius: 10px;
 }
