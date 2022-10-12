@@ -35,11 +35,11 @@ function MatchTimer(props) {
   });
 
   socket.on("waiting match", (data) => {
-    console.log(data);
+    console.log("waiting match", data);
   });
 
   socket.on("match cancelled", (data) => {
-    console.log(data);
+    console.log("match cancelled", data);
   });
 
   useEffect(() => {

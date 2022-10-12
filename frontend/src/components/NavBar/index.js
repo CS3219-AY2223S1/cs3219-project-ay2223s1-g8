@@ -10,9 +10,11 @@ import { useNavigate } from "react-router-dom";
 import { logoutUser } from "../../stores/user";
 import { getUsername, hasToken } from "../../utils/localStorageUtils";
 import logo from "../../assets/logo-white.png";
+
+import PropTypes from "prop-types";
 import "./styles.scss";
 
-function NavBar() {
+function NavBar({ logoHref }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
@@ -58,7 +60,7 @@ function NavBar() {
     <>
       <Navbar bg="light" fixed="top">
         <Container fluid>
-          <Navbar.Brand href="/match" className="Navbar-peerprep text-white">
+          <Navbar.Brand href={logoHref || "/match"} className="Navbar-peerprep text-white">
             <img alt="" src={logo} width="30" height="30" className="d-inline-block align-top" />{" "}
             PeerPrep
           </Navbar.Brand>
@@ -110,5 +112,9 @@ function NavBar() {
     </>
   );
 }
+
+NavBar.propTypes = {
+  logoHref: PropTypes.string,
+};
 
 export default NavBar;
