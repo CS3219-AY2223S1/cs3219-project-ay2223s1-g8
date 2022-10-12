@@ -14,7 +14,7 @@ function CollabPage2() {
   return (
     <>
       <div className="Collab2-container">
-        <NavBar />
+        <NavBar logoHref="#" />
         <div className="Collab2-content-div">
           <div className="Collab2-left-div">
             <QuestionCard containerId="Collab2-qn-card-container" />
