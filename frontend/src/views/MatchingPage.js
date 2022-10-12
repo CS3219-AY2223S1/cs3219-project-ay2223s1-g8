@@ -8,14 +8,13 @@ import { userSelector } from "../stores/user";
 const config = configs[process.env.NODE_ENV];
 
 function MatchingPage() {
-  console.log("MatchPage");
   const { userId } = useSelector(userSelector);
   const socket = io.connect(config.MATCH_SVC_BASE_URL, {
     path: "/matching-api",
     query: `userId=${userId}`,
   });
   socket.on("connect_error", (data) => {
-    console.log(data);
+    console.log("Matching socket connection error:", data);
     socket.disconnect();
   });
 

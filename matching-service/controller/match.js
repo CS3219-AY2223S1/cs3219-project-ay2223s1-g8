@@ -25,7 +25,6 @@ async function findMatch(req, socketId) {
 
     const isWaitingMatch = await matchController.hasMatchPotential(userId);
     if (isWaitingMatch) {
-      console.log("JERERE");
       resp.status = MatchState.MatchWaiting;
       release();
       return resp;

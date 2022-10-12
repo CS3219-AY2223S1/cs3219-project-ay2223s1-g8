@@ -95,7 +95,7 @@ const {
 } = require("./controller/match");
 
 const port = process.env.PORT;
-httpServer.listen(port);
+httpServer.listen(port || 8001);
 console.log(
   `Matching-service listening on port ${port} in ${app.get("env")} mode.`
 );
