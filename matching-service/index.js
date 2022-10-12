@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 
 const httpServer = http.createServer(app);
 const io = require("socket.io")(httpServer, {
-  path: "/matching-api/",
+  path: "/matching-api",
   cors: {
     origin: "*",
     methods: ["POST", "GET"],
@@ -33,6 +33,14 @@ const io = require("socket.io")(httpServer, {
 
 io.on("connection", (socket) => {
   console.log(socket.id + " has connected");
+  // Remove any existing match potential entry
+  matchRefresh({ userId: socket.handshake.query["userId"] }).then((resp) => {
+    if (resp.status == "Match Potential Refreshed") {
+      console.log("Match potential removed");
+    }
+  });
+
+  // Find a match
   socket.on("find match", (req) => {
     findMatch(req, socket.id).then((resp) => {
       if (resp.status == "Match Found") {
@@ -46,6 +54,7 @@ io.on("connection", (socket) => {
     });
   });
 
+  // Cancel existing find match
   socket.on("cancel match", (req) => {
     cancelMatch(req).then((resp) => {
       if (resp.status == "Match Cancelled") {
@@ -60,12 +69,14 @@ io.on("connection", (socket) => {
     });
   });
 
+  // Remove all match and match potential entry upon leave room
   socket.on("leave room by close tab", (req) => {
     leaveMatchRoom(req).then((resp) => {
       console.log(resp.status);
     });
   });
 
+  // Remove all match and match potential entry upon leave room
   socket.on("leave room by button", (req) => {
     leaveMatchRoom(req).then((resp) => {});
     console.log(resp.status);
@@ -80,10 +91,11 @@ const {
   findMatch,
   cancelMatch,
   leaveMatchRoom,
+  matchRefresh,
 } = require("./controller/match");
 
 const port = process.env.PORT;
-httpServer.listen(port || 8001);
+httpServer.listen(port);
 console.log(
   `Matching-service listening on port ${port} in ${app.get("env")} mode.`
 );
