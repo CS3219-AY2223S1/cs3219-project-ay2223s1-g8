@@ -29,10 +29,8 @@ function CollabEditor() {
               (node, delta) =>
                 delta.compose(
                   new Delta().retain(delta.length(), {
-                    color: false,
-                    background: false,
                     bold: false,
-                    strike: false,
+                    italic: false,
                     underline: false,
                   }),
                 ),
@@ -40,6 +38,7 @@ function CollabEditor() {
           ],
         },
       },
+      formats: ["bold", "italic", "underline"],
       placeholder: "Start collaborating...",
       theme: "snow", // 'bubble' is also great
     });
