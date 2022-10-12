@@ -19,13 +19,14 @@ const {
 const router = express.Router();
 
 // Controller will contain all the User-defined Routes
+app.get("/", (req, res) => res.send("Ok")); // for liveness check
 router.post("/user", createUser);
 router.post("/session", getUser);
 router.patch("/user", updateUser);
 router.delete("/user", deleteUser);
 router.post("/username", checkUsername);
 
-app.use("/api", router).all((_, res) => {
+app.use("/user-api", router).all((_, res) => {
   res.setHeader("content-type", "application/json");
   res.setHeader("Access-Control-Allow-Origin", "*");
 });
