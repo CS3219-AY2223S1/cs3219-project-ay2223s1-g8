@@ -2,22 +2,28 @@ const { createMatchedModel, createMatchPotentialModel } = require("../model");
 const {
   DuplicateMatchPotentialError,
   InvalidMatchPotentialError,
-  NoMatchPotentialError,
   DuplicateMatchedError,
   NoMatchedError,
 } = require("../utils/errors");
 const { generateMatchId } = require("../utils/match");
 const { Op } = require("sequelize");
+const { sequelize } = require("../database");
 
 class MatchController {
-  constructor(sequelize) {
-    createMatchedModel(sequelize);
-    createMatchPotentialModel(sequelize);
-    this.client = sequelize;
-    this.models = sequelize.models;
+  constructor(s = sequelize) {
+    createMatchedModel(s);
+    createMatchPotentialModel(s);
+    // creates a table if it does not exist
+    // { force: true } - new tables in each initialization)
+    s.sync({ force: true });
+    console.log("[Database] Matched Model initialized");
+    console.log("[Database] Match Potential Model initialized");
+    this.client = s;
+    this.models = s.models;
   }
 
   async hasMatchPotential(userId) {
+    await sequelize.sync();
     const matchPotentials = await this.models.MatchPotential.findOne({
       where: { userId },
     });
@@ -26,6 +32,7 @@ class MatchController {
   }
 
   async createMatchPotential(userId, level, socketId) {
+    await sequelize.sync();
     const hasMatchPotential = await this.hasMatchPotential(userId);
     if (hasMatchPotential) {
       throw new DuplicateMatchPotentialError();
@@ -34,6 +41,7 @@ class MatchController {
   }
 
   async findOneMatchPotential(userId) {
+    await sequelize.sync();
     const matchPotential = await this.models.MatchPotential.findOne({
       where: { userId },
     });
@@ -44,6 +52,7 @@ class MatchController {
   }
 
   async deleteMatchPotential(userId) {
+    await sequelize.sync();
     const hasMatchPotential = await this.hasMatchPotential(userId);
     if (!hasMatchPotential) {
       throw new InvalidMatchPotentialError();
@@ -53,6 +62,7 @@ class MatchController {
   }
 
   async findMatchesWhereLevel(level) {
+    await sequelize.sync();
     let matches;
     if (level == "any") {
       matches = await this.models.MatchPotential.findOne({
@@ -74,11 +84,13 @@ class MatchController {
   }
 
   async hasMatchedId(matchedId) {
+    await sequelize.sync();
     const matched = await this.models.Matched.findOne({ where: { matchedId } });
     return !(matched === null || matched.length === 0);
   }
 
   async hasMatchedSocketId(socketId) {
+    await sequelize.sync();
     const matched = await this.models.Matched.findOne({
       where: {
         [Op.or]: [{ socketId1: socketId }, { socketId2: socketId }],
@@ -88,6 +100,7 @@ class MatchController {
   }
 
   async checkIsUserMatched(userId) {
+    await sequelize.sync();
     const matched = await this.models.Matched.findAll({
       where: {
         [Op.or]: [{ userId1: userId }, { userId2: userId }],
@@ -97,6 +110,7 @@ class MatchController {
   }
 
   async findMatchedWhereUserId(userId) {
+    await sequelize.sync();
     const matched = await this.models.Matched.findOne({
       where: {
         [Op.or]: [{ userId1: userId }, { userId2: userId }],
@@ -110,6 +124,7 @@ class MatchController {
   }
 
   async createMatched(userId1, userId2, level, socketId1, socketId2) {
+    await sequelize.sync();
     const isUserId1Matched = await this.checkIsUserMatched(userId1);
     const isUserId2Matched = await this.checkIsUserMatched(userId2);
     if (isUserId1Matched || isUserId2Matched) {
@@ -127,6 +142,7 @@ class MatchController {
   }
 
   async removeMatchedByMatchId(matchedId) {
+    await sequelize.sync();
     const hasMatchedId = await this.hasMatchedId(matchedId);
     if (!hasMatchedId) {
       throw new NoMatchedError();
@@ -136,6 +152,7 @@ class MatchController {
   }
 
   async removeMatchedBySocketId(socketId) {
+    await sequelize.sync();
     const hasMatchedSocketId = await this.hasMatchedSocketId(socketId);
     if (!hasMatchedSocketId) {
       throw new NoMatchedError();
