@@ -3,11 +3,13 @@ import io from "socket.io-client";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../stores/user";
 import { matchSelector } from "../../stores/match/match.slice";
-import { COMMUNICATION_SVC_BASE_URL } from "../../utils/configs";
 import useAutosizeTextArea from "../../utils/useAutoSizedTextArea";
+import configs from "../../utils/configs";
 import "./styles.scss";
 
-const socket = io.connect(COMMUNICATION_SVC_BASE_URL, {
+const config = configs[process.env.NODE_ENV];
+
+const socket = io.connect(config.COMMUNICATION_SVC_BASE_URL, {
   path: "/communication-api",
 });
 

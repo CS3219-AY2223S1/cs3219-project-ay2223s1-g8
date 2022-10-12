@@ -1,8 +1,15 @@
-export const USER_SVC_BASE_URL =
-  window.__RUNTIME_CONFIG__.REACT_APP_URI_USER_SVC || "http://localhost:8000";
-export const MATCH_SVC_BASE_URL =
-  window.__RUNTIME_CONFIG__.REACT_APP_URI_MATCH_SVC || "http://localhost:8001";
-export const QUESTION_SVC_BASE_URL =
-  window.__RUNTIME_CONFIG__.REACT_APP_URI_QUESTION_SVC || "http://localhost:8002";
-export const COMMUNICATION_SVC_BASE_URL =
-  window.__RUNTIME_CONFIG__.REACT_APP_URI_COMMUNICATION_SVC || "http://localhost:8005";
+export default {
+  development: {
+    USER_SVC_BASE_URL: "http://localhost:8000",
+    MATCH_SVC_BASE_URL: "http://localhost:8001",
+    QUESTION_SVC_BASE_URL: "http://localhost:8001",
+    COMMUNICATION_SVC_BASE_URL: "http://localhost:8005",
+  },
+  production: {
+    USER_SVC_BASE_URL: window.__RUNTIME_CONFIG__.REACT_APP_API_URL || "http://localhost:8000",
+    MATCH_SVC_BASE_URL: window.__RUNTIME_CONFIG__.REACT_APP_API_URL || "http://localhost:8001",
+    QUESTION_SVC_BASE_URL: window.__RUNTIME_CONFIG__.REACT_APP_API_URL || "http://localhost:8002",
+    COMMUNICATION_SVC_BASE_URL:
+      window.__RUNTIME_CONFIG__.REACT_APP_API_URL || "http://localhost:8005",
+  },
+};
