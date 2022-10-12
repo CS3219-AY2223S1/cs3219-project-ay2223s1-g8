@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = async (sequelize) => {
-  const MatchPotential = sequelize.define(
+  return sequelize.define(
     "MatchPotential",
     {
       userId: {
@@ -19,14 +19,9 @@ module.exports = async (sequelize) => {
       },
     },
     {
+      tableName: "matchPotentials",
       timestamps: true,
       updatedAt: false,
     }
   );
-
-  // creates a table if it does not exist
-  // { force: true } - new db in each initialization)
-  await sequelize.sync();
-  console.log("[Database] Match Potential Model initialized");
-  return MatchPotential;
 };
