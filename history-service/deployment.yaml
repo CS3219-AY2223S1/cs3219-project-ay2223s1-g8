@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: history-service
+spec:
+  selector:
+    matchLabels:
+      app: history-service-app
+  template:
+    metadata:
+      labels:
+        app: history-service-app
+    spec:
+      serviceAccountName: cs3219-group8
+      containers:
+      - name: history-service-app
+        image: us-central1-docker.pkg.dev/peerprep-363807/history-service/history-service-image:latest
+        # This app listens on port 8004 for web traffic.
+        ports:
+        - containerPort: 8004
+        env:
+        - name: NODE_ENV
+          value: "prod"
+        - name: DB_MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: peerprep-secrets
+              key: historyMongoDb
