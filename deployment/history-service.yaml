@@ -26,3 +26,15 @@ spec:
             secretKeyRef:
               name: peerprep-secrets
               key: historyMongoDb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: history-service
+spec:
+  type: NodePort
+  selector:
+    app: history-service-app
+  ports:
+  - port: 8004 # port in service
+    targetPort: 8004 # port in deployment

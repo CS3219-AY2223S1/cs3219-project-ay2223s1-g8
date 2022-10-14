@@ -47,3 +47,15 @@ spec:
           - "-instances=peerprep-363807:us-central1:question-service=tcp:5432"
         securityContext:
           runAsNonRoot: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: question-service
+spec:
+  type: NodePort
+  selector:
+    app: question-service-app
+  ports:
+  - port: 8002 # port in service
+    targetPort: 8002 # port in deployment

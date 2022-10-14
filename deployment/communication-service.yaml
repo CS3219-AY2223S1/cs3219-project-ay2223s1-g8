@@ -21,3 +21,15 @@ spec:
         env:
         - name: NODE_ENV
           value: "prod"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: communication-service
+spec:
+  type: NodePort
+  selector:
+    app: communication-service-app
+  ports:
+  - port: 8005 # port in service
+    targetPort: 8005 # port in deployment

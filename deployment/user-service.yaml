@@ -52,3 +52,15 @@ spec:
           - "-instances=peerprep-363807:us-central1:user-service=tcp:5432"
         securityContext:
           runAsNonRoot: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  type: NodePort
+  selector:
+    app: user-service-app
+  ports:
+  - port: 8000 # port in service
+    targetPort: 8000 # port in deployment  
