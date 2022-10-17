@@ -85,7 +85,7 @@ jobs:
   #       run: |
   #         cd user-service
   #         gcloud config set project peerprep-363807
-  #         gcloud builds submit --tag us-central1-docker.pkg.dev/peerprep-363807/user-service/user-service-image .
+  #         gcloud builds submit --tag us-central1-docker.pkg.dev/peerprep-363807/user-service/user-service-image:$SHORT_SHA .
 
   Deploy:
     needs: Test
@@ -117,16 +117,9 @@ jobs:
           location: ${{ env.GKE_ZONE }}
           credentials: ${{ secrets.GKE_SA_KEY }}
 
-      - name: Setup Kustomize
-        uses: imranismail/setup-kustomize@v1
-        with:
-          kustomize-version: 4.5.4
-
-      - name: Update deploy image
-        working-directory: deployment/microservices
+      - name: Deploy
         run: |-
-          kustomize edit set image "gcr.io/peerprep-363807/user-service-image"
-          cat kustomization.yaml
-          kustomize build . | kubectl apply -f -
+          kubectl delete deploy user-service
+          kubectl apply -f /deployment/microservices/user-service.yaml
           kubectl rollout status deployment/user-service
           kubectl get services -o wide
