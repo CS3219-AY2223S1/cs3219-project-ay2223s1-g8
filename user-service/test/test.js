@@ -14,6 +14,8 @@ const sequelize = new Sequelize(config);
 const TestUser = createUserModel(sequelize);
 
 describe("User Service Endpoints", () => {
+  beforeAll(async () => await TestUser.sync());
+
   afterEach(async () => await TestUser.truncate());
 
   describe("POST /api/username", () => {
