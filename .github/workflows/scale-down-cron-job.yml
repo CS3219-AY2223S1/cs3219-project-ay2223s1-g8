@@ -1,6 +1,8 @@
 name: Scale down cron job
 
 on: 
+  workflow_dispatch:
+    branches: [ "main", "prod" ]
   schedule: 
       - cron: "0 16 * * *"  # every day at 4pm UTC (12am SGT)
 

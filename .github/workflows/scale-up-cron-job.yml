@@ -1,6 +1,8 @@
 name: Scale up cron job
 
-on: 
+on:
+  workflow_dispatch:
+    branches: [ "main", "prod" ]
   schedule: 
       - cron: "0 3 * * *" # 3am UTC (11am SGT)
 
