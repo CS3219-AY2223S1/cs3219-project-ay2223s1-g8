@@ -41,7 +41,7 @@ jobs:
 
   Build:
     needs: Local
-    if: ${{ github.event.type }} == "PushEvent"
+    if: ${{ github.event.type == "PushEvent" }}
     name: Build and Push to GKE
     runs-on: ubuntu-latest
     
@@ -80,7 +80,7 @@ jobs:
 
   Deploy:
     needs: Build
-    if: ${{ github.event.type }} == "PushEvent"
+    if: ${{ github.event.type == "PushEvent" }}
     name: Deploy to GKE
     runs-on: ubuntu-latest
     
