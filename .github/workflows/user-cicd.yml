@@ -1,10 +1,23 @@
-name: User - Test, Build and Deploy in GKE
+name: User CICD
 
 on:
   push:
     branches: [ "cicd" ]
+    paths:
+      - "user-service/**"
+      - ".github/workflows/user-cicd.yml"
   pull_request:
     branches: [ "cicd" ]
+    paths:
+      - "user-service/**"
+      - ".github/workflows/user-cicd.yml"
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
+  GKE_CLUSTER: peerprep-cluster
+  GKE_ZONE: us-central1
+  DEPLOYMENT_NAME: user-service 
+  IMAGE: user-service-image
 
 jobs:
   Test:
@@ -17,7 +30,6 @@ jobs:
       PASSWORD: ${{ secrets.PG_PASSWORD }}
       PORT: "5432"
       TEST_DB: peerprep-test
-      PROD_DB: peerprep-prod
       TOKEN_KEY: ${{ secrets.JWT_SECRET }}
 
     services:
@@ -43,24 +55,18 @@ jobs:
           node-version: '16.x'
       - name: Install dependencies
         run: |
-          cd user-service
+          cd ${{ env.DEPLOYMENT_NAME }}
           npm ci
       - name: Run testcases
         run: |
-          cd user-service
+          cd ${{ env.DEPLOYMENT_NAME }}
           npm run test
 
   Build:
     needs: Test
+    if: ${{ github.event.type }} == "PushEvent"
     name: Build and Push to GKE
     runs-on: ubuntu-latest
-
-    env:
-      PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
-      GKE_CLUSTER: peerprep-cluster
-      GKE_ZONE: us-central1
-      DEPLOYMENT_NAME: user-service 
-      IMAGE: user-service-image
     
     steps:
       - name: Checkout
@@ -91,21 +97,16 @@ jobs:
       - name: Build and push using Cloud Build
         run: |
           cd user-service
-          gcloud config set project peerprep-363807
-          gcloud builds submit --tag us-central1-docker.pkg.dev/peerprep-363807/user-service/user-service-image:${{ steps.vars.outputs.docker_tag }} .
+          gcloud config set project ${{ env.PROJECT_ID }}
+          gcloud builds submit --tag ${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.PROJECT_ID }}/ \
+          ${{ env.DEPLOYMENT_NAME }}/${{ env.IMAGE }}:${{ steps.vars.outputs.docker_tag }} .
 
 
   Deploy:
     needs: Build
+    if: ${{ github.event.type }} == "PushEvent"
     name: Deploy to GKE
     runs-on: ubuntu-latest
-
-    env:
-      PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
-      GKE_CLUSTER: peerprep-cluster
-      GKE_ZONE: us-central1
-      DEPLOYMENT_NAME: user-service 
-      IMAGE: user-service-image
     
     steps:
       - name: Checkout
@@ -127,6 +128,6 @@ jobs:
 
       - name: Deploy
         run: |-
-          kubectl apply -f ./deployment/microservices/user-service.yaml
-          kubectl rollout status deployment/user-service
+          kubectl apply -f ./deployment/microservices/${{ env.DEPLOYMENT_NAME }}.yaml
+          kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
           kubectl get services -o wide
