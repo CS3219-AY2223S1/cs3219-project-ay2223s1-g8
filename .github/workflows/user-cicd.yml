@@ -7,48 +7,48 @@ on:
     branches: [ "cicd" ]
 
 jobs:
-  Test:
-    runs-on: ubuntu-latest
+  # Test:
+  #   runs-on: ubuntu-latest
     
-    env:
-      NODE_ENV: "test"
-      USER: ${{ secrets.PG_USERNAME }}
-      HOST: "127.0.0.1"
-      PASSWORD: ${{ secrets.PG_PASSWORD }}
-      PORT: "5432"
-      TEST_DB: peerprep-test
-      PROD_DB: peerprep-prod
-      TOKEN_KEY: ${{ secrets.JWT_SECRET }}
+  #   env:
+  #     NODE_ENV: "test"
+  #     USER: ${{ secrets.PG_USERNAME }}
+  #     HOST: "127.0.0.1"
+  #     PASSWORD: ${{ secrets.PG_PASSWORD }}
+  #     PORT: "5432"
+  #     TEST_DB: peerprep-test
+  #     PROD_DB: peerprep-prod
+  #     TOKEN_KEY: ${{ secrets.JWT_SECRET }}
 
-    services:
-      postgres:
-        image: postgres:12-alpine
-        env:
-          POSTGRES_USER: ${{ secrets.PG_USERNAME }}
-          POSTGRES_PASSWORD: ${{ secrets.PG_PASSWORD }}
-          POSTGRES_DB: peerprep-test
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+  #   services:
+  #     postgres:
+  #       image: postgres:12-alpine
+  #       env:
+  #         POSTGRES_USER: ${{ secrets.PG_USERNAME }}
+  #         POSTGRES_PASSWORD: ${{ secrets.PG_PASSWORD }}
+  #         POSTGRES_DB: peerprep-test
+  #       ports:
+  #         - 5432:5432
+  #       options: >-
+  #         --health-cmd pg_isready
+  #         --health-interval 10s
+  #         --health-timeout 5s
+  #         --health-retries 5
     
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16.x'
-      - name: Install dependencies
-        run: |
-          cd user-service
-          npm ci
-      - name: Run testcases
-        run: |
-          cd user-service
-          npm run test
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Use Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16.x'
+  #     - name: Install dependencies
+  #       run: |
+  #         cd user-service
+  #         npm ci
+  #     - name: Run testcases
+  #       run: |
+  #         cd user-service
+  #         npm run test
 
   # Build:
   #   needs: Test
@@ -88,7 +88,7 @@ jobs:
   #         gcloud builds submit --tag us-central1-docker.pkg.dev/peerprep-363807/user-service/user-service-image:$SHORT_SHA .
 
   Deploy:
-    needs: Test
+    # needs: Test
     name: Deploy to GKE
     runs-on: ubuntu-latest
 
