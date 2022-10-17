@@ -77,12 +77,18 @@ jobs:
   #     - run: |-
   #         gcloud --quiet auth configure-docker
 
-  #     # Get the GKE credentials so we can deploy to the cluster
-  #     - uses: 'google-github-actions/get-gke-credentials@v0'
-  #       with:
-  #         cluster_name: ${{ env.GKE_CLUSTER }}
-  #         location: ${{ env.GKE_ZONE }}
-  #         credentials: ${{ secrets.GKE_SA_KEY }}
+      # Get the GKE credentials so we can deploy to the cluster
+      - uses: 'google-github-actions/get-gke-credentials@v0'
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+          credentials: ${{ secrets.GKE_SA_KEY }}
+    
+      # Build and push image to Google Container Registry
+      - name: Build
+        run: |
+          cd user-service
+          gcloud builds submit --tag us-central1-docker.pkg.dev/peerprep-363807/user-service/user-service-image .
 
   #     - name: Declare docker tag variables
   #       id: vars
