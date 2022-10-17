@@ -96,10 +96,9 @@ jobs:
       # Build and push image to Google Container Registry
       - name: Build and push using Cloud Build
         run: |
-          cd user-service
+          cd ${{ env.DEPLOYMENT_NAME }}
           gcloud config set project ${{ env.PROJECT_ID }}
-          gcloud builds submit --tag ${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.PROJECT_ID }}/ \
-          ${{ env.DEPLOYMENT_NAME }}/${{ env.IMAGE }}:${{ steps.vars.outputs.docker_tag }} .
+          gcloud builds submit --tag ${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.DEPLOYMENT_NAME }}/${{ env.IMAGE }}:${{ steps.vars.outputs.docker_tag }} .
 
 
   Deploy:
