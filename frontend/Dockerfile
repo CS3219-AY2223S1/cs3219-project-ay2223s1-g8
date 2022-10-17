@@ -13,6 +13,7 @@ RUN npm run build
 FROM nginx:stable-alpine as release
 
 COPY --from=build /frontend/build /usr/share/nginx/html
+COPY --from=build /frontend/.env.prod /usr/share/nginx/html/.env
 COPY --from=build /frontend/nginx/nginx.conf /etc/nginx/nginx.conf
 
 RUN apk add --update nodejs
