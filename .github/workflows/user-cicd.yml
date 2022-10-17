@@ -2,11 +2,9 @@ name: User - Test, Build and Deploy in GKE
 
 on:
   push:
-    branches:
-      - cicd
+    branches: [ "cicd" ]
   pull_request:
-    branches: 
-      - cicd
+    branches: [ "cicd" ]
 
 jobs:
   Test:
@@ -30,7 +28,7 @@ jobs:
           node-version: '16.x'
       - name: Install dependencies
         run: |
-          cd backend
+          cd user-service
           npm ci
       - name: Run testcases
         run: |
