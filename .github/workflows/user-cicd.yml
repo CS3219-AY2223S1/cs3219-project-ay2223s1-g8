@@ -127,6 +127,6 @@ jobs:
         run: |-
           kustomize edit set image "gcr.io/peerprep-363807/user-service-image:${{ steps.vars.outputs.docker_tag }}"
           cat kustomization.yaml
-          kustomize build . | kubectl apply -f user-service.yaml
+          kustomize build . | kubectl apply -f -
           kubectl rollout status deployment/user-service
           kubectl get services -o wide
