@@ -88,7 +88,7 @@ jobs:
           gcloud builds submit --tag us-central1-docker.pkg.dev/peerprep-363807/user-service/user-service-image:$SHORT_SHA .
 
   Deploy:
-    needs: Test
+    needs: Build
     name: Deploy to GKE
     runs-on: ubuntu-latest
 
