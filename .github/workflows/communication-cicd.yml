@@ -2,12 +2,12 @@ name: Communication CICD
 
 on:
   push:
-    branches: [ "cicd" ]
+    branches: [ "prod" ]
     paths:
       - "communication-service/**"
       - ".github/workflows/communication-cicd.yml"
   pull_request:
-    branches: [ "cicd" ]
+    branches: [ "prod" ]
     paths:
       - "communication-service/**"
       - ".github/workflows/communication-cicd.yml"

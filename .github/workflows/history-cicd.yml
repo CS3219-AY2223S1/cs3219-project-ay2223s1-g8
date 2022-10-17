@@ -2,12 +2,12 @@ name: History CICD
 
 on:
   push:
-    branches: [ "cicd" ]
+    branches: [ "prod" ]
     paths:
       - "history-service/**"
       - ".github/workflows/history-cicd.yml"
   pull_request:
-    branches: [ "cicd" ]
+    branches: [ "prod" ]
     paths:
       - "history-service/**"
       - ".github/workflows/history-cicd.yml"

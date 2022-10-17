@@ -2,12 +2,12 @@ name: Question CICD
 
 on:
   push:
-    branches: [ "cicd" ]
+    branches: [ "prod" ]
     paths:
       - "question-service/**"
       - ".github/workflows/question-cicd.yml"
   pull_request:
-    branches: [ "cicd" ]
+    branches: [ "prod" ]
     paths:
       - "question-service/**"
       - ".github/workflows/question-cicd.yml"

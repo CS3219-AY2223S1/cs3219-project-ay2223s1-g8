@@ -2,12 +2,12 @@ name: User CICD
 
 on:
   push:
-    branches: [ "cicd" ]
+    branches: [ "prod" ]
     paths:
       - "user-service/**"
       - ".github/workflows/user-cicd.yml"
   pull_request:
-    branches: [ "cicd" ]
+    branches: [ "prod" ]
     paths:
       - "user-service/**"
       - ".github/workflows/user-cicd.yml"

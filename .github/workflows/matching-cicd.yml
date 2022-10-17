@@ -2,12 +2,12 @@ name: Matching CICD
 
 on:
   push:
-    branches: [ "cicd" ]
+    branches: [ "prod" ]
     paths:
       - "matching-service/**"
       - ".github/workflows/matching-cicd.yml"
   pull_request:
-    branches: [ "cicd" ]
+    branches: [ "prod" ]
     paths:
       - "matching-service/**"
       - ".github/workflows/matching-cicd.yml"

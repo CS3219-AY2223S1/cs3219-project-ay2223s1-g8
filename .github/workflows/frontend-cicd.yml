@@ -2,12 +2,12 @@ name: Frontend CICD
 
 on:
   push:
-    branches: [ "cicd" ]
+    branches: [ "prod" ]
     paths:
       - "frontend/**"
       - ".github/workflows/frontend-cicd.yml"
   pull_request:
-    branches: [ "cicd" ]
+    branches: [ "prod" ]
     paths:
       - "frontend/**"
       - ".github/workflows/frontend-cicd.yml"
