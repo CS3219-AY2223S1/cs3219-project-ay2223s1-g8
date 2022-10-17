@@ -88,6 +88,7 @@ jobs:
       - name: Build
         run: |
           cd user-service
+          gcloud config set peerprep-363807
           gcloud builds submit --tag us-central1-docker.pkg.dev/peerprep-363807/user-service/user-service-image .
 
   #     - name: Declare docker tag variables
