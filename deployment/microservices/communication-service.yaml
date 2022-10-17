@@ -10,6 +10,7 @@ spec:
     metadata:
       labels:
         app: communication-service-app
+        environment: prod
     spec:
       serviceAccountName: cs3219-group8
       containers:

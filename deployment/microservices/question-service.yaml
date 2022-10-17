@@ -1,23 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-service
+  name: question-service
 spec:
   selector:
     matchLabels:
-      app: user-service-app
+      app: question-service-app
   template:
     metadata:
       labels:
-        app: user-service-app
+        app: question-service-app
+        environment: prod
     spec:
       serviceAccountName: cs3219-group8
       containers:
-      - name: user-service-app
-        image: us-central1-docker.pkg.dev/peerprep-363807/user-service/user-service-image:latest
-        # This app listens on port 8000 for web traffic.
+      - name: question-service-app
+        image: us-central1-docker.pkg.dev/peerprep-363807/question-service/question-service-image:latest
+        # This app listens on port 8002 for web traffic.
         ports:
-        - containerPort: 8000
+        - containerPort: 8002
         env:
         - name: NODE_ENV
           value: "prod"
@@ -40,27 +41,22 @@ spec:
             secretKeyRef:
               name: peerprep-secrets
               key: database
-        - name: TOKEN_KEY
-          valueFrom:
-            secretKeyRef:
-              name: peerprep-secrets
-              key: jwt
       - name: cloud-sql-proxy
         image: gcr.io/cloudsql-docker/gce-proxy:latest
         command:
           - "/cloud_sql_proxy"
-          - "-instances=peerprep-363807:us-central1:user-service=tcp:5432"
+          - "-instances=peerprep-363807:us-central1:question-service=tcp:5432"
         securityContext:
           runAsNonRoot: true
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: user-service
+  name: question-service
 spec:
   type: NodePort
   selector:
-    app: user-service-app
+    app: question-service-app
   ports:
-  - port: 8000 # port in service
-    targetPort: 8000 # port in deployment  
+  - port: 8002 # port in service
+    targetPort: 8002 # port in deployment

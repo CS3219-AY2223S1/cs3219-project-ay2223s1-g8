@@ -10,6 +10,7 @@ spec:
     metadata:
       labels:
         app: frontend
+        environment: prod
     spec:
       serviceAccountName: cs3219-group8
       containers:
