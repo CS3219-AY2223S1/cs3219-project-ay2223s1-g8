@@ -50,26 +50,27 @@ jobs:
           cd user-service
           npm run test
 
-  # Deploy:
-  #   name: Build, Push and deploy app to gke
-  #   runs-on: ubuntu-latest
+  Deploy:
+    needs: Test
+    name: Build, Push and deploy app to gke
+    runs-on: ubuntu-latest
 
-  #   env:
-  #     PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
-  #     GKE_CLUSTER: peerprep-cluster
-  #     GKE_ZONE: us-central1
-  #     DEPLOYMENT_NAME: user-service 
-  #     IMAGE: user-service-image
+    env:
+      PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
+      GKE_CLUSTER: peerprep-cluster
+      GKE_ZONE: us-central1
+      DEPLOYMENT_NAME: user-service 
+      IMAGE: user-service-image
     
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  #     - name: 'Set up Cloud SDK'
-  #       uses: 'google-github-actions/setup-gcloud@v0'
-  #       with:
-  #         service_account_key: ${{ secrets.GKE_SA_KEY }}
-  #         project_id: ${{ secrets.GKE_PROJECT }}
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v0'
+        with:
+          service_account_key: ${{ secrets.GKE_SA_KEY }}
+          project_id: ${{ secrets.GKE_PROJECT }}
 
   #     # Configure Docker to use the gcloud command-line tool as a credential
   #     # helper for authentication
