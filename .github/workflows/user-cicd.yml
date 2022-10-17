@@ -7,7 +7,7 @@ on:
       - "user-service/**"
       - ".github/workflows/user-cicd.yml"
   pull_request:
-    branches: [ "prod" ]
+    branches: [ "prod", "main" ]
     paths:
       - "user-service/**"
       - ".github/workflows/user-cicd.yml"

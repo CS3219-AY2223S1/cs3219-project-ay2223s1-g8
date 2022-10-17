@@ -7,7 +7,7 @@ on:
       - "frontend/**"
       - ".github/workflows/frontend-cicd.yml"
   pull_request:
-    branches: [ "prod" ]
+    branches: [ "prod", "main" ]
     paths:
       - "frontend/**"
       - ".github/workflows/frontend-cicd.yml"

@@ -7,7 +7,7 @@ on:
       - "question-service/**"
       - ".github/workflows/question-cicd.yml"
   pull_request:
-    branches: [ "prod" ]
+    branches: [ "prod", "main" ]
     paths:
       - "question-service/**"
       - ".github/workflows/question-cicd.yml"

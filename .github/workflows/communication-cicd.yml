@@ -7,7 +7,7 @@ on:
       - "communication-service/**"
       - ".github/workflows/communication-cicd.yml"
   pull_request:
-    branches: [ "prod" ]
+    branches: [ "prod", "main" ]
     paths:
       - "communication-service/**"
       - ".github/workflows/communication-cicd.yml"

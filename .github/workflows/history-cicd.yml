@@ -7,7 +7,7 @@ on:
       - "history-service/**"
       - ".github/workflows/history-cicd.yml"
   pull_request:
-    branches: [ "prod" ]
+    branches: [ "prod", "main" ]
     paths:
       - "history-service/**"
       - ".github/workflows/history-cicd.yml"

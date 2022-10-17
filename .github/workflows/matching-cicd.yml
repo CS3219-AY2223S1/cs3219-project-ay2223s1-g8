@@ -7,7 +7,7 @@ on:
       - "matching-service/**"
       - ".github/workflows/matching-cicd.yml"
   pull_request:
-    branches: [ "prod" ]
+    branches: [ "prod", "main" ]
     paths:
       - "matching-service/**"
       - ".github/workflows/matching-cicd.yml"
