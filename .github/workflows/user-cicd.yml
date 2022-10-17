@@ -120,6 +120,6 @@ jobs:
       - name: Deploy
         run: |-
           kubectl delete deploy user-service
-          kubectl apply -f /deployment/microservices/user-service.yaml
+          kubectl apply -f ./deployment/microservices/user-service.yaml
           kubectl rollout status deployment/user-service
           kubectl get services -o wide
