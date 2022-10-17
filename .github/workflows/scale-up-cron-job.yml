@@ -1,4 +1,4 @@
-name: User CICD
+name: Scale up cron job
 
 on: workflow_dispatch
   # schedule: 
