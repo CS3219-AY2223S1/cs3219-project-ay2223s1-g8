@@ -21,7 +21,6 @@ env:
 
 jobs:
   Build:
-    needs: Test
     if: ${{ github.event.type }} == "PushEvent"
     name: Build and Push to GKE
     runs-on: ubuntu-latest
