@@ -22,6 +22,8 @@ const io = require("socket.io")(httpServer, {
   },
 });
 
+const Mutex = require("async-mutex").Mutex;
+
 io.on("connection", (socket) => {
   console.log(`SocketIO connection created, socketID=${socket.id}`);
 
@@ -30,9 +32,13 @@ io.on("connection", (socket) => {
     socket.join(req.roomId);
   });
 
-  socket.on("send message", (req) => {
+  socket.on("send message", async (req) => {
+    const mutex = new Mutex();
+    console.log("SEND MESSAGE");
+    const release = await mutex.acquire();
     console.log(req);
     io.to(req.roomId).emit("receive message", req);
+    release();
   });
 
   socket.on("disconnect", (reason) => {
