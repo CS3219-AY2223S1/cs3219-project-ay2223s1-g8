@@ -34,7 +34,6 @@ io.on("connection", (socket) => {
 
   socket.on("send message", async (req) => {
     const mutex = new Mutex();
-    console.log("SEND MESSAGE");
     const release = await mutex.acquire();
     console.log(req);
     io.to(req.roomId).emit("receive message", req);
