@@ -10,7 +10,7 @@ module.exports = {
         dialect: "postgres",
         username: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
-        logging: console.log,
+        logging: false,
       },
     },
   },
