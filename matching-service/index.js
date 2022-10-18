@@ -66,8 +66,10 @@ io.on("connection", (socket) => {
   });
 
   socket.on("leave room by button", (req) => {
-    leaveMatchRoom(req).then((resp) => {});
-    console.log(resp.status);
+    console.log(req);
+    leaveMatchRoom(req["req"]).then((resp) => {
+      console.log(`${socket.id} has left the room.`);
+    });
   });
 
   socket.on("disconnect", (reason) => {

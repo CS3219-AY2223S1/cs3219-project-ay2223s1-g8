@@ -110,6 +110,7 @@ async function cancelMatch(req) {
 }
 
 async function leaveMatchRoom(req) {
+  console.log("LeaveMatchRoom: " + req);
   const mutex = new Mutex();
   const release = await mutex.acquire();
   var resp = {};
