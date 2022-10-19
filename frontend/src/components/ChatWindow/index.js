@@ -33,11 +33,13 @@ const ChatWindow = () => {
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    socket.emit("send message", {
-      username: username,
-      message: message,
-      roomId: matchId,
-    });
+    if (message.trim().length != 0) {
+      socket.emit("send message", {
+        username: username,
+        message: message,
+        roomId: matchId,
+      });
+    }
     setMessage("");
   };
 

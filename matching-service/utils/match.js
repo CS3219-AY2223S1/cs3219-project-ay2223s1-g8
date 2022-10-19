@@ -6,6 +6,7 @@ const MatchState = {
   MatchExists: "Match Already Exists",
   MatchCancelled: "Match Cancelled",
   MatchDeleted: "Match Room Deleted",
+  MatchRefreshed: "Match Potential Refreshed",
 };
 
 // Generate unique match id
