@@ -17,16 +17,16 @@ function LeaveRoomModal({ handleClose, show }) {
 
   socket.on("leave room", (data) => {
     console.log(`all users have left room ${data.roomId}`);
-    navigate("/match");
-  });
-
-  const leaveRoomButtonClick = () => {
-    socket.emit("leave room by button", { socketId: socket.id });
     axios.delete(config.QUESTION_SVC_BASE_URL + "/question-api/assigned-question", {
       data: {
         matchId: matchId,
       },
     });
+    navigate("/match");
+  });
+
+  const leaveRoomButtonClick = () => {
+    socket.emit("leave room by button", { socketId: socket.id });
   };
 
   return (
