@@ -21,7 +21,7 @@ function LeaveRoomModal({ handleClose, show }) {
   });
 
   const leaveRoomButtonClick = () => {
-    socket.emit("leave room by button", { req: socket.id });
+    socket.emit("leave room by button", { socketId: socket.id });
     axios.delete(config.QUESTION_SVC_BASE_URL + "/question-api/assigned-question", {
       data: {
         matchId: matchId,
