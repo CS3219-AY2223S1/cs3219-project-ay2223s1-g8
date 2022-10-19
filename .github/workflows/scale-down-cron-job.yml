@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     branches: [ "main", "prod" ]
   schedule: 
-      - cron: "0 16 * * *"  # every day at 4pm UTC (12am SGT)
+    - cron: "0 16 * * *"  # every day at 4pm UTC (12am SGT)
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
@@ -13,7 +13,7 @@ env:
 
 jobs:
   scale:
-    name: Scale up to 1 replica
+    name: Scale down to 0 replica
     runs-on: ubuntu-latest
     
     steps:
