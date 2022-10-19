@@ -3,21 +3,25 @@ import Modal from "react-bootstrap/Modal";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { socketSelector } from "../../stores/socket/socket.slice";
+import { matchSelector } from "../../stores/match/match.slice";
 import { useSelector } from "react-redux";
-// import configs from "../../utils/configs";
-// import io from "socket.io-client";
-// const config = configs[process.env.NODE_ENV];
-// const socket = io.connect(config.MATCH_SVC_BASE_URL, {
-//   path: "/matching-api",
-// });
+import axios from "axios";
+import configs from "../../utils/configs";
+const config = configs[process.env.NODE_ENV];
 
 function LeaveRoomModal({ handleClose, show }) {
   const navigate = useNavigate();
   const { socket } = useSelector(socketSelector);
-  console.log(socket);
+  const { matchId } = useSelector(matchSelector);
+  console.log(matchId);
 
   const leaveRoomButtonClick = () => {
     socket.emit("leave room by button", { req: socket.id });
+    axios.delete(config.QUESTION_SVC_BASE_URL + "/question-api/assigned-question", {
+      data: {
+        matchId: matchId,
+      },
+    });
     navigate("/match");
   };
 

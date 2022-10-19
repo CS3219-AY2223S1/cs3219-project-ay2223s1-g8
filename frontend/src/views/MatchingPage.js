@@ -2,13 +2,15 @@ import NavBar from "../components/NavBar";
 import MatchTimer from "../components/MatchTimer";
 import io from "socket.io-client";
 import configs from "../utils/configs";
-import { setSocket } from "../stores/socket/socket.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { userSelector } from "../stores/user";
+import { clearState, setSocket } from "../stores/socket/socket.slice";
 
 const config = configs[process.env.NODE_ENV];
 
 function MatchingPage() {
+  const dispatch = useDispatch();
+  dispatch(clearState());
   const socket = io.connect(config.MATCH_SVC_BASE_URL, {
     path: "/matching-api",
   });
@@ -17,7 +19,6 @@ function MatchingPage() {
     socket.disconnect();
   });
   // console.log(socket);
-  const dispatch = useDispatch();
   const { userId } = useSelector(userSelector);
   dispatch(setSocket({ userId: userId, socket: socket }));
 
