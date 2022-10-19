@@ -11,5 +11,9 @@ module.exports = {
       uri: process.env.DB_MONGO_URI_TEST || "mongodb://localhost:27017/history-db-test",
     },
   },
-  prod: {},
+  prod: {
+    database: {
+        uri: process.env.DB_MONGO_URI,
+      },
+  },
 };

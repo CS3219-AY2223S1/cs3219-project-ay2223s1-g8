@@ -2,21 +2,35 @@ require("dotenv/config");
 const server = require("../index.js");
 const supertest = require("supertest");
 const requestWithSupertest = supertest(server.app);
-const { Sequelize } = require("sequelize");
+// const { Sequelize } = require("sequelize");
 const createUserModel = require("../model/user-model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const jwtDecode = require("jwt-decode");
-const config = require("../config/config")[process.env.NODE_ENV || "test"];
+// const config = require("../config/config")[process.env.NODE_ENV || "test"];
 
-const sequelize = new Sequelize(config);
+// const sequelize = new Sequelize(config);
 
-const TestUser = createUserModel(sequelize);
+const TestUser = createUserModel();
 
 describe("User Service Endpoints", () => {
-  afterEach(async () => await TestUser.truncate());
+  beforeAll(async () => {
+    try {
+      await TestUser.sync();
+    } catch (e) {
+      expect(e).toBe({});
+    }
+  });
 
-  describe("POST /api/username", () => {
+  afterEach(async () => {
+    try {
+      await TestUser.truncate();
+    } catch (e) {
+      expect(e).toBe({});
+    }
+  });
+
+  describe("POST /user-api/username", () => {
     it("should return true if username is in database", async () => {
       // Arrange
       await TestUser.create({
@@ -26,7 +40,7 @@ describe("User Service Endpoints", () => {
 
       // Act
       const res = await requestWithSupertest
-        .post("/api/username")
+        .post("/user-api/username")
         .send({ username: "TestUsername" });
 
       // Assert
@@ -44,7 +58,7 @@ describe("User Service Endpoints", () => {
     it("should return false if username is not in database", async () => {
       // Act
       const res = await requestWithSupertest
-        .post("/api/username")
+        .post("/user-api/username")
         .send({ username: "TestUsername" });
 
       // Assert
@@ -54,18 +68,18 @@ describe("User Service Endpoints", () => {
 
     it("should throw error when username is missing", async () => {
       // Act
-      const res = await requestWithSupertest.post("/api/username").send();
+      const res = await requestWithSupertest.post("/user-api/username").send();
 
       // Assert
       expect(res.status).toEqual(400);
     });
   });
 
-  describe("POST /api/user", () => {
+  describe("POST /user-api/user", () => {
     it("should successfully create a new user", async () => {
       // Act
       const res = await requestWithSupertest
-        .post("/api/user")
+        .post("/user-api/user")
         .send({ username: "TestUsername", password: "TestPassword" });
 
       // Assert
@@ -93,7 +107,7 @@ describe("User Service Endpoints", () => {
 
       // Act
       const res = await requestWithSupertest
-        .post("/api/user")
+        .post("/user-api/user")
         .send({ username: "TestUsername", password: "TestPassword2" });
 
       // Assert
@@ -115,7 +129,7 @@ describe("User Service Endpoints", () => {
 
       // Act
       const res = await requestWithSupertest
-        .post("/api/user")
+        .post("/user-api/user")
         .send({ username: "TestUsername2", password: "TestPassword" });
 
       // Assert
@@ -137,7 +151,7 @@ describe("User Service Endpoints", () => {
     });
   });
 
-  describe("POST /api/session", () => {
+  describe("POST /user-api/session", () => {
     it("should successfully log in a user", async () => {
       // Arrange
       await TestUser.create({
@@ -147,7 +161,7 @@ describe("User Service Endpoints", () => {
 
       // Act
       const res = await requestWithSupertest
-        .post("/api/session")
+        .post("/user-api/session")
         .send({ username: "TestUsername", password: "TestPassword" });
 
       // Assert
@@ -168,7 +182,7 @@ describe("User Service Endpoints", () => {
 
       // Act
       const res = await requestWithSupertest
-        .post("/api/session")
+        .post("/user-api/session")
         .send({ username: "TestUsername2", password: "TestPassword" });
 
       // Assert
@@ -191,7 +205,7 @@ describe("User Service Endpoints", () => {
 
       // Act
       const res = await requestWithSupertest
-        .post("/api/session")
+        .post("/user-api/session")
         .send({ username: "TestUsername", password: "TestPassword2" });
 
       // Assert
@@ -206,7 +220,7 @@ describe("User Service Endpoints", () => {
     });
   });
 
-  describe("PATCH /api/user", () => {
+  describe("PATCH /user-api/user", () => {
     it("should successfully change password for user", async () => {
       // Arrange
       await TestUser.create({
@@ -221,7 +235,7 @@ describe("User Service Endpoints", () => {
       const token = jwt.sign({ id: addedUser.userId }, process.env.TOKEN_KEY, {
         expiresIn: "2h",
       });
-      const res = await requestWithSupertest.patch("/api/user").send({
+      const res = await requestWithSupertest.patch("/user-api/user").send({
         token,
         currPassword: "TestPassword",
         newPassword: "TestPassword2",
@@ -254,7 +268,7 @@ describe("User Service Endpoints", () => {
       const token = jwt.sign({ id: addedUser.userId }, process.env.TOKEN_KEY, {
         expiresIn: "2h",
       });
-      const res = await requestWithSupertest.patch("/api/user").send({
+      const res = await requestWithSupertest.patch("/user-api/user").send({
         token,
         currPassword: "TestPassword",
         newPassword: "TestPassword",
@@ -277,7 +291,7 @@ describe("User Service Endpoints", () => {
       const token = jwt.sign({ id: null }, process.env.TOKEN_KEY, {
         expiresIn: "2h",
       });
-      const res = await requestWithSupertest.patch("/api/user").send({
+      const res = await requestWithSupertest.patch("/user-api/user").send({
         token,
         currPassword: "TestPassword",
         newPassword: "TestPassword2",
@@ -308,7 +322,7 @@ describe("User Service Endpoints", () => {
       const token = jwt.sign({ id: addedUser.userId }, process.env.TOKEN_KEY, {
         expiresIn: "2h",
       });
-      const res = await requestWithSupertest.patch("/api/user").send({
+      const res = await requestWithSupertest.patch("/user-api/user").send({
         token,
         currPassword: "TestPassword1",
         newPassword: "TestPassword2",
@@ -328,7 +342,7 @@ describe("User Service Endpoints", () => {
     });
   });
 
-  describe("DELETE /api/user", () => {
+  describe("DELETE /user-api/user", () => {
     it("should successfully delete user", async () => {
       // Arrange
       await TestUser.create({
@@ -344,7 +358,7 @@ describe("User Service Endpoints", () => {
         expiresIn: "2h",
       });
       const res = await requestWithSupertest
-        .delete("/api/user")
+        .delete("/user-api/user")
         .send({ token });
 
       // Assert
@@ -370,7 +384,7 @@ describe("User Service Endpoints", () => {
         expiresIn: "2h",
       });
       const res = await requestWithSupertest
-        .delete("/api/user")
+        .delete("/user-api/user")
         .send({ token });
 
       // Assert

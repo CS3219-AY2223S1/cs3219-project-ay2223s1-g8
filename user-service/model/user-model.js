@@ -1,10 +1,9 @@
-const { Model, DataTypes } = require("sequelize");
-const { Sequelize } = require("./database.js");
-const sequelize = require("./database.js");
+const { Sequelize, Model, DataTypes } = require("sequelize");
+const s = require("./database.js");
 
 class User extends Model {}
 
-function createUserModel(s = sequelize) {
+function createUserModel() {
   return User.init(
     {
       userId: {

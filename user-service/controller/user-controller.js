@@ -88,7 +88,7 @@ async function checkUsername(req, res) {
     } else {
       return res
         .status(500)
-        .json({ message: "Database failure when fetching new user!" });
+        .json({ message: "Database failure when check username!" });
     }
   }
 }

@@ -1,0 +1,57 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: scale-down-job
+spec:
+  schedule: "0 16 * * *"  # every day at 4pm UTC (12am SGT)
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: kubectl
+            image: bitnami/kubectl:latest
+            imagePullPolicy: IfNotPresent
+            args: 
+              - scale
+              - deployment
+              - user-service
+              - matching-service
+              - question-service
+              - history-service
+              - communication-service
+              - frontend
+              - --replicas=0 
+          serviceAccountName: gke-service-account
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: scale-up-job
+spec:
+  schedule: "0 3 * * *" # 3am UTC (11am SGT)
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: kubectl
+            image: bitnami/kubectl:latest
+            imagePullPolicy: IfNotPresent
+            args: 
+              - scale
+              - deployment
+              - user-service
+              - matching-service
+              - question-service
+              - history-service
+              - communication-service
+              - frontend
+              - --replicas=1
+          serviceAccountName: gke-service-account
