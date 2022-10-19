@@ -68,15 +68,18 @@ io.on("connection", (socket) => {
       } else {
         io.to(socket.id).emit("last user left room", resp);
       }
-      
     });
   });
 
   socket.on("disconnect", (reason) => {
     console.log(`User socketID=${socket.id} disconnected, reason=${reason}`);
-    leaveMatchRoom({ socketId: socket.id} ).then((resp) => {
+    leaveMatchRoom({ socketId: socket.id }).then((resp) => {
       console.log(`${socket.id} has left the room.`);
-      io.to(resp.otherUserSocketId).emit("other user left room", resp);
+      if (resp.firstUserToLeave) {
+        io.to(resp.otherUserSocketId).emit("other user left room", resp);
+      } else {
+        io.to(socket.id).emit("last user left room", resp);
+      }
     });
   });
 });
