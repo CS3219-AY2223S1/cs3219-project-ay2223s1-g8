@@ -69,6 +69,13 @@ jobs:
         run: |
           GIT_HASH=$(git rev-parse --short "${GITHUB_SHA}")
           echo "##[set-output name=docker_tag;]$(echo ${GITHUB_REF##*/}-${GIT_HASH})"
+      
+      - name: 'Create .env.prod file'
+        run: |
+          cd ${{ env.DEPLOYMENT_NAME }}
+          touch .env.prod
+          echo REACT_APP_API_URL=${{ secrets.GATEWAY_URL }} >> .env.prod
+          cat .env.prod
         
       # Build and push image to Google Container Registry
       - name: Build and push using Cloud Build
