@@ -4,17 +4,10 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { socketSelector } from "../../stores/socket/socket.slice";
 import { useSelector } from "react-redux";
-// import configs from "../../utils/configs";
-// import io from "socket.io-client";
-// const config = configs[process.env.NODE_ENV];
-// const socket = io.connect(config.MATCH_SVC_BASE_URL, {
-//   path: "/matching-api",
-// });
 
 function LeaveRoomModal({ handleClose, show }) {
   const navigate = useNavigate();
   const { socket } = useSelector(socketSelector);
-  console.log(socket);
 
   const leaveRoomButtonClick = () => {
     socket.emit("leave room by button", { socketId: socket.id });
