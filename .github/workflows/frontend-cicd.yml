@@ -34,7 +34,7 @@ jobs:
         run: |
           cd ${{ env.DEPLOYMENT_NAME }}
           npm ci
-      - name: Build locally
+      - name: Build frontend locally
         run: |
           cd ${{ env.DEPLOYMENT_NAME }}
           npm run build
