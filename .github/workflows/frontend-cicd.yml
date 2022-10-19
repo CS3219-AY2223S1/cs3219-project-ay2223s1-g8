@@ -75,7 +75,7 @@ jobs:
           touch .env.prod
           echo REACT_APP_API_URL=${{ secrets.GATEWAY_URL }} > .env.prod
           cat .env.prod
-          ls
+          ls -a
         
       # Build and push image to Google Container Registry
       # - name: Build and push using Cloud Build
