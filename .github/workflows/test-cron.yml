@@ -1,0 +1,14 @@
+name: Test cron
+
+on:
+  schedule: 
+      - cron: "*/5 * * * *"
+
+jobs:
+  scale:
+    name: Test cron schedule
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Test
+        run: echo Hello World!
