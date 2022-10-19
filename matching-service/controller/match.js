@@ -135,8 +135,35 @@ async function leaveMatchRoom(req) {
   }
 }
 
+async function matchRefresh(req) {
+  const mutex = new Mutex();
+  const release = await mutex.acquire();
+  var resp = {};
+  const { userId } = req;
+  try {
+    const deleteMatchPotential = await matchController.deleteMatchPotential(
+      userId
+    );
+    resp.status = MatchState.MatchRefreshed;
+    release();
+    return resp;
+  } catch (err) {
+    if (err instanceof InvalidMatchPotentialError) {
+      console.log(err.message);
+      resp.status = MatchState.MatchRefreshed;
+      release();
+      return resp;
+    }
+    console.log(err.message);
+    release();
+    resp.error = err.message;
+    return resp;
+  }
+}
+
 module.exports = {
   findMatch,
   cancelMatch,
   leaveMatchRoom,
+  matchRefresh,
 };
