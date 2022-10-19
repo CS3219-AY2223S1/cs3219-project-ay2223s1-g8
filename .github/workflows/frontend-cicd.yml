@@ -20,27 +20,26 @@ env:
   IMAGE: frontend-image
 
 jobs:
-  Local:
-    name: Local Build
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16.x'
-      - name: Install dependencies
-        run: |
-          cd ${{ env.DEPLOYMENT_NAME }}
-          npm ci
-      - name: Build frontend locally
-        run: |
-          cd ${{ env.DEPLOYMENT_NAME }}
-          npm run build
+  # Local:
+  #   name: Local Build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Use Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16.x'
+  #     - name: Install dependencies
+  #       run: |
+  #         cd ${{ env.DEPLOYMENT_NAME }}
+  #         npm ci
+  #     - name: Build locally
+  #       run: |
+  #         cd ${{ env.DEPLOYMENT_NAME }}
+  #         npm run build
 
   Build:
-    needs: Local
+    # needs: Local
     if: ${{ github.event_name == 'push' }}
     name: Build and Push to GKE
     runs-on: ubuntu-latest
