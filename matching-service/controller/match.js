@@ -110,15 +110,20 @@ async function cancelMatch(req) {
 }
 
 async function leaveMatchRoom(req) {
+  console.log("LeaveMatchRoom: " + req);
   const mutex = new Mutex();
   const release = await mutex.acquire();
   var resp = {};
   const { socketId } = req;
   try {
-    const deleteMatchedBySocket = await matchController.removeMatchedBySocketId(
-      socketId
-    );
+    const match = await matchController.findMatchedWhereSocketId(socketId);
+    if (match !== null) {
+      const deleteMatchedBySocket =
+        await matchController.removeMatchedBySocketId(socketId);
+    }
+
     resp.status = MatchState.MatchDeleted;
+    resp.roomId = match.dataValues.matchedId;
     release();
     return resp;
   } catch (err) {

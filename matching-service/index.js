@@ -3,7 +3,7 @@ const cors = require("cors");
 const http = require("http");
 const database = require("./database");
 
-const config = require("./config")[process.env.NODE_ENV || "development"];
+const config = require("./config");
 
 config.postgres.client = database.connectToPostgres();
 
@@ -77,12 +77,19 @@ io.on("connection", (socket) => {
 
   // Remove all match and match potential entry upon leave room
   socket.on("leave room by button", (req) => {
-    leaveMatchRoom(req).then((resp) => {});
-    console.log(resp.status);
+    console.log(req);
+    leaveMatchRoom(req).then((resp) => {
+      console.log(`${socket.id} has left the room.`);
+      io.to(resp.roomId).emit("leave room", resp);
+    });
   });
 
   socket.on("disconnect", (reason) => {
     console.log(`User socketID=${socket.id} disconnected, reason=${reason}`);
+    leaveMatchRoom({ socketId: socket.id} ).then((resp) => {
+      console.log(`${socket.id} has left the room.`);
+      io.to(resp.roomId).emit("leave room", resp);
+    });
   });
 });
 
