@@ -16,9 +16,13 @@ function LeaveRoomModal({ handleClose, show }) {
   const { socket } = useSelector(socketSelector);
   console.log(socket);
 
-  const leaveRoomButtonClick = () => {
-    socket.emit("leave room by button", { req: socket.id });
+  socket.on("leave room", (data) => {
+    console.log(`all users have left room ${data.roomId}`);
     navigate("/match");
+  });
+
+  const leaveRoomButtonClick = () => {
+    socket.emit("leave room by button", { socketId: socket.id });
   };
 
   return (

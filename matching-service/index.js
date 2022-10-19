@@ -59,21 +59,20 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("leave room by close tab", (req) => {
-    leaveMatchRoom(req).then((resp) => {
-      console.log(resp.status);
-    });
-  });
-
   socket.on("leave room by button", (req) => {
     console.log(req);
-    leaveMatchRoom(req["req"]).then((resp) => {
+    leaveMatchRoom(req).then((resp) => {
       console.log(`${socket.id} has left the room.`);
+      io.to(resp.roomId).emit("leave room", resp);
     });
   });
 
   socket.on("disconnect", (reason) => {
     console.log(`User socketID=${socket.id} disconnected, reason=${reason}`);
+    leaveMatchRoom(socket.id).then((resp) => {
+      console.log(`${socket.id} has left the room.`);
+      //io.to(resp.roomId).emit("leave room", resp);
+    });
   });
 });
 
