@@ -3,7 +3,7 @@ const cors = require("cors");
 const http = require("http");
 const database = require("./database");
 
-const config = require("./config")[process.env.NODE_ENV || "development"];
+const config = require("./config");
 
 config.postgres.client = database.connectToPostgres();
 

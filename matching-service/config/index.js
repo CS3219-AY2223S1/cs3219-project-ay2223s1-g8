@@ -1,7 +1,8 @@
 require("dotenv/config");
+const env = process.env.NODE_ENV || 'dev';
 
-module.exports = {
-  development: {
+const config = {
+  dev: {
     postgres: {
       options: {
         host: "localhost",
@@ -28,3 +29,5 @@ module.exports = {
     },
   },
 };
+
+module.exports = config[env];
