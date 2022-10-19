@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: communication-service
+spec:
+  selector:
+    matchLabels:
+      app: communication-service-app
+  template:
+    metadata:
+      labels:
+        app: communication-service-app
+        environment: prod
+    spec:
+      serviceAccountName: cs3219-group8
+      containers:
+      - name: communication-service-app
+        image: us-central1-docker.pkg.dev/peerprep-363807/communication-service/communication-service-image:latest
+        # This app listens on port 8005 for web traffic.
+        ports:
+        - containerPort: 8005
+        env:
+        - name: NODE_ENV
+          value: "prod"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: communication-service
+spec:
+  type: NodePort
+  selector:
+    app: communication-service-app
+  ports:
+  - port: 8005 # port in service
+    targetPort: 8005 # port in deployment

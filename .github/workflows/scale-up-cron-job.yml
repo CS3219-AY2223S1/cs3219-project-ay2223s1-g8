@@ -1,0 +1,39 @@
+name: Scale up cron job
+
+on:
+  workflow_dispatch:
+    branches: [ "main", "prod" ]
+  schedule: 
+      - cron: "0 3 * * *" # 3am UTC (11am SGT)
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
+  GKE_CLUSTER: peerprep-cluster
+  GKE_ZONE: us-central1
+
+jobs:
+  scale:
+    name: Scale up to 1 replica
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v0'
+        with:
+          service_account_key: ${{ secrets.GKE_SA_KEY }}
+          project_id: ${{ secrets.GKE_PROJECT }}
+
+      # Get the GKE credentials so we can deploy to the cluster
+      - name: Set up GKE credentials
+        uses: 'google-github-actions/get-gke-credentials@v0'
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+          credentials: ${{ secrets.GKE_SA_KEY }}
+
+      - name: Scale up to 1 replica
+        run: |-
+          kubectl scale deployment user-service matching-service question-service history-service communication-service frontend --replicas=1
