@@ -9,8 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Git checkout
-      uses: actions/checkout@v2
-      with: { ref: debug }
-    - name: List files
-      run: ls
+    - uses: actions/checkout@v3
+    - name: Test
+      run: echo hello world
