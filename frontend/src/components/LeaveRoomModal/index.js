@@ -13,10 +13,10 @@ import { useSelector } from "react-redux";
 
 function LeaveRoomModal({ handleClose, show }) {
   const navigate = useNavigate();
+  const { socket } = useSelector(socketSelector);
+  console.log(socket);
 
   const leaveRoomButtonClick = () => {
-    const { socket } = useSelector(socketSelector);
-    console.log(socket);
     socket.emit("leave room by button", { req: socket.id });
     navigate("/match");
   };
@@ -33,7 +33,7 @@ function LeaveRoomModal({ handleClose, show }) {
         <Button variant="outline-light" onClick={handleClose}>
           Cancel
         </Button>
-        <Button variant="danger" onClick={leaveRoomButtonClick()}>
+        <Button variant="danger" onClick={leaveRoomButtonClick}>
           Leave Room
         </Button>
       </Modal.Footer>

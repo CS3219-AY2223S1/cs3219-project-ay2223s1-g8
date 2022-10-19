@@ -114,7 +114,7 @@ async function leaveMatchRoom(req) {
   const mutex = new Mutex();
   const release = await mutex.acquire();
   var resp = {};
-  const { socketId } = req;
+  const socketId = req;
   try {
     const deleteMatchedBySocket = await matchController.removeMatchedBySocketId(
       socketId
