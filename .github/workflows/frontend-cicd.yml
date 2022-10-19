@@ -39,7 +39,7 @@ jobs:
           npm run build
 
   Build:
-    # needs: Local
+    needs: Local
     if: ${{ github.event_name == 'push' }}
     name: Build, Push, Deploy to GKE
     runs-on: ubuntu-latest
