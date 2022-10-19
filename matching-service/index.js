@@ -63,7 +63,7 @@ io.on("connection", (socket) => {
     console.log(req);
     leaveMatchRoom(req).then((resp) => {
       console.log(`${socket.id} has left the room.`);
-      io.to(resp.roomId).emit("leave room", resp);
+      io.to(resp.otherUserSocketId).emit("other user left room", resp);
     });
   });
 
@@ -71,7 +71,7 @@ io.on("connection", (socket) => {
     console.log(`User socketID=${socket.id} disconnected, reason=${reason}`);
     leaveMatchRoom({ socketId: socket.id} ).then((resp) => {
       console.log(`${socket.id} has left the room.`);
-      io.to(resp.roomId).emit("leave room", resp);
+      io.to(resp.otherUserSocketId).emit("other user left room", resp);
     });
   });
 });

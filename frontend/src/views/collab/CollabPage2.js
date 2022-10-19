@@ -5,11 +5,21 @@ import QuestionCard from "../../components/QuestionCard";
 import ChatWindow from "../../components/ChatWindow";
 import CollabEditor from "../../components/CollabEditor";
 import LeaveRoomModal from "../../components/LeaveRoomModal";
+import NotifyUserLeftModal from "../../components/NotifyUserLeftModal";
+import { socketSelector } from "../../stores/socket/socket.slice";
+import { useSelector } from "react-redux";
 
 import "./CollabPage2.scss";
 
 function CollabPage2() {
   const [showLeaveRoomModal, setShowLeaveRoomModal] = useState(false);
+  const [showUserLeftModal, setShowUserLeftModal] = useState(false);
+
+  const { socket } = useSelector(socketSelector);
+
+  socket.on("other user left room", () => {
+    setShowUserLeftModal(true);
+  });
 
   return (
     <>
@@ -37,6 +47,10 @@ function CollabPage2() {
       </div>
 
       <LeaveRoomModal handleClose={() => setShowLeaveRoomModal(false)} show={showLeaveRoomModal} />
+      <NotifyUserLeftModal
+        handleClose={() => setShowUserLeftModal(false)}
+        show={showUserLeftModal}
+      />
     </>
   );
 }

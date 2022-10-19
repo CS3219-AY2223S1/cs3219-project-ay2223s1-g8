@@ -123,7 +123,11 @@ async function leaveMatchRoom(req) {
     }
 
     resp.status = MatchState.MatchDeleted;
-    resp.roomId = match.dataValues.matchedId;
+    const otherUserSocketId =
+      socketId == match.dataValues.socketId1
+        ? match.dataValues.socketId2
+        : match.dataValues.socketId1;
+    resp.otherUserSocketId = otherUserSocketId;
     release();
     return resp;
   } catch (err) {

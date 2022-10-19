@@ -4,30 +4,24 @@ import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { socketSelector } from "../../stores/socket/socket.slice";
 import { useSelector } from "react-redux";
-// import configs from "../../utils/configs";
-// import io from "socket.io-client";
-// const config = configs[process.env.NODE_ENV];
-// const socket = io.connect(config.MATCH_SVC_BASE_URL, {
-//   path: "/matching-api",
-// });
 
-function LeaveRoomModal({ handleClose, show }) {
+function NotifyUserLeftModal({ handleClose, show }) {
   const navigate = useNavigate();
   const { socket } = useSelector(socketSelector);
   console.log(socket);
 
   const leaveRoomButtonClick = () => {
-    socket.emit("leave room by button", { socketId: socket.id });
+    // Matched record already deleted, so only need to navigate to match page
     navigate("/match");
   };
 
   return (
     <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>Confirm Leave Room</Modal.Title>
+        <Modal.Title>Matched user has left the room</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        Are you sure you want to leave the room? You would lose access to your match and your code.
+        Your matched user has left the room . Would you like to leave the room?
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-light" onClick={handleClose}>
@@ -41,9 +35,9 @@ function LeaveRoomModal({ handleClose, show }) {
   );
 }
 
-LeaveRoomModal.propTypes = {
+NotifyUserLeftModal.propTypes = {
   show: PropTypes.bool,
   handleClose: PropTypes.func,
 };
 
-export default LeaveRoomModal;
+export default NotifyUserLeftModal;
