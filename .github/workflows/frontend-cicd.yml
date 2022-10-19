@@ -69,17 +69,19 @@ jobs:
           GIT_HASH=$(git rev-parse --short "${GITHUB_SHA}")
           echo "##[set-output name=docker_tag;]$(echo ${GITHUB_REF##*/}-${GIT_HASH})"
       
-      - name: 'Create .env.prod file'
-        run: |
-          cd ${{ env.DEPLOYMENT_NAME }}
-          touch .env.prod
-          echo REACT_APP_API_URL=${{ secrets.GATEWAY_URL }} > .env.prod
-          cat .env.prod
+      - name: Make .env.prod file
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_REACT_APP_API_URL: ${{ secrets.GATEWAY_URL }}
+          directory: frontend
+          file_name: .env.prod
+          fail_on_empty: false
         
       # Build and push image to Google Container Registry
       - name: Build and push using Cloud Build
         run: |
           cd ${{ env.DEPLOYMENT_NAME }}
+          cat .env.prod
           ls -a
           gcloud config set project ${{ env.PROJECT_ID }}
           gcloud builds submit --tag ${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.DEPLOYMENT_NAME }}/${{ env.IMAGE }}:${{ steps.vars.outputs.docker_tag }} .
