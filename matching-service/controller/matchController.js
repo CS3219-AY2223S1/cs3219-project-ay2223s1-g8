@@ -40,17 +40,6 @@ class MatchController {
     return await this.models.MatchPotential.create({ userId, level, socketId });
   }
 
-  async findOneMatchPotential(userId) {
-    await sequelize.sync();
-    const matchPotential = await this.models.MatchPotential.findOne({
-      where: { userId },
-    });
-    if (matchPotential === null) {
-      throw new InvalidMatchPotentialError();
-    }
-    return matchPotential;
-  }
-
   async deleteMatchPotential(userId) {
     await sequelize.sync();
     const hasMatchPotential = await this.hasMatchPotential(userId);
@@ -114,6 +103,20 @@ class MatchController {
     const matched = await this.models.Matched.findOne({
       where: {
         [Op.or]: [{ userId1: userId }, { userId2: userId }],
+      },
+    });
+    if (matched === null || matched.length === 0) {
+      return null;
+    } else {
+      return matched;
+    }
+  }
+
+  async findMatchedWhereSocketId(socketId) {
+    await sequelize.sync();
+    const matched = await this.models.Matched.findOne({
+      where: {
+        [Op.or]: [{ socketId1: socketId }, { socketId2: socketId }],
       },
     });
     if (matched === null || matched.length === 0) {

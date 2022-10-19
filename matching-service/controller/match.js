@@ -110,15 +110,20 @@ async function cancelMatch(req) {
 }
 
 async function leaveMatchRoom(req) {
+  console.log("LeaveMatchRoom: " + req);
   const mutex = new Mutex();
   const release = await mutex.acquire();
   var resp = {};
   const { socketId } = req;
   try {
-    const deleteMatchedBySocket = await matchController.removeMatchedBySocketId(
-      socketId
-    );
+    const match = await matchController.findMatchedWhereSocketId(socketId);
+    if (match !== null) {
+      const deleteMatchedBySocket =
+        await matchController.removeMatchedBySocketId(socketId);
+    }
+
     resp.status = MatchState.MatchDeleted;
+    resp.roomId = match.dataValues.matchedId;
     release();
     return resp;
   } catch (err) {
@@ -135,8 +140,35 @@ async function leaveMatchRoom(req) {
   }
 }
 
+async function matchRefresh(req) {
+  const mutex = new Mutex();
+  const release = await mutex.acquire();
+  var resp = {};
+  const { userId } = req;
+  try {
+    const deleteMatchPotential = await matchController.deleteMatchPotential(
+      userId
+    );
+    resp.status = MatchState.MatchRefreshed;
+    release();
+    return resp;
+  } catch (err) {
+    if (err instanceof InvalidMatchPotentialError) {
+      console.log(err.message);
+      resp.status = MatchState.MatchRefreshed;
+      release();
+      return resp;
+    }
+    console.log(err.message);
+    release();
+    resp.error = err.message;
+    return resp;
+  }
+}
+
 module.exports = {
   findMatch,
   cancelMatch,
   leaveMatchRoom,
+  matchRefresh,
 };
