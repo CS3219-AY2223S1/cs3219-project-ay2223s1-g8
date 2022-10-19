@@ -8,6 +8,10 @@ import LeaveRoomModal from "../../components/LeaveRoomModal";
 import NotifyUserLeftModal from "../../components/NotifyUserLeftModal";
 import { socketSelector } from "../../stores/socket/socket.slice";
 import { useSelector } from "react-redux";
+import { matchSelector } from "../../stores/match/match.slice";
+import axios from "axios";
+import configs from "../../utils/configs";
+const config = configs[process.env.NODE_ENV];
 
 import "./CollabPage2.scss";
 
@@ -16,9 +20,18 @@ function CollabPage2() {
   const [showUserLeftModal, setShowUserLeftModal] = useState(false);
 
   const { socket } = useSelector(socketSelector);
+  const { matchId } = useSelector(matchSelector);
 
   socket.on("other user left room", () => {
     setShowUserLeftModal(true);
+  });
+
+  socket.on("last user left room", () => {
+    axios.delete(config.QUESTION_SVC_BASE_URL + "/question-api/assigned-question", {
+      data: {
+        matchId: matchId,
+      },
+    });
   });
 
   return (
