@@ -1,5 +1,7 @@
 name: Experiment
 on: 
+  workflow_dispatch:
+    branches: [ "main", "prod" ]
   schedule:
   - cron: '*/5 * * * *'
 
