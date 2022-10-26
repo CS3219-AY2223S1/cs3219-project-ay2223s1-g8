@@ -1,12 +1,12 @@
-variable "gke_username" {
-  default     = ""
-  description = "gke username"
-}
+# variable "gke_username" {
+#   default     = ""
+#   description = "gke username"
+# }
 
-variable "gke_password" {
-  default     = ""
-  description = "gke password"
-}
+# variable "gke_password" {
+#   default     = ""
+#   description = "gke password"
+# }
 
 # GKE cluster
 resource "google_container_cluster" "primary" {
