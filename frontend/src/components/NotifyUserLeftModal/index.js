@@ -1,18 +1,17 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
 import { socketSelector } from "../../stores/socket/socket.slice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsLeaving } from "../../stores/match/match.slice";
+import PropTypes from "prop-types";
 
 function NotifyUserLeftModal({ handleClose, show }) {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { socket } = useSelector(socketSelector);
   console.log(socket);
 
   const leaveRoomButtonClick = () => {
-    socket.emit("leave room by button", { socketId: socket.id });
-    navigate("/match");
+    dispatch(setIsLeaving(true));
   };
 
   return (
@@ -21,7 +20,7 @@ function NotifyUserLeftModal({ handleClose, show }) {
         <Modal.Title>Matched user has left the room</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        Your matched user has left the room . Would you like to leave the room?
+        Your matched user has left the room. Would you like to leave the room?
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-light" onClick={handleClose}>

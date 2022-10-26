@@ -37,7 +37,7 @@ function CollabPage2() {
   return (
     <>
       <div className="Collab2-container">
-        <NavBar logoHref="#" />
+        <NavBar isCollabPage />
         <div className="Collab2-content-div">
           <div className="Collab2-left-div">
             <QuestionCard containerId="Collab2-qn-card-container" />
@@ -59,7 +59,7 @@ function CollabPage2() {
         </div>
       </div>
 
-      <LeaveRoomModal handleClose={() => setShowLeaveRoomModal(false)} show={showLeaveRoomModal} />
+      <LeaveRoomModal show={showLeaveRoomModal} handleClose={() => setShowLeaveRoomModal(false)} />
       <NotifyUserLeftModal
         handleClose={() => setShowUserLeftModal(false)}
         show={showUserLeftModal}
