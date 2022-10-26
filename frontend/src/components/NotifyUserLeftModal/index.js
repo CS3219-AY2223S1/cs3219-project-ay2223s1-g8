@@ -3,16 +3,11 @@ import Modal from "react-bootstrap/Modal";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { socketSelector } from "../../stores/socket/socket.slice";
-import { matchSelector } from "../../stores/match/match.slice";
 import { useSelector } from "react-redux";
-import axios from "axios";
-import configs from "../../utils/configs";
-const config = configs[process.env.NODE_ENV];
 
 function NotifyUserLeftModal({ handleClose, show }) {
   const navigate = useNavigate();
   const { socket } = useSelector(socketSelector);
-  const { matchId } = useSelector(matchSelector);
   console.log(socket);
 
   const leaveRoomButtonClick = () => {
