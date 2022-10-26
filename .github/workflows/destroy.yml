@@ -1,10 +1,8 @@
-name: Create GKE cluster and setup environment
+name: Destory GKE cluster
 
 on:
   workflow_dispatch:
     branches: [ "main", "prod", "automation" ]
-  # push:
-  #   branches: [ "main", "prod", "automation" ]
 
 jobs:
   terraform:
@@ -40,10 +38,10 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
-      - name: Terraform Apply
+      - name: Terraform Destroy
         run: |
           cd deployment/terraform
-          terraform apply -auto-approve
+          terraform destroy -auto-approve
   
   # bootstrap:
   #   name: bootstrap-cluster
