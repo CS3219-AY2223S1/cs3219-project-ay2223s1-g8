@@ -31,6 +31,7 @@ jobs:
           gcloud container clusters create-auto ${{ env.GKE_CLUSTER }} \
             --region ${{ env.GKE_ZONE }} \
             --project=${{ env.PROJECT_ID }}
+            --service-account=cs3219-group8-service-account@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
 
       # Get the GKE credentials so we can deploy to the cluster
       - name: Set up GKE credentials
