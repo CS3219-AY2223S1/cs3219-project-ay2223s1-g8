@@ -6,39 +6,55 @@ on:
   push:
     branches: [ "main", "prod", "automation" ]
 
-env:
-  PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
-  GKE_CLUSTER: peerprep-cluster2
-  GKE_ZONE: us-central1
-
 jobs:
-  setup:
-    name: Set up cluster
+  terraform:
+    name: "Terraform - Create cluster"
     runs-on: ubuntu-latest
+    working-directory: deployment/terraform
     
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v0'
-        with:
-          service_account_key: ${{ secrets.GKE_SA_KEY }}
-          project_id: ${{ secrets.GKE_PROJECT }}
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
 
-      - name: Create cluster
-        run: |-
-          gcloud container clusters create-auto ${{ env.GKE_CLUSTER }} \
-            --region ${{ env.GKE_ZONE }} \
-            --project=${{ env.PROJECT_ID }}
-            --service-account=cs3219-group8-service-account@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
+      - name: Terraform Init
+        id: init
+        run: terraform init
+          
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color
+        continue-on-error: true
 
-      # Get the GKE credentials so we can deploy to the cluster
-      - name: Set up GKE credentials
-        uses: 'google-github-actions/get-gke-credentials@v0'
-        with:
-          cluster_name: ${{ env.GKE_CLUSTER }}
-          location: ${{ env.GKE_ZONE }}
-          credentials: ${{ secrets.GKE_SA_KEY }}
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
 
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+  
+  # bootstrap:
+  #   name: bootstrap-cluster
+  #   runs-on: ubuntu-latest
+  #   needs: terraform
+  #   steps:    
+  #     - id: get-credentials
+  #       if: github.ref == 'refs/heads/master' && github.event_name == 'push' 
+  #       uses: google-github-actions/get-gke-credentials@main
+  #       with:
+  #         cluster_name: production-cluster
+  #         location: us-east1
+  #         credentials: ${{ secrets.GCP_SECRET }}
       
+  #     - id: get-pods
+  #       if: github.ref == 'refs/heads/master' && github.event_name == 'push' 
+  #       run: kubectl get pods -A 
+
+  #     - id: install-flagger 
+  #       if: github.ref == 'refs/heads/master' && github.event_name == 'push' 
+  #       run: |
+  #         helm repo add flagger https://flagger.app
+  #         helm install my-flagger flagger/flagger --version 1.4.2
