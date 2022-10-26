@@ -7,7 +7,6 @@ const {
   deleteUserHistory,
   deleteAllUserHistory,
 } = require("./db-interaction");
-const { NoHistoryFoundError } = require("../errors");
 
 const ormCreateUserHistory = async (uid, attempts) => {
   return await createUserHistory(uid, attempts);
@@ -18,11 +17,7 @@ const ormGetAllUserHistory = async (uid) => {
 };
 
 const ormGetUserHistory = async (uid) => {
-  const history = await getUserHistory(uid);
-  if (!history) {
-    throw new NoHistoryFoundError();
-  }
-  return history;
+  return await getUserHistory(uid);
 };
 
 const ormGetUserAttempt = async (uid, qid) => {
@@ -34,11 +29,6 @@ const ormAddUserAttempt = async (uid, attempt) => {
 };
 
 const ormDeleteUserHistory = async (uid) => {
-  const history = await getUserHistory(uid);
-  if (!history) {
-    throw new NoHistoryFoundError();
-  }
-
   return await deleteUserHistory(uid);
 }
 
