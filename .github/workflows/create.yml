@@ -8,7 +8,7 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
-  GKE_CLUSTER: peerprep-cluster
+  GKE_CLUSTER: peerprep-cluster2
   GKE_ZONE: us-central1
 
 jobs:
