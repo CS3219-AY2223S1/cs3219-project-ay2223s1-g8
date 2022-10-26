@@ -69,13 +69,6 @@ io.on("connection", (socket) => {
   });
 
   // Remove all match and match potential entry upon leave room
-  socket.on("leave room by close tab", (req) => {
-    leaveMatchRoom(req).then((resp) => {
-      console.log(resp.status);
-    });
-  });
-
-  // Remove all match and match potential entry upon leave room
   socket.on("leave room by button", (req) => {
     console.log(req);
     leaveMatchRoom(req).then((resp) => {
