@@ -120,10 +120,16 @@ async function leaveMatchRoom(req) {
     if (match !== null) {
       const deleteMatchedBySocket =
         await matchController.removeMatchedBySocketId(socketId);
+      const otherUserSocketId =
+        socketId == match.dataValues.socketId1
+          ? match.dataValues.socketId2
+          : match.dataValues.socketId1;
+      resp.otherUserSocketId = otherUserSocketId;
+      resp.firstUserToLeave = true;
+    } else {
+      resp.firstUserToLeave = false;
     }
-
     resp.status = MatchState.MatchDeleted;
-    resp.roomId = match.dataValues.matchedId;
     release();
     return resp;
   } catch (err) {
