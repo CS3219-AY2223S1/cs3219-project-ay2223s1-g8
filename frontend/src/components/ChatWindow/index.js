@@ -13,6 +13,11 @@ const socket = io.connect(config.COMMUNICATION_SVC_BASE_URL, {
   path: "/communication-api",
 });
 
+socket.on("connect_error", (data) => {
+  console.log("Communication socket connection error:", data);
+  socket.disconnect();
+});
+
 const ChatWindow = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);

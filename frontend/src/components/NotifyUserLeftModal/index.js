@@ -16,12 +16,7 @@ function NotifyUserLeftModal({ handleClose, show }) {
   console.log(socket);
 
   const leaveRoomButtonClick = () => {
-    axios.delete(config.QUESTION_SVC_BASE_URL + "/question-api/assigned-question", {
-      data: {
-        matchId: matchId,
-      },
-    });
-    // Matched record already deleted, so only need to navigate to match page
+    socket.emit("leave room by button", { socketId: socket.id });
     navigate("/match");
   };
 
@@ -35,7 +30,7 @@ function NotifyUserLeftModal({ handleClose, show }) {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-light" onClick={handleClose}>
-          Cancel
+          Stay
         </Button>
         <Button variant="danger" onClick={leaveRoomButtonClick}>
           Leave Room
