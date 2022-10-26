@@ -9,7 +9,7 @@ on:
 jobs:
   terraform:
     env:
-      GOOGLE_CREDENTIALS: ${{ secrets.GKE_SA_KEY_SHORT }}
+      GOOGLE_CREDENTIALS: ${{ secrets.GKE_TERRAFORM_CREDS }}
     name: "Terraform - Create cluster"
     runs-on: ubuntu-latest
 
