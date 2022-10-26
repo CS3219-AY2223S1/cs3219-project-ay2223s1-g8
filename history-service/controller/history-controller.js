@@ -30,7 +30,7 @@ const getAllUserHistory = async (req, res) => {
 };
 
 const getUserHistory = async (req, res) => {
-  const { uid } = req.body;
+  const { uid } = req.query;
   try {
     if (!uid) {
       throw new ValidationError();
@@ -59,7 +59,7 @@ const getUserHistory = async (req, res) => {
 };
 
 const getUserAttempt = async (req, res) => {
-  const { uid, qid } = req.body;
+  const { uid, qid } = req.query;
   try {
     if (!uid || !qid) {
       throw new ValidationError();
