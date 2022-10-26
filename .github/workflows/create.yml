@@ -2,7 +2,7 @@ name: Create GKE cluster and setup environment
 
 on:
   workflow_dispatch:
-    branches: [ "main", "prod", "automation" ]
+    branches: [ "main" ]
   # push:
   #   branches: [ "main", "prod", "automation" ]
 

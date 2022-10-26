@@ -2,6 +2,8 @@ name: Destory GKE cluster
 
 on:
   workflow_dispatch:
+    branches: [ "main" ]
+  push:
     branches: [ "main", "prod", "automation" ]
 
 jobs:
