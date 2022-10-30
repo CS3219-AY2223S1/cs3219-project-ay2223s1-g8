@@ -9,6 +9,7 @@ import LandingPage from "./views/landing/LandingPage";
 import CollabPage from "./views/collab/CollabPage";
 import MatchingPage from "./views/MatchingPage";
 import CollabPage2 from "./views/collab/CollabPage2";
+import HistoryPage from "./views/history/HistoryPage";
 import ForgotPasswordPage from "./views/forgotPassword/ForgotPasswordPage";
 import "./App.scss";
 
@@ -19,6 +20,7 @@ function App() {
         <Route element={<PrivateRoutes />}>
           <Route path="/match" element={<MatchingPage />} />
           <Route path="/collab" element={<CollabPage />} />
+          <Route path="/history" element={<HistoryPage />} />
           <Route element={<CollabRoute />}>
             <Route path="/collab2" element={<CollabPage2 />} />
           </Route>
