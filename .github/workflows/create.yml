@@ -94,7 +94,7 @@ jobs:
       - name: Set up service account
         run: |-
           kubectl apply -f ./deployment/service-account.yaml
-          kubectl annotate serviceaccount cs3219-group8 iam.gke.io/gcp-service-account=cs3219-group8-service-account@${{ secrets.GKE_PROJECT }}.iam.gserviceaccount.com
+          kubectl annotate serviceaccount cs3219-group8 iam.gke.io/gcp-service-account=cs3219-group8-service-account@peerprep-363807.iam.gserviceaccount.com
 
       - name: Deploy services
         run: |-
