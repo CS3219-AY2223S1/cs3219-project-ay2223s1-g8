@@ -97,7 +97,8 @@ jobs:
           gcloud iam service-accounts add-iam-policy-binding \
             --role="roles/iam.workloadIdentityUser" \
             --member="serviceAccount:peerprep-363807.svc.id.goog[default/cs3219-group8]" \
-            cs3219-group8-service-account@peerprep-363807.iam.gserviceaccount.com
+            cs3219-group8-service-account@peerprep-363807.iam.gserviceaccount.com \
+            --project peerprep-363807
           kubectl annotate serviceaccount cs3219-group8 iam.gke.io/gcp-service-account=cs3219-group8-service-account@peerprep-363807.iam.gserviceaccount.com --overwrite=true
 
       - name: Deploy services
