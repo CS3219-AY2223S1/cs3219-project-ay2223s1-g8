@@ -10,7 +10,7 @@ jobs:
   terraform:
     env:
       GOOGLE_CREDENTIALS: ${{ secrets.GKE_TERRAFORM_CREDS }}
-    name: "Terraform - Create cluster"
+    name: "Terraform - Destroy cluster"
     runs-on: ubuntu-latest
 
     steps:
