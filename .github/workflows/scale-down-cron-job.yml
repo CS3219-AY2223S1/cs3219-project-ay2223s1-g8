@@ -23,7 +23,7 @@ jobs:
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v0'
         with:
-          service_account_key: ${{ secrets.GKE_SA_KEY }}
+          service_account_key: ${{ secrets.GKE_TERRAFORM_CREDS }}
           project_id: ${{ secrets.GKE_PROJECT }}
 
       - name: Set up GKE credentials
@@ -31,7 +31,7 @@ jobs:
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
-          credentials: ${{ secrets.GKE_SA_KEY }}
+          credentials: ${{ secrets.GKE_TERRAFORM_CREDS }}
 
       - name: Scale to 0 replicas
         run: |-

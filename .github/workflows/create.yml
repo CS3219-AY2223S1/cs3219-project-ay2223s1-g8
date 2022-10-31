@@ -2,9 +2,9 @@ name: Create GKE cluster and setup environment
 
 on: 
   workflow_dispatch:
-    branches: [ "main", "prod" ]
-  push:
-    branches: [ "main", "prod", "automation" ]
+    branches: [ "main" ]
+  # push:
+  #   branches: [ "main", "prod", "automation" ]
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
@@ -12,50 +12,50 @@ env:
   GKE_ZONE: us-central1
 
 jobs:
-  # terraform:
-  #   env:
-  #     GOOGLE_CREDENTIALS: ${{ secrets.GKE_TERRAFORM_CREDS }}
-  #   name: "Terraform - Create cluster"
-  #   runs-on: ubuntu-latest
+  terraform:
+    env:
+      GOOGLE_CREDENTIALS: ${{ secrets.GKE_TERRAFORM_CREDS }}
+    name: "Terraform - Create cluster"
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-  #     - name: Terraform Format
-  #       id: fmt
-  #       run: |
-  #         cd deployment/terraform
-  #         terraform fmt -check
+      - name: Terraform Format
+        id: fmt
+        run: |
+          cd deployment/terraform
+          terraform fmt -check
 
-  #     - name: Terraform Init
-  #       id: init
-  #       run: |
-  #         cd deployment/terraform
-  #         terraform init -reconfigure
+      - name: Terraform Init
+        id: init
+        run: |
+          cd deployment/terraform
+          terraform init -reconfigure
           
-  #     - name: Terraform Plan
-  #       id: plan
-  #       run: |
-  #         cd deployment/terraform
-  #         terraform plan -no-color
-  #       continue-on-error: true
+      - name: Terraform Plan
+        id: plan
+        run: |
+          cd deployment/terraform
+          terraform plan -no-color
+        continue-on-error: true
 
-  #     - name: Terraform Plan Status
-  #       if: steps.plan.outcome == 'failure'
-  #       run: exit 1
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
 
-  #     - name: Terraform Apply
-  #       id: apply
-  #       run: |
-  #         cd deployment/terraform
-  #         terraform apply -auto-approve
+      - name: Terraform Apply
+        id: apply
+        run: |
+          cd deployment/terraform
+          terraform apply -auto-approve
   
-  #     - name: Terraform Apply Cleanup
-  #       if: steps.apply.outcome == 'failure'
-  #       run: |
-  #         cd deployment/terraform
-  #         terraform destroy -auto-approve
+      - name: Terraform Apply Cleanup
+        if: steps.apply.outcome == 'failure'
+        run: |
+          cd deployment/terraform
+          terraform destroy -auto-approve
   bootstrap:
     name: Set up secrets and ingress gateway
     runs-on: ubuntu-latest
@@ -117,7 +117,7 @@ jobs:
           helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
           helm repo update
 
-      # - name: Deploy ingress
-      #   run: |-
-      #     kubectl delete ingress gateway --ignore-not-found=true
-      #     kubectl apply -f ./deployment/gateway.yaml
+      - name: Deploy ingress
+        run: |-
+          kubectl delete ingress gateway --ignore-not-found=true
+          kubectl apply -f ./deployment/gateway.yaml
