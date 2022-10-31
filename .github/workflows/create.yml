@@ -79,7 +79,9 @@ jobs:
           credentials: ${{ secrets.GKE_TERRAFORM_CREDS }}
       
       - name: Create peerprep-secrets
+        continue-on-error: true
         run: |-
+          kubectl delete secret peerprep-secrets
           kubectl create secret generic peerprep-secrets \
             --from-literal=database=peerprep-dev \
             --from-literal=username=${{ secrets.PG_USERNAME }} \
