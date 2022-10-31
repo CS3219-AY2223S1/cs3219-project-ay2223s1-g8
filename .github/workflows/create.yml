@@ -57,7 +57,7 @@ jobs:
           cd deployment/terraform
           terraform destroy -auto-approve
   bootstrap:
-    name: bootstrap-cluster
+    name: Set up secrets and ingress gateway
     runs-on: ubuntu-latest
     needs: terraform
 
