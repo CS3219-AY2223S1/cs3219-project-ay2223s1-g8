@@ -32,7 +32,7 @@ jobs:
         id: init
         run: |
           cd deployment/terraform
-          terraform init
+          terraform init -reconfigure
           
       - name: Terraform Plan
         id: plan
