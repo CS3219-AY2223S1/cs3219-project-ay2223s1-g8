@@ -3,8 +3,8 @@ name: Destory GKE cluster
 on:
   workflow_dispatch:
     branches: [ "main", "prod", "automation" ]
-  push:
-    branches: [ "main", "prod", "automation" ]
+  # push:
+  #   branches: [ "main", "prod", "automation" ]
 
 jobs:
   terraform:
@@ -43,4 +43,7 @@ jobs:
       - name: Terraform Destroy
         run: |
           cd deployment/terraform
-          terraform destroy -auto-approve
+          terraform destroy -auto-approve \
+            --target 'google_container_cluster.primary' \
+            --target 'google_compute_network.vpc' \
+            --target 'google_compute_subnetwork.subnet'

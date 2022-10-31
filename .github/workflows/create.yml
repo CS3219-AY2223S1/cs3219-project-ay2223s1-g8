@@ -3,8 +3,8 @@ name: Create GKE cluster and setup environment
 on: 
   workflow_dispatch:
     branches: [ "main", "prod" ]
-  # push:
-  #   branches: [ "main", "prod", "automation" ]
+  push:
+    branches: [ "main", "prod", "automation" ]
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
@@ -60,7 +60,7 @@ jobs:
     name: bootstrap-cluster
     runs-on: ubuntu-latest
     needs: terraform
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -70,19 +70,26 @@ jobs:
         with:
           service_account_key: ${{ secrets.GKE_SA_KEY }}
           project_id: ${{ secrets.GKE_PROJECT }}
-      
-       - name: Set up GKE credentials
-         uses: 'google-github-actions/get-gke-credentials@v0'
-         with:
-            cluster_name: ${{ env.GKE_CLUSTER }}
-            location: ${{ env.GKE_ZONE }}
-            credentials: ${{ secrets.GKE_SA_KEY }}
-  #     - id: get-pods
-  #       if: github.ref == 'refs/heads/master' && github.event_name == 'push' 
-  #       run: kubectl get pods -A 
 
-  #     - id: install-flagger 
-  #       if: github.ref == 'refs/heads/master' && github.event_name == 'push' 
-  #       run: |
-  #         helm repo add flagger https://flagger.app
-  #         helm install my-flagger flagger/flagger --version 1.4.2
+      - name: Set up GKE credentials
+        uses: 'google-github-actions/get-gke-credentials@v0'
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+          credentials: ${{ secrets.GKE_SA_KEY }}
+      
+      - name: Create peerprep-secrets
+        run: |-
+          kubectl create secret generic peerprep-secrets \
+            --from-literal=database=peerprep-dev \
+            --from-literal=username=${{ secrets.PG_USERNAME }} \
+            --from-literal=password=${{ secrets.PG_PASSWORD }} \
+            --from-literal=jwt=${{ secrets.JWT_SECRET }} \
+            --from-literal=apiUrl=${{ secrets.GATEWAY_URL }} \
+            --from-literal=historyMongoDb=${{ secrets.HISTORY_MONGO_URL_PROD }} \
+            --from-literal=SERVICE_ACCOUNT_KEY=${{ secrets.GKE_SA_KEY }}
+
+      - name: Deploy ingress
+        run: |-
+          kubectl apply -f ./deployment/microservices/gateway.yaml
+          kubectl rollout status ingress/gateway
