@@ -12,54 +12,54 @@ env:
   GKE_ZONE: us-central1
 
 jobs:
-  terraform:
-    env:
-      GOOGLE_CREDENTIALS: ${{ secrets.GKE_TERRAFORM_CREDS }}
-    name: "Terraform - Create cluster"
-    runs-on: ubuntu-latest
+  # terraform:
+  #   env:
+  #     GOOGLE_CREDENTIALS: ${{ secrets.GKE_TERRAFORM_CREDS }}
+  #   name: "Terraform - Create cluster"
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
 
-      - name: Terraform Format
-        id: fmt
-        run: |
-          cd deployment/terraform
-          terraform fmt -check
+  #     - name: Terraform Format
+  #       id: fmt
+  #       run: |
+  #         cd deployment/terraform
+  #         terraform fmt -check
 
-      - name: Terraform Init
-        id: init
-        run: |
-          cd deployment/terraform
-          terraform init -reconfigure
+  #     - name: Terraform Init
+  #       id: init
+  #       run: |
+  #         cd deployment/terraform
+  #         terraform init -reconfigure
           
-      - name: Terraform Plan
-        id: plan
-        run: |
-          cd deployment/terraform
-          terraform plan -no-color
-        continue-on-error: true
+  #     - name: Terraform Plan
+  #       id: plan
+  #       run: |
+  #         cd deployment/terraform
+  #         terraform plan -no-color
+  #       continue-on-error: true
 
-      - name: Terraform Plan Status
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
+  #     - name: Terraform Plan Status
+  #       if: steps.plan.outcome == 'failure'
+  #       run: exit 1
 
-      - name: Terraform Apply
-        id: apply
-        run: |
-          cd deployment/terraform
-          terraform apply -auto-approve
+  #     - name: Terraform Apply
+  #       id: apply
+  #       run: |
+  #         cd deployment/terraform
+  #         terraform apply -auto-approve
   
-      - name: Terraform Apply Cleanup
-        if: steps.apply.outcome == 'failure'
-        run: |
-          cd deployment/terraform
-          terraform destroy -auto-approve
+  #     - name: Terraform Apply Cleanup
+  #       if: steps.apply.outcome == 'failure'
+  #       run: |
+  #         cd deployment/terraform
+  #         terraform destroy -auto-approve
   bootstrap:
     name: Set up secrets and ingress gateway
     runs-on: ubuntu-latest
-    needs: terraform
+    # needs: terraform
 
     steps:
       - name: Checkout
@@ -68,7 +68,7 @@ jobs:
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v0'
         with:
-          service_account_key: ${{ secrets.GKE_SA_KEY }}
+          service_account_key: ${{ secrets.GKE_TERRAFORM_CREDS }}
           project_id: ${{ secrets.GKE_PROJECT }}
 
       - name: Set up GKE credentials
@@ -76,7 +76,7 @@ jobs:
         with:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
-          credentials: ${{ secrets.GKE_SA_KEY }}
+          credentials: ${{ secrets.GKE_TERRAFORM_CREDS }}
       
       - name: Create peerprep-secrets
         run: |-
@@ -87,7 +87,7 @@ jobs:
             --from-literal=jwt=${{ secrets.JWT_SECRET }} \
             --from-literal=apiUrl=${{ secrets.GATEWAY_URL }} \
             --from-literal=historyMongoDb=${{ secrets.HISTORY_MONGO_URL_PROD }} \
-            --from-literal=SERVICE_ACCOUNT_KEY=${{ secrets.GKE_SA_KEY }}
+            --from-literal=SERVICE_ACCOUNT_KEY=${{ secrets.GKE_TERRAFORM_CREDS }}
 
       - name: Deploy ingress
         run: |-
