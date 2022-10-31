@@ -99,12 +99,12 @@ jobs:
           kubectl apply -f ./deployment/microservices/history-service.yaml
           kubectl apply -f ./deployment/microservices/communication-service.yaml
           kubectl apply -f ./deployment/microservices/frontend.yaml
-          kubectl rollout deployment/user-service
-          kubectl rollout deployment/matching-service
-          kubectl rollout deployment/question-service
-          kubectl rollout deployment/history-service
-          kubectl rollout deployment/communication-service
-          kubectl rollout deployment/frontend
+          kubectl rollout status deployment/user-service
+          kubectl rollout status deployment/matching-service
+          kubectl rollout status deployment/question-service
+          kubectl rollout status deployment/history-service
+          kubectl rollout status deployment/communication-service
+          kubectl rollout status deployment/frontend
 
       - name: Set up ingress controller
         run: |-
