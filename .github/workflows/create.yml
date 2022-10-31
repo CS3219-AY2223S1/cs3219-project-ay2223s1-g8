@@ -1,10 +1,10 @@
 name: Create GKE cluster and setup environment
 
-on:
+on: 
   workflow_dispatch:
-    branches: [ "main" ]
-  # push:
-  #   branches: [ "main", "prod", "automation" ]
+    branches: [ "main", "prod" ]
+  push:
+    branches: [ "main", "prod", "automation" ]
 
 jobs:
   terraform:
@@ -41,10 +41,16 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
+        id: apply
         run: |
           cd deployment/terraform
           terraform apply -auto-approve
   
+      - name: Terraform Apply Cleanup
+        if: steps.apply.outcome == 'failure'
+        run: |
+          cd deployment/terraform
+          terraform destroy -auto-approve
   # bootstrap:
   #   name: bootstrap-cluster
   #   runs-on: ubuntu-latest

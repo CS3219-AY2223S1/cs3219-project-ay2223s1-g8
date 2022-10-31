@@ -7,4 +7,9 @@ terraform {
   }
 
   required_version = ">= 0.14"
+
+  backend "gcs" {
+    bucket = "650764b83e8fdbee-bucket-tfstate"
+    prefix = "terraform/state"
+  }
 }
