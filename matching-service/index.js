@@ -69,26 +69,27 @@ io.on("connection", (socket) => {
   });
 
   // Remove all match and match potential entry upon leave room
-  socket.on("leave room by close tab", (req) => {
-    leaveMatchRoom(req).then((resp) => {
-      console.log(resp.status);
-    });
-  });
-
-  // Remove all match and match potential entry upon leave room
   socket.on("leave room by button", (req) => {
     console.log(req);
     leaveMatchRoom(req).then((resp) => {
       console.log(`${socket.id} has left the room.`);
-      io.to(resp.roomId).emit("leave room", resp);
+      if (resp.firstUserToLeave) {
+        io.to(resp.otherUserSocketId).emit("other user left room", resp);
+      } else {
+        io.to(socket.id).emit("last user left room", resp);
+      }
     });
   });
 
   socket.on("disconnect", (reason) => {
     console.log(`User socketID=${socket.id} disconnected, reason=${reason}`);
-    leaveMatchRoom({ socketId: socket.id} ).then((resp) => {
+    leaveMatchRoom({ socketId: socket.id }).then((resp) => {
       console.log(`${socket.id} has left the room.`);
-      io.to(resp.roomId).emit("leave room", resp);
+      if (resp.firstUserToLeave) {
+        io.to(resp.otherUserSocketId).emit("other user left room", resp);
+      } else {
+        io.to(socket.id).emit("last user left room", resp);
+      }
     });
   });
 });

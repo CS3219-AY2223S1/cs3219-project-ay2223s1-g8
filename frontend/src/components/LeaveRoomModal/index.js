@@ -1,32 +1,14 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { useDispatch } from "react-redux";
+import { setIsLeaving } from "../../stores/match/match.slice";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
-import { socketSelector } from "../../stores/socket/socket.slice";
-import { matchSelector } from "../../stores/match/match.slice";
-import { useSelector } from "react-redux";
-import axios from "axios";
-import configs from "../../utils/configs";
-const config = configs[process.env.NODE_ENV];
 
-function LeaveRoomModal({ handleClose, show }) {
-  const navigate = useNavigate();
-  const { socket } = useSelector(socketSelector);
-  const { matchId } = useSelector(matchSelector);
-  console.log(matchId);
-
-  socket.on("leave room", (data) => {
-    console.log(`all users have left room ${data.roomId}`);
-    axios.delete(config.QUESTION_SVC_BASE_URL + "/question-api/assigned-question", {
-      data: {
-        matchId: matchId,
-      },
-    });
-    navigate("/match");
-  });
+function LeaveRoomModal({ show, handleClose }) {
+  const dispatch = useDispatch();
 
   const leaveRoomButtonClick = () => {
-    socket.emit("leave room by button", { socketId: socket.id });
+    dispatch(setIsLeaving(true));
   };
 
   return (

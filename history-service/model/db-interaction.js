@@ -25,7 +25,7 @@ const getAllUserHistory = async () => {
 const getUserHistory = async (uid) => {
   const history = await History.findOne({ uid });
   if (!history) {
-    throw new NoHistoryFoundError();
+    return createUserHistory(uid);
   }
   return history;
 };
@@ -62,6 +62,10 @@ const addUserAttempt = async (uid, attempt) => {
 }
 
 const deleteUserHistory = async (uid) => {
+  const history = await History.findOne({ uid });
+  if (!history) {
+    throw new NoHistoryFoundError();
+  }
   return await History.findOneAndDelete({ uid });
 };
 

@@ -14,7 +14,7 @@ import logo from "../../assets/logo-white.png";
 import PropTypes from "prop-types";
 import "./styles.scss";
 
-function NavBar({ logoHref }) {
+function NavBar({ isHistoryPage = false, isCollabPage = false }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
@@ -58,12 +58,22 @@ function NavBar({ logoHref }) {
 
   return (
     <>
-      <Navbar bg="light" fixed="top">
+      <Navbar bg="light" variant="dark" fixed="top">
         <Container fluid>
-          <Navbar.Brand href={logoHref || "/match"} className="Navbar-peerprep text-white">
+          <Navbar.Brand href={isCollabPage ? "#" : "/match"} className="Navbar-peerprep text-white">
             <img alt="" src={logo} width="30" height="30" className="d-inline-block align-top" />{" "}
             PeerPrep
           </Navbar.Brand>
+          {!isCollabPage && (
+            <Nav className="me-auto" activeKey={isHistoryPage ? "link-1" : "default"}>
+              <Nav.Link href="/match" eventKey="default">
+                Match
+              </Nav.Link>
+              <Nav.Link href="/history" eventKey="link-1">
+                History
+              </Nav.Link>
+            </Nav>
+          )}
           <Nav>
             <NavDropdown
               title={`Welcome, ${getUsername() || "user"}`}
@@ -114,7 +124,8 @@ function NavBar({ logoHref }) {
 }
 
 NavBar.propTypes = {
-  logoHref: PropTypes.string,
+  isCollabPage: PropTypes.bool,
+  isHistoryPage: PropTypes.bool,
 };
 
 export default NavBar;
