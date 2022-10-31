@@ -3,8 +3,8 @@ name: Create GKE cluster and setup environment
 on: 
   workflow_dispatch:
     branches: [ "main", "prod" ]
-  push:
-    branches: [ "main", "prod", "automation" ]
+  # push:
+  #   branches: [ "main", "prod", "automation" ]
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
