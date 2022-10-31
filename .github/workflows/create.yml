@@ -90,7 +90,11 @@ jobs:
             --from-literal=apiUrl=${{ secrets.GATEWAY_URL }} \
             --from-literal=historyMongoDb=${{ secrets.HISTORY_MONGO_URL_PROD }} \
             --from-literal=SERVICE_ACCOUNT_KEY=${{ secrets.GKE_TERRAFORM_CREDS }}
-     
+
+      - name: Set up service account
+        run: |-
+          kubectl apply -f ./deployment/service-account.yaml
+
       - name: Deploy services
         run: |-
           kubectl apply -f ./deployment/microservices/user-service.yaml
