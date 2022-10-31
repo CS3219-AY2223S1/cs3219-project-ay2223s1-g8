@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getRandomQuestion } from "../../middleware/questionSvc";
-import { matchSelector } from "../../stores/match/match.slice";
+import { matchSelector, setQid } from "../../stores/match/match.slice";
 
 import PropTypes from "prop-types";
 import "./styles.scss";
 
 function QuestionCard({ containerId }) {
+  const dispatch = useDispatch();
   const [question, setQuestion] = useState(null);
   const { matchId, difficulty } = useSelector(matchSelector);
 
   useEffect(() => {
     getRandomQuestion({ matchId, difficulty }).then((data) => {
       setQuestion(data);
+      dispatch(setQid(data.qid));
     });
   }, []);
 

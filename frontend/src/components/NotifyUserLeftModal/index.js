@@ -1,28 +1,17 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
 import { socketSelector } from "../../stores/socket/socket.slice";
-import { matchSelector } from "../../stores/match/match.slice";
-import { useSelector } from "react-redux";
-import axios from "axios";
-import configs from "../../utils/configs";
-const config = configs[process.env.NODE_ENV];
+import { useDispatch, useSelector } from "react-redux";
+import { setIsLeaving } from "../../stores/match/match.slice";
+import PropTypes from "prop-types";
 
 function NotifyUserLeftModal({ handleClose, show }) {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { socket } = useSelector(socketSelector);
-  const { matchId } = useSelector(matchSelector);
   console.log(socket);
 
   const leaveRoomButtonClick = () => {
-    axios.delete(config.QUESTION_SVC_BASE_URL + "/question-api/assigned-question", {
-      data: {
-        matchId: matchId,
-      },
-    });
-    // Matched record already deleted, so only need to navigate to match page
-    navigate("/match");
+    dispatch(setIsLeaving(true));
   };
 
   return (
@@ -31,11 +20,11 @@ function NotifyUserLeftModal({ handleClose, show }) {
         <Modal.Title>Matched user has left the room</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        Your matched user has left the room . Would you like to leave the room?
+        Your matched user has left the room. Would you like to leave the room?
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-light" onClick={handleClose}>
-          Cancel
+          Stay
         </Button>
         <Button variant="danger" onClick={leaveRoomButtonClick}>
           Leave Room

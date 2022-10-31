@@ -117,17 +117,42 @@ async function leaveMatchRoom(req) {
   const { socketId } = req;
   try {
     const match = await matchController.findMatchedWhereSocketId(socketId);
+    // Check if user is first user to leave
     if (match !== null) {
-      const deleteMatchedBySocket =
-        await matchController.removeMatchedBySocketId(socketId);
-      const otherUserSocketId =
-        socketId == match.dataValues.socketId1
-          ? match.dataValues.socketId2
-          : match.dataValues.socketId1;
-      resp.otherUserSocketId = otherUserSocketId;
-      resp.firstUserToLeave = true;
-    } else {
-      resp.firstUserToLeave = false;
+      if (
+        match.dataValues.socketId1 != "" &&
+        match.dataValues.socketId2 != "" &&
+        match.dataValues.userId1 != "" &&
+        match.dataValues.userId2 != ""
+      ) {
+        // First user to leave
+        // Update Matched record
+        if (match.dataValues.socketId1 == socketId) {
+          // User1 left
+          const updated = await matchController.updateMatchedBySocketId(
+            socketId,
+            1
+          );
+        } else {
+          // User2 left
+          const updated = await matchController.updateMatchedBySocketId(
+            socketId,
+            2
+          );
+        }
+        const otherUserSocketId =
+          socketId == match.dataValues.socketId1
+            ? match.dataValues.socketId2
+            : match.dataValues.socketId1;
+        resp.otherUserSocketId = otherUserSocketId;
+        resp.firstUserToLeave = true;
+      } else {
+        // Last user to leave
+        resp.firstUserToLeave = false;
+        // Delete Matched record
+        const deleteMatchedBySocket =
+          await matchController.removeMatchedBySocketId(socketId);
+      }
     }
     resp.status = MatchState.MatchDeleted;
     release();
@@ -160,7 +185,7 @@ async function matchRefresh(req) {
     return resp;
   } catch (err) {
     if (err instanceof InvalidMatchPotentialError) {
-      console.log(err.message);
+      // Match potential does not exist
       resp.status = MatchState.MatchRefreshed;
       release();
       return resp;

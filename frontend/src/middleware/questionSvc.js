@@ -15,3 +15,15 @@ export const getRandomQuestion = async ({ matchId, difficulty }) => {
     return e.response.data;
   }
 };
+
+export const getQuestionDetails = async ({ qid }) => {
+  try {
+    const res = await axios.post(`${config.QUESTION_SVC_BASE_URL}/question-api/question-by-id`, {
+      qid,
+    });
+    return res.data;
+  } catch (e) {
+    console.log("Error: Unable to get question details", e.response.data);
+    return e.response.data;
+  }
+};

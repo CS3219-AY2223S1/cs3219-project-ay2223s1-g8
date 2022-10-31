@@ -9,3 +9,16 @@ label {
   font-weight: 600;
   color: rgb(34, 34, 34);
 }
+
+.h-content {
+  height: calc(100vh - $header-height);
+}
+
+.h-content-w-footer {
+  height: calc(100vh - ($header-height + $footer-height));
+}
+
+.font-trebuchet {
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial,
+    sans-serif;
+}

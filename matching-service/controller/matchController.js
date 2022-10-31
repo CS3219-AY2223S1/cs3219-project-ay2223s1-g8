@@ -167,6 +167,35 @@ class MatchController {
     });
     return true;
   }
+
+  // Updates matched record to indicate that a user left
+  async updateMatchedBySocketId(socketId, userNo) {
+    await sequelize.sync();
+    const hasMatchedSocketId = await this.hasMatchedSocketId(socketId);
+    if (!hasMatchedSocketId) {
+      throw new NoMatchedError();
+    }
+    if (userNo == 1) {
+      await this.models.Matched.update(
+        { socketId1: "", userId1: "" },
+        {
+          where: {
+            [Op.or]: [{ socketId1: socketId }, { socketId2: socketId }],
+          },
+        }
+      );
+    } else {
+      await this.models.Matched.update(
+        { socketId2: "", userId2: "" },
+        {
+          where: {
+            [Op.or]: [{ socketId1: socketId }, { socketId2: socketId }],
+          },
+        }
+      );
+    }
+    return true;
+  }
 }
 
 module.exports = MatchController;
