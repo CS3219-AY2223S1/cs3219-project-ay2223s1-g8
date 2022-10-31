@@ -93,5 +93,5 @@ jobs:
 
       - name: Deploy ingress
         run: |-
-          kubectl apply -f ./deployment/microservices/gateway.yaml
+          kubectl apply -f ./deployment/gateway.yaml
           kubectl rollout status ingress/gateway
