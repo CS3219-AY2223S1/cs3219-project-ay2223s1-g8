@@ -3,8 +3,8 @@ name: Scale up cron job
 on:
   workflow_dispatch:
     branches: [ "main", "prod" ]
-  schedule: 
-      - cron: "0 3 * * *" # 3am UTC (11am SGT)
+  # schedule: 
+  #     - cron: "0 3 * * *" # 3am UTC (11am SGT)
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
