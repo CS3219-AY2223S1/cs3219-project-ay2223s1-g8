@@ -81,7 +81,7 @@ jobs:
       - name: Create peerprep-secrets
         continue-on-error: true
         run: |-
-          kubectl delete secret peerprep-secrets
+          kubectl delete secret peerprep-secrets --ignore-not-found=true
           kubectl create secret generic peerprep-secrets \
             --from-literal=database=peerprep-dev \
             --from-literal=username=${{ secrets.PG_USERNAME }} \
@@ -90,7 +90,22 @@ jobs:
             --from-literal=apiUrl=${{ secrets.GATEWAY_URL }} \
             --from-literal=historyMongoDb=${{ secrets.HISTORY_MONGO_URL_PROD }} \
             --from-literal=SERVICE_ACCOUNT_KEY=${{ secrets.GKE_TERRAFORM_CREDS }}
+     
+      - name: Deploy services
+        run: |-
+          kubectl apply -f ./deployment/microservices/user-service.yaml
+          kubectl apply -f ./deployment/microservices/matching-service.yaml
+          kubectl apply -f ./deployment/microservices/question-service.yaml
+          kubectl apply -f ./deployment/microservices/history-service.yaml
+          kubectl apply -f ./deployment/microservices/communication-service.yaml
+          kubectl apply -f ./deployment/microservices/frontend.yaml
+
+      - name: Set up ingress controller
+        run: |-
+          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+          helm repo update
 
       - name: Deploy ingress
         run: |-
+          kubectl delete ingress gateway --ignore-not-found=true
           kubectl apply -f ./deployment/gateway.yaml
