@@ -94,9 +94,11 @@ jobs:
       - name: Set up service account
         run: |-
           kubectl apply -f ./deployment/service-account.yaml
+          kubectl annotate serviceaccount cs3219-group8 iam.gke.io/gcp-service-account=cs3219-group8-service-account@${{ secrets.GKE_PROJECT }}.iam.gserviceaccount.com
 
       - name: Deploy services
         run: |-
+          kubectl delete deploy user-service matching-service question-service history-service communication-service frontend --ignore-not-found=true
           kubectl apply -f ./deployment/microservices/user-service.yaml
           kubectl apply -f ./deployment/microservices/matching-service.yaml
           kubectl apply -f ./deployment/microservices/question-service.yaml
