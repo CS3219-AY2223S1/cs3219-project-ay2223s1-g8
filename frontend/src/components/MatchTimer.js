@@ -44,7 +44,7 @@ function MatchTimer(props) {
 
   useEffect(() => {
     if (status) {
-      navigate("/collab2");
+      navigate("/collab");
     }
     if (start) {
       if (count >= 0) {
