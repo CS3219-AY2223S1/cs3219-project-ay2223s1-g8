@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
 
 function MatchTimer(props) {
   const socket = props.sock;
-  const [count, setCount] = useState(10);
+  const [count, setCount] = useState(30);
   const [start, setStart] = useState(false);
   const [intervalId, setIntervalId] = useState();
   const [status, setStatus] = useState(false);
@@ -74,7 +74,7 @@ function MatchTimer(props) {
 
   const cancelTimer = () => {
     clearInterval(intervalId);
-    setCount(10);
+    setCount(30);
     setStart(false);
     socket.emit("cancel match", { userId });
     closePopUp();
