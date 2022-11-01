@@ -11,16 +11,23 @@ import { socketSelector } from "../../stores/socket/socket.slice";
 import { userSelector } from "../../stores/user/user.slice";
 import { addAttempt } from "../../middleware/historySvc";
 
+const colors = ["#eb7434", "#348ceb", "#7a34eb", "#eb3499"];
+
 const Delta = Quill.import("delta");
 
 Quill.register("modules/cursors", QuillCursors);
 import "./styles.scss";
 
+function getRandomColor() {
+  const index = Math.floor(Math.random() * 4);
+  return colors[index];
+}
+
 function CollabEditor() {
   const reff = useRef(null);
   const navigate = useNavigate();
   const { matchId, isLeaving, qid } = useSelector(matchSelector);
-  const { userId } = useSelector(userSelector);
+  const { userId, username } = useSelector(userSelector);
   const { socket } = useSelector(socketSelector);
 
   useEffect(() => {
@@ -58,12 +65,18 @@ function CollabEditor() {
     const ydoc = new Y.Doc();
     console.log(matchId);
     const provider = new WebsocketProvider("wss://demos.yjs.dev", matchId, ydoc);
+    const awareness = provider.awareness;
+    const color = getRandomColor();
+    awareness.setLocalStateField("user", {
+      name: username,
+      color: color,
+    });
 
     // Define a shared text type on the document
     const ytext = ydoc.getText("quill");
 
     // "Bind" the quill editor to a Yjs text type.
-    const binding = new QuillBinding(ytext, quill, provider.awareness);
+    const binding = new QuillBinding(ytext, quill, awareness);
     binding;
   }, [reff]);
 
