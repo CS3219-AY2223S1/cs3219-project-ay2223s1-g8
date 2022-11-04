@@ -41,7 +41,7 @@ const ChatWindow = () => {
 
   const handleSendMessage = (e) => {
     e.preventDefault();
-    if (message.trim().length != 0) {
+    if (message.trim().length != 0 && message.trim().length < 1000) {
       socket.emit("send message", {
         username: username,
         message: message,

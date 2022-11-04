@@ -1,10 +1,7 @@
 const matchController = require("../index");
 const { MatchState } = require("../utils/match");
 const {
-  DuplicateMatchPotentialError,
   InvalidMatchPotentialError,
-  NoMatchPotentialError,
-  DuplicateMatchedError,
   NoMatchedError,
 } = require("../utils/errors");
 const Mutex = require("async-mutex").Mutex;
