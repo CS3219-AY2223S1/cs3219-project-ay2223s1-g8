@@ -137,9 +137,9 @@ function LoginPage() {
                 <p className="sign-up text-center mt-3">
                   Don&apos;t have an account? <Link to="/signup">Sign Up</Link>
                 </p>
-                <p className="forgot-password text-center mt-3">
+                {/* <p className="forgot-password text-center mt-3">
                   <Link to="/forgotPassword">Forgot password?</Link>
-                </p>
+                </p> */}
               </div>
             </Form>
           </div>
