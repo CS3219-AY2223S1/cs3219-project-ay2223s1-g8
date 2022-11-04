@@ -17,7 +17,15 @@ const ormGetAllUserHistory = async (uid) => {
 };
 
 const ormGetUserHistory = async (uid) => {
-  return await getUserHistory(uid);
+  const userHistory = await getUserHistory(uid);
+  const sortedAttempts = userHistory.attempts.sort((a1, a2) =>
+    (a1.attemptDate < a2.attemptDate) 
+    ? 1 
+    : (a1.attemptDate > a2.attemptDate) 
+      ? -1 
+      : 0
+  );
+  return { uid: userHistory.uid, attempts: sortedAttempts };
 };
 
 const ormGetUserAttempt = async (uid, qid) => {
