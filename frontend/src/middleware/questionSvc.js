@@ -12,7 +12,7 @@ export const getRandomQuestion = async ({ matchId, difficulty }) => {
     return res.data;
   } catch (e) {
     console.log("Error: Unable to get a random question", e.response.data);
-    return e.response.data;
+    throw e.response.data;
   }
 };
 
