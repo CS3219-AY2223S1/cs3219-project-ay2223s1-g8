@@ -4,9 +4,9 @@ import { useEffect, useRef } from "react";
 import Quill from "quill";
 import QuillCursors from "quill-cursors";
 import { QuillBinding } from "y-quill";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { matchSelector } from "../../stores/match/match.slice";
+import { clearState, matchSelector } from "../../stores/match/match.slice";
 import { socketSelector } from "../../stores/socket/socket.slice";
 import { userSelector } from "../../stores/user/user.slice";
 import { addAttempt } from "../../middleware/historySvc";
@@ -25,6 +25,7 @@ function getRandomColor() {
 
 function CollabEditor() {
   const reff = useRef(null);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { matchId, isLeaving, qid } = useSelector(matchSelector);
   const { userId, username } = useSelector(userSelector);
@@ -63,7 +64,6 @@ function CollabEditor() {
 
     // A Yjs document holds the shared data
     const ydoc = new Y.Doc();
-    console.log(matchId);
     const provider = new WebsocketProvider("wss://demos.yjs.dev", matchId, ydoc);
     const awareness = provider.awareness;
     const color = getRandomColor();
@@ -81,13 +81,12 @@ function CollabEditor() {
   }, [reff]);
 
   useEffect(() => {
-    console.log("isLeaving", isLeaving);
     if (isLeaving) {
       const content = reff.current.children[0].innerText;
       const attemptData = { uid: userId, qid, content };
       addAttempt(attemptData).then(() => {
-        console.log(attemptData);
         socket.emit("leave room by button", { socketId: socket.id });
+        dispatch(clearState());
         navigate("/match");
       });
     }
