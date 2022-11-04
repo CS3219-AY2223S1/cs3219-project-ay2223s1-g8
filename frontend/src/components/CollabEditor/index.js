@@ -10,6 +10,9 @@ import { clearState, matchSelector } from "../../stores/match/match.slice";
 import { socketSelector } from "../../stores/socket/socket.slice";
 import { userSelector } from "../../stores/user/user.slice";
 import { addAttempt } from "../../middleware/historySvc";
+import configs from "../../utils/configs";
+
+const config = configs[process.env.NODE_ENV];
 
 const colors = ["#eb7434", "#348ceb", "#7a34eb", "#eb3499"];
 
@@ -64,7 +67,8 @@ function CollabEditor() {
 
     // A Yjs document holds the shared data
     const ydoc = new Y.Doc();
-    const provider = new WebsocketProvider("wss://demos.yjs.dev", matchId, ydoc);
+    // const provider = new WebsocketProvider("wss://demos.yjs.dev", matchId, ydoc);
+    const provider = new WebsocketProvider(config.COLLABORATION_SVC_BASE_URL, matchId, ydoc);
     const awareness = provider.awareness;
     const color = getRandomColor();
     awareness.setLocalStateField("user", {
