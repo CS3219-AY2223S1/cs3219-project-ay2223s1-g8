@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import NavBar from "../../components/NavBar";
 import QuestionCard from "../../components/QuestionCard";
@@ -7,15 +7,16 @@ import CollabEditor from "../../components/CollabEditor";
 import LeaveRoomModal from "../../components/LeaveRoomModal";
 import NotifyUserLeftModal from "../../components/NotifyUserLeftModal";
 import { socketSelector } from "../../stores/socket/socket.slice";
-import { useSelector } from "react-redux";
-import { matchSelector } from "../../stores/match/match.slice";
+import { useDispatch, useSelector } from "react-redux";
+import { clearState, matchSelector } from "../../stores/match/match.slice";
 import axios from "axios";
 import configs from "../../utils/configs";
 const config = configs[process.env.NODE_ENV];
 
 import "./CollabPage.scss";
 
-function CollabPage2() {
+function CollabPage() {
+  const dispatch = useDispatch();
   const [showLeaveRoomModal, setShowLeaveRoomModal] = useState(false);
   const [showUserLeftModal, setShowUserLeftModal] = useState(false);
 
@@ -32,6 +33,24 @@ function CollabPage2() {
         matchId: matchId,
       },
     });
+  });
+
+  const handleTabClosing = () => {
+    dispatch(clearState());
+  };
+
+  const alertUser = (e) => {
+    e.preventDefault();
+    return (e.returnValue = "Are you sure you want to exit?");
+  };
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", alertUser);
+    window.addEventListener("unload", handleTabClosing);
+    return () => {
+      window.removeEventListener("beforeunload", alertUser);
+      window.removeEventListener("unload", handleTabClosing);
+    };
   });
 
   return (
@@ -68,4 +87,4 @@ function CollabPage2() {
   );
 }
 
-export default CollabPage2;
+export default CollabPage;
