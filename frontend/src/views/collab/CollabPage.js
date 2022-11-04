@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "react-bootstrap/esm/Button";
 import NavBar from "../../components/NavBar";
 import QuestionCard from "../../components/QuestionCard";
@@ -7,11 +8,8 @@ import CollabEditor from "../../components/CollabEditor";
 import LeaveRoomModal from "../../components/LeaveRoomModal";
 import NotifyUserLeftModal from "../../components/NotifyUserLeftModal";
 import { socketSelector } from "../../stores/socket/socket.slice";
-import { useDispatch, useSelector } from "react-redux";
 import { clearState, matchSelector } from "../../stores/match/match.slice";
-import axios from "axios";
-import configs from "../../utils/configs";
-const config = configs[process.env.NODE_ENV];
+import { deleteAssignedQuestion } from "../../middleware/questionSvc";
 
 import "./CollabPage.scss";
 
@@ -28,11 +26,7 @@ function CollabPage() {
   });
 
   socket.on("last user left room", () => {
-    axios.delete(config.QUESTION_SVC_BASE_URL + "/question-api/assigned-question", {
-      data: {
-        matchId: matchId,
-      },
-    });
+    deleteAssignedQuestion(matchId);
   });
 
   const handleTabClosing = () => {
