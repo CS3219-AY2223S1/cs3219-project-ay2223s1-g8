@@ -9,7 +9,7 @@ import LandingPage from "./views/landing/LandingPage";
 import MatchingPage from "./views/MatchingPage";
 import CollabPage from "./views/collab/CollabPage";
 import HistoryPage from "./views/history/HistoryPage";
-import ForgotPasswordPage from "./views/forgotPassword/ForgotPasswordPage";
+// import ForgotPasswordPage from "./views/forgotPassword/ForgotPasswordPage";
 import "./App.scss";
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/forgotPassword" element={<ForgotPasswordPage />} />
+          {/* <Route path="/forgotPassword" element={<ForgotPasswordPage />} /> */}
         </Route>
       </Routes>
     </BrowserRouter>
