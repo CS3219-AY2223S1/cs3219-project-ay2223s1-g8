@@ -1,17 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import toast from "react-hot-toast";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Modal from "react-bootstrap/Modal";
-import Spinner from "react-bootstrap/Spinner";
-import Toast from "react-bootstrap/Toast";
-import ToastContainer from "react-bootstrap/ToastContainer";
-import PropTypes from "prop-types";
+import { changeUserPassword } from "../../middleware/userSvc";
+
 // form related imports
-import { useDispatch, useSelector } from "react-redux";
-import { userSelector, clearState, changePassword } from "../../stores/user";
 import { Formik } from "formik";
 import * as Yup from "yup";
+
+import PropTypes from "prop-types";
 import "./styles.scss";
 
 const initialValues = {
@@ -32,12 +31,8 @@ const changePasswordSchema = Yup.object().shape({
 });
 
 const ChangePasswordModal = ({ show, handleClose }) => {
-  const dispatch = useDispatch();
   const [currPasswordType, setCurrPasswordType] = useState("password");
   const [newPasswordType, setNewPasswordType] = useState("password");
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
-  const [showErrorToast, setShowErrorToast] = useState(false);
-  const { isFetching, isSuccess, isError, errorMessage } = useSelector(userSelector);
 
   const toggleCurrPasswordVisibility = () => {
     if (currPasswordType === "password") {
@@ -55,159 +50,106 @@ const ChangePasswordModal = ({ show, handleClose }) => {
     setNewPasswordType("password");
   };
 
-  const onSubmit = (values) => {
-    dispatch(changePassword(values));
+  const onSubmit = async (values) => {
+    await changeUserPassword(values)
+      .then(() => {
+        toast.success("Password changed successfully");
+        handleClose();
+      })
+      .catch((err) => {
+        const errMsg = err.message.includes("Incorrect token or password")
+          ? "Incorrect password"
+          : err.message;
+        toast.error(errMsg);
+      });
   };
 
-  useEffect(() => {
-    return () => {
-      dispatch(clearState());
-    };
-  }, []);
-
-  useEffect(() => {
-    if (isSuccess) {
-      dispatch(clearState());
-      setShowSuccessToast(true);
-      handleClose();
-    }
-    if (isError) {
-      dispatch(clearState());
-      setShowErrorToast(true);
-    }
-  }, [isSuccess, isError]);
-
-  const SuccessToast = () => (
-    <ToastContainer position="bottom-end" className="custom-toast-container">
-      <Toast
-        bg="success"
-        show={showSuccessToast}
-        onClose={() => setShowSuccessToast(false)}
-        delay={3000}
-        autohide
-      >
-        <Toast.Body className="text-white">Password changed successfully.</Toast.Body>
-      </Toast>
-    </ToastContainer>
-  );
-
-  const ErrorToast = () => (
-    <ToastContainer position="bottom-end" className="custom-toast-container">
-      <Toast
-        bg="warning"
-        show={showErrorToast}
-        onClose={() => setShowErrorToast(false)}
-        delay={3000}
-        autohide
-      >
-        <Toast.Body className="text-black">
-          <i className="bi bi-exclamation-triangle-fill"></i>{" "}
-          {errorMessage.includes("Incorrect token or password")
-            ? "Incorrect password"
-            : errorMessage}
-        </Toast.Body>
-      </Toast>
-    </ToastContainer>
-  );
-
   return (
-    <>
-      <Modal
-        show={show}
-        onHide={handleClose}
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Change password</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Formik
-            initialValues={initialValues}
-            validationSchema={changePasswordSchema}
-            onSubmit={onSubmit}
-          >
-            {({ values, handleChange, handleSubmit, handleBlur, errors, touched }) => (
-              <Form noValidate onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <Form.Label>Current Password</Form.Label>
-                  <InputGroup>
-                    <Form.Control
-                      type={currPasswordType}
-                      name="currPassword"
-                      placeholder="Current password"
-                      value={values.currPassword}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      isValid={touched.currPassword && !errors.currPassword}
-                    />
-                    <Button
-                      variant="outline-secondary"
-                      className="btn btn-outline-secondary btn-toggle-password-visibility"
-                      onClick={toggleCurrPasswordVisibility}
-                    >
-                      {currPasswordType === "password" ? (
-                        <i className="bi bi-eye-slash"></i>
-                      ) : (
-                        <i className="bi bi-eye"></i>
-                      )}
-                    </Button>
-                  </InputGroup>
-                  {touched.currPassword && errors.currPassword ? (
-                    <div className="error-message">{errors.currPassword}</div>
-                  ) : null}
-                </div>
-
-                <div className="mb-3">
-                  <Form.Label>New Password</Form.Label>
-                  <InputGroup>
-                    <Form.Control
-                      type={newPasswordType}
-                      name="newPassword"
-                      placeholder="New password"
-                      value={values.newPassword}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      isValid={touched.newPassword && !errors.newPassword}
-                    />
-                    <Button
-                      variant="outline-secondary"
-                      className="btn btn-outline-secondary btn-toggle-password-visibility"
-                      onClick={toggleNewPasswordVisibility}
-                    >
-                      {newPasswordType === "password" ? (
-                        <i className="bi bi-eye-slash"></i>
-                      ) : (
-                        <i className="bi bi-eye"></i>
-                      )}
-                    </Button>
-                  </InputGroup>
-                  {touched.newPassword && errors.newPassword ? (
-                    <div className="error-message">{errors.newPassword}</div>
-                  ) : null}
-                </div>
-
-                <div className="d-grid gap-2 mt-4">
-                  <Button className="btn btn-primary text-white" variant="primary" type="submit">
-                    {isFetching ? (
-                      <>
-                        <Spinner animation="border" size="sm" role="status" aria-hidden="true" />{" "}
-                        Changing password
-                      </>
+    <Modal
+      show={show}
+      onHide={handleClose}
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>Change password</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={changePasswordSchema}
+          onSubmit={onSubmit}
+        >
+          {({ values, handleChange, handleSubmit, handleBlur, errors, touched }) => (
+            <Form noValidate onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <Form.Label>Current Password</Form.Label>
+                <InputGroup>
+                  <Form.Control
+                    type={currPasswordType}
+                    name="currPassword"
+                    placeholder="Current password"
+                    value={values.currPassword}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    isValid={touched.currPassword && !errors.currPassword}
+                  />
+                  <Button
+                    variant="outline-secondary"
+                    className="btn btn-outline-secondary btn-toggle-password-visibility"
+                    onClick={toggleCurrPasswordVisibility}
+                  >
+                    {currPasswordType === "password" ? (
+                      <i className="bi bi-eye-slash"></i>
                     ) : (
-                      <>Save</>
+                      <i className="bi bi-eye"></i>
                     )}
                   </Button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </Modal.Body>
-      </Modal>
+                </InputGroup>
+                {touched.currPassword && errors.currPassword ? (
+                  <div className="error-message">{errors.currPassword}</div>
+                ) : null}
+              </div>
 
-      <SuccessToast />
-      <ErrorToast />
-    </>
+              <div className="mb-3">
+                <Form.Label>New Password</Form.Label>
+                <InputGroup>
+                  <Form.Control
+                    type={newPasswordType}
+                    name="newPassword"
+                    placeholder="New password"
+                    value={values.newPassword}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    isValid={touched.newPassword && !errors.newPassword}
+                  />
+                  <Button
+                    variant="outline-secondary"
+                    className="btn btn-outline-secondary btn-toggle-password-visibility"
+                    onClick={toggleNewPasswordVisibility}
+                  >
+                    {newPasswordType === "password" ? (
+                      <i className="bi bi-eye-slash"></i>
+                    ) : (
+                      <i className="bi bi-eye"></i>
+                    )}
+                  </Button>
+                </InputGroup>
+                {touched.newPassword && errors.newPassword ? (
+                  <div className="error-message">{errors.newPassword}</div>
+                ) : null}
+              </div>
+
+              <div className="d-grid gap-2 mt-4">
+                <Button className="btn btn-primary text-white" variant="primary" type="submit">
+                  Save
+                </Button>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </Modal.Body>
+    </Modal>
   );
 };
 

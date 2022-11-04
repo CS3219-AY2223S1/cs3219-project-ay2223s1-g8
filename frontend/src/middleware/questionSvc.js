@@ -12,7 +12,7 @@ export const getRandomQuestion = async ({ matchId, difficulty }) => {
     return res.data;
   } catch (e) {
     console.log("Error: Unable to get a random question", e.response.data);
-    return e.response.data;
+    throw e.response.data;
   }
 };
 
@@ -24,6 +24,23 @@ export const getQuestionDetails = async ({ qid }) => {
     return res.data;
   } catch (e) {
     console.log("Error: Unable to get question details", e.response.data);
+    return e.response.data;
+  }
+};
+
+export const deleteAssignedQuestion = async (matchId) => {
+  try {
+    const res = await axios.delete(
+      config.QUESTION_SVC_BASE_URL + "/question-api/assigned-question",
+      {
+        data: {
+          matchId,
+        },
+      },
+    );
+    return res.data;
+  } catch (e) {
+    console.log("Error: Unable to delete assigned question", e.response.data);
     return e.response.data;
   }
 };

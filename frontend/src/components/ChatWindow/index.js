@@ -11,6 +11,9 @@ const config = configs[process.env.NODE_ENV];
 
 const socket = io.connect(config.COMMUNICATION_SVC_BASE_URL, {
   path: "/communication-api",
+  pingTimeout: 40000,
+  pingInterval: 10000,
+  closeOnBeforeunload: false,
 });
 
 socket.on("connect_error", (data) => {
@@ -22,7 +25,7 @@ const ChatWindow = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const { username } = useSelector(userSelector);
-  const { matchId } = useSelector(matchSelector);
+  const { matchId, isLeaving } = useSelector(matchSelector);
 
   const textAreaRef = useRef(null);
   let formRef = useRef(null);
@@ -69,20 +72,24 @@ const ChatWindow = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (isLeaving) socket.disconnect();
+  }, [isLeaving]);
+
   return (
     <div className="overlay rounded-md overflow-hidden shadow-4xl" id="ChatWindow-container">
       <div className="pt-2 pb-1" id="Chat-header-container">
         Chat Box
       </div>
       <div ref={messageEnd} className="p-2 h-100 overflow-auto" id="Chatbox-container">
-        {messages.map((message) =>
+        {messages.map((message, idx) =>
           message.username === username ? (
-            <div className="Chat-messages" key={message.id}>
+            <div className="Chat-messages" key={idx}>
               <p className="Sender-name">You</p>
               <div className="Message Message-sender">{message.message}</div>
             </div>
           ) : (
-            <div className="Chat-messages" key={message.id}>
+            <div className="Chat-messages" key={idx}>
               <p className="Recipient-name">{message.username}</p>
               <div className="Message Message-recipient">{message.message}</div>
             </div>
