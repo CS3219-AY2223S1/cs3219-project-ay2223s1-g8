@@ -9,9 +9,7 @@ import NotifyUserLeftModal from "../../components/NotifyUserLeftModal";
 import { socketSelector } from "../../stores/socket/socket.slice";
 import { useSelector } from "react-redux";
 import { matchSelector } from "../../stores/match/match.slice";
-import axios from "axios";
-import configs from "../../utils/configs";
-const config = configs[process.env.NODE_ENV];
+import { deleteAssignedQuestion } from "../../middleware/questionSvc";
 
 import "./CollabPage.scss";
 
@@ -27,11 +25,7 @@ function CollabPage2() {
   });
 
   socket.on("last user left room", () => {
-    axios.delete(config.QUESTION_SVC_BASE_URL + "/question-api/assigned-question", {
-      data: {
-        matchId: matchId,
-      },
-    });
+    deleteAssignedQuestion(matchId);
   });
 
   return (
