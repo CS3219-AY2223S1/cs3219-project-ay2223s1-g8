@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/Modal";
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
 import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
-import { clearState, deleteUser, userSelector } from "../../stores/user";
+import { deleteUser } from "../../middleware/userSvc";
+import { logoutUser } from "../../stores/user";
+
 import "./styles.scss";
 
 const DeleteAccountModal = ({ show, handleClose }) => {
@@ -14,29 +16,19 @@ const DeleteAccountModal = ({ show, handleClose }) => {
   const navigate = useNavigate();
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [showErrorToast, setShowErrorToast] = useState(false);
-  const { isSuccess, isError } = useSelector(userSelector);
 
-  const handleDelete = () => {
-    dispatch(deleteUser());
+  const handleDelete = async () => {
+    await deleteUser()
+      .then(() => {
+        setShowSuccessToast(true);
+        handleClose();
+        setTimeout(() => {
+          dispatch(logoutUser());
+          navigate("/login");
+        }, 1000);
+      })
+      .catch(() => setShowErrorToast(true));
   };
-
-  useEffect(() => {
-    dispatch(clearState());
-  }, []);
-
-  useEffect(() => {
-    if (isSuccess) {
-      dispatch(clearState());
-      setShowSuccessToast(true);
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
-    }
-    if (isError) {
-      dispatch(clearState());
-      setShowErrorToast(true);
-    }
-  }, [isSuccess, isError]);
 
   const SuccessToast = () => (
     <ToastContainer position="bottom-end" className="custom-toast-container">

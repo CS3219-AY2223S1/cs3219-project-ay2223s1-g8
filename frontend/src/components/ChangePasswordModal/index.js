@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Modal from "react-bootstrap/Modal";
-import Spinner from "react-bootstrap/Spinner";
 import Toast from "react-bootstrap/Toast";
 import ToastContainer from "react-bootstrap/ToastContainer";
-import PropTypes from "prop-types";
+import { changeUserPassword } from "../../middleware/userSvc";
+
 // form related imports
-import { useDispatch, useSelector } from "react-redux";
-import { userSelector, clearState, changePassword } from "../../stores/user";
 import { Formik } from "formik";
 import * as Yup from "yup";
+
+import PropTypes from "prop-types";
 import "./styles.scss";
 
 const initialValues = {
@@ -32,12 +32,11 @@ const changePasswordSchema = Yup.object().shape({
 });
 
 const ChangePasswordModal = ({ show, handleClose }) => {
-  const dispatch = useDispatch();
   const [currPasswordType, setCurrPasswordType] = useState("password");
   const [newPasswordType, setNewPasswordType] = useState("password");
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [showErrorToast, setShowErrorToast] = useState(false);
-  const { isFetching, isSuccess, isError, errorMessage } = useSelector(userSelector);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const toggleCurrPasswordVisibility = () => {
     if (currPasswordType === "password") {
@@ -55,27 +54,17 @@ const ChangePasswordModal = ({ show, handleClose }) => {
     setNewPasswordType("password");
   };
 
-  const onSubmit = (values) => {
-    dispatch(changePassword(values));
+  const onSubmit = async (values) => {
+    await changeUserPassword(values)
+      .then(() => {
+        setShowSuccessToast(true);
+        handleClose();
+      })
+      .catch((err) => {
+        setErrorMessage(err.message);
+        setShowErrorToast(true);
+      });
   };
-
-  useEffect(() => {
-    return () => {
-      dispatch(clearState());
-    };
-  }, []);
-
-  useEffect(() => {
-    if (isSuccess) {
-      dispatch(clearState());
-      setShowSuccessToast(true);
-      handleClose();
-    }
-    if (isError) {
-      dispatch(clearState());
-      setShowErrorToast(true);
-    }
-  }, [isSuccess, isError]);
 
   const SuccessToast = () => (
     <ToastContainer position="bottom-end" className="custom-toast-container">
@@ -189,14 +178,7 @@ const ChangePasswordModal = ({ show, handleClose }) => {
 
                 <div className="d-grid gap-2 mt-4">
                   <Button className="btn btn-primary text-white" variant="primary" type="submit">
-                    {isFetching ? (
-                      <>
-                        <Spinner animation="border" size="sm" role="status" aria-hidden="true" />{" "}
-                        Changing password
-                      </>
-                    ) : (
-                      <>Save</>
-                    )}
+                    Save
                   </Button>
                 </div>
               </Form>
