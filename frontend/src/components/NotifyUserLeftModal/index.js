@@ -1,14 +1,11 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { socketSelector } from "../../stores/socket/socket.slice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setIsLeaving } from "../../stores/match/match.slice";
 import PropTypes from "prop-types";
 
 function NotifyUserLeftModal({ handleClose, show }) {
   const dispatch = useDispatch();
-  const { socket } = useSelector(socketSelector);
-  console.log(socket);
 
   const leaveRoomButtonClick = () => {
     dispatch(setIsLeaving(true));

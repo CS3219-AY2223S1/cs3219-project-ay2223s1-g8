@@ -21,7 +21,6 @@ function MatchingPage() {
     console.log("Matching socket connection error:", data);
     socket.disconnect();
   });
-  // console.log(socket);
   dispatch(setSocket({ userId: userId, socket: socket }));
 
   return (

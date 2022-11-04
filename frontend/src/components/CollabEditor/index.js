@@ -64,7 +64,6 @@ function CollabEditor() {
 
     // A Yjs document holds the shared data
     const ydoc = new Y.Doc();
-    console.log(matchId);
     const provider = new WebsocketProvider("wss://demos.yjs.dev", matchId, ydoc);
     const awareness = provider.awareness;
     const color = getRandomColor();
@@ -82,12 +81,10 @@ function CollabEditor() {
   }, [reff]);
 
   useEffect(() => {
-    console.log("isLeaving", isLeaving);
     if (isLeaving) {
       const content = reff.current.children[0].innerText;
       const attemptData = { uid: userId, qid, content };
       addAttempt(attemptData).then(() => {
-        console.log(attemptData);
         socket.emit("leave room by button", { socketId: socket.id });
         dispatch(clearState());
         navigate("/match");
