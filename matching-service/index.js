@@ -28,6 +28,8 @@ const io = require("socket.io")(httpServer, {
     origin: "*",
     methods: ["POST", "GET"],
   },
+  pingTimeout: 40000,
+  pingInterval: 10000,
 });
 
 io.on("connection", (socket) => {
