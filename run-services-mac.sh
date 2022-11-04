@@ -21,7 +21,7 @@ osascript -e 'tell application "Terminal"
   do script "npm ci && npm run dev" in front window
 
   my makeTab()
-  do script "cd ../communication-service/" in front window
+  do script "cd ../history-service/" in front window
   do script "npm ci && npm run dev" in front window
 
 end tell
