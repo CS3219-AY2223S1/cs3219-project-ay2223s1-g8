@@ -40,15 +40,14 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start-windows": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,scss,sass,md,json}\" --config ./.prettierrc && cross-env NODE_ENV=development runtime-env-cra --config-name=./public/runtime-env.js && react-scripts start",
-    "start-mac": "prettier --write './**/*.{js,jsx,ts,tsx,css,scss,sass,md,json}' --config ./.prettierrc && cross-env NODE_ENV=development runtime-env-cra --config-name=./public/runtime-env.js && react-scripts start",
+    "start:win": "format:win && cross-env NODE_ENV=development runtime-env-cra --config-name=./public/runtime-env.js && react-scripts start",
+    "start:mac": "format:mac && cross-env NODE_ENV=development runtime-env-cra --config-name=./public/runtime-env.js && react-scripts start",
     "build": "prettier --write './**/*.{js,jsx,ts,tsx,css,scss,sass,md,json}' --config ./.prettierrc && react-scripts build",
     "test": "react-scripts test",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
-    "format-mac": "prettier --write './**/*.{js,jsx,ts,tsx,css,scss,sass,md,json}' --config ./.prettierrc",
-    "format-windows": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,scss,sass,md,json}\" --config ./.prettierrc",
-    "start": "react-scripts start"
+    "format:mac": "prettier --write './**/*.{js,jsx,ts,tsx,css,scss,sass,md,json}' --config ./.prettierrc",
+    "format:win": "prettier --write \"./**/*.{js,jsx,ts,tsx,css,scss,sass,md,json}\" --config ./.prettierrc"
   },
   "eslintConfig": {
     "extends": [

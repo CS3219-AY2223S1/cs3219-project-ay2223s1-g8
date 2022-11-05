@@ -6,7 +6,7 @@ osascript -e 'tell application "Terminal"
   
   my makeTab()
   do script "cd ./frontend/" in front window
-  do script "npm ci && npm run start-mac" in front window
+  do script "npm ci && npm run start:mac" in front window
   
   my makeTab()
   do script "cd ../user-service/" in front window
