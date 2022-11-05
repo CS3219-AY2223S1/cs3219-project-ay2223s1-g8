@@ -3,8 +3,8 @@ name: Destory GKE cluster
 on:
   workflow_dispatch:
     branches: [ "main" ]
-  schedule: 
-    - cron: "0 18 * * *"  # every day at 6pm UTC (2am SGT)
+  # schedule: 
+  #   - cron: "0 18 * * *"  # every day at 6pm UTC (2am SGT)
 
 jobs:
   terraform:

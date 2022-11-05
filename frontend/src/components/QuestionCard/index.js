@@ -8,15 +8,27 @@ import "./styles.scss";
 
 function QuestionCard({ containerId }) {
   const dispatch = useDispatch();
+  const [retry, setRetry] = useState(false);
   const [question, setQuestion] = useState(null);
   const { matchId, difficulty } = useSelector(matchSelector);
 
   useEffect(() => {
-    getRandomQuestion({ matchId, difficulty }).then((data) => {
-      setQuestion(data);
-      dispatch(setQid(data.qid));
-    });
+    getRandomQuestion({ matchId, difficulty })
+      .then((data) => {
+        setQuestion(data);
+        dispatch(setQid(data.qid));
+      })
+      .catch(() => setRetry(!retry));
   }, []);
+
+  useEffect(() => {
+    getRandomQuestion({ matchId, difficulty })
+      .then((data) => {
+        setQuestion(data);
+        dispatch(setQid(data.qid));
+      })
+      .catch(() => setRetry(!retry));
+  }, [retry]);
 
   if (!question) return null;
 

@@ -15,12 +15,14 @@ function MatchingPage() {
   const socket = io.connect(config.MATCH_SVC_BASE_URL, {
     path: "/matching-api",
     query: `userId=${userId}`,
+    pingTimeout: 40000,
+    pingInterval: 10000,
+    closeOnBeforeunload: false,
   });
   socket.on("connect_error", (data) => {
     console.log("Matching socket connection error:", data);
     socket.disconnect();
   });
-  // console.log(socket);
   dispatch(setSocket({ userId: userId, socket: socket }));
 
   return (

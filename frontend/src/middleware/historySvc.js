@@ -9,7 +9,6 @@ export const addAttempt = async ({ uid, qid, content }) => {
       uid,
       attempt: { qid, content },
     });
-    console.log(res.data);
     return res.data;
   } catch (e) {
     console.log("Error: Unable to post new attempt to question", e.response.data);

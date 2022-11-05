@@ -4,27 +4,43 @@ body {
   overflow-x: hidden;
 }
 
-.Collab-container {
+.Collab2-container {
   display: flex;
-  background-color: $bg-light;
   flex-direction: column;
-  align-items: center;
+  background-color: $bg-light;
   width: 100vw;
   min-height: 100vh;
-  padding: 2vh;
-  padding-top: 90px;
-  padding-bottom: 4vh;
 }
 
-.Collab-actions-container {
+.Collab2-content-div {
+  height: calc(100vh - ($header-height + $footer-height));
+  display: flex;
+  flex-direction: row;
+}
+
+.Collab2-left-div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-right: 0.25vw;
+  border: 1px solid $outline;
+  border-width: 0px 1px 1px 0px;
+}
+
+.Collab2-right-div {
+  flex: 1;
+  margin-left: 0.25vw;
+}
+
+.Collab2-footer-div {
   width: 100%;
+  height: $footer-height;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
 }
 
-.Editor-chat-container {
-  display: flex;
-  flex-direction: row;
-  width: 90vw;
+#Collab2-qn-card-container {
+  border: none;
+  border-radius: 0px;
 }

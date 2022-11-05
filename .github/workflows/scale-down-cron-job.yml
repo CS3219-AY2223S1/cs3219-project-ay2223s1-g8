@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     branches: [ "main", "prod" ]
   # schedule: 
-  #   - cron: "0 16 * * *"  # every day at 4pm UTC (12am SGT)
+  #   - cron: "0 18 * * *"  # every day at 6pm UTC (2am SGT)
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
@@ -35,5 +35,5 @@ jobs:
 
       - name: Scale to 0 replicas
         run: |-
-          kubectl scale deployment user-service matching-service question-service history-service communication-service frontend --replicas=0
+          kubectl delete deploy user-service matching-service question-service history-service communication-service frontend
 

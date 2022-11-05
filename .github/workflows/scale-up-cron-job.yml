@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     branches: [ "main", "prod" ]
   # schedule: 
-  #     - cron: "0 3 * * *" # 3am UTC (11am SGT)
+  #     - cron: "0 1 * * *" # 1am UTC (9am SGT)
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
@@ -36,4 +36,15 @@ jobs:
 
       - name: Scale up to 1 replica
         run: |-
-          kubectl scale deployment user-service matching-service question-service history-service communication-service frontend --replicas=1
+          kubectl apply -f ./deployment/microservices/user-service.yaml
+          kubectl apply -f ./deployment/microservices/matching-service.yaml
+          kubectl apply -f ./deployment/microservices/question-service.yaml
+          kubectl apply -f ./deployment/microservices/history-service.yaml
+          kubectl apply -f ./deployment/microservices/communication-service.yaml
+          kubectl apply -f ./deployment/microservices/frontend.yaml
+          kubectl rollout status deployment/user-service
+          kubectl rollout status deployment/matching-service
+          kubectl rollout status deployment/question-service
+          kubectl rollout status deployment/history-service
+          kubectl rollout status deployment/communication-service
+          kubectl rollout status deployment/frontend
