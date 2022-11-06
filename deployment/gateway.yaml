@@ -43,3 +43,10 @@ spec:
             name: communication-service
             port:
               number: 8005
+      - path: /collab-api/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: collab-service
+            port:
+              number: 8006
