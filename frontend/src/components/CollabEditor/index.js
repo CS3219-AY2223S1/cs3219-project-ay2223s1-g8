@@ -68,11 +68,7 @@ function CollabEditor() {
     // A Yjs document holds the shared data
     const ydoc = new Y.Doc();
     // const provider = new WebsocketProvider("wss://demos.yjs.dev", matchId, ydoc);
-    const provider = new WebsocketProvider(
-      config.COLLABORATION_SVC_BASE_URL + "/collab-api",
-      matchId,
-      ydoc,
-    );
+    const provider = new WebsocketProvider(config.COLLABORATION_SVC_BASE_URL, matchId, ydoc);
     const awareness = provider.awareness;
     const color = getRandomColor();
     awareness.setLocalStateField("user", {
