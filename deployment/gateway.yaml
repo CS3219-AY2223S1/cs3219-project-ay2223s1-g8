@@ -43,10 +43,10 @@ spec:
             name: communication-service
             port:
               number: 8005
-      - path: /*
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: collab-service
-            port:
-              number: 8006
+      # - path: /*
+      #   pathType: ImplementationSpecific
+      #   backend:
+      #     service:
+      #       name: collab-service
+      #       port:
+      #         number: 8006
