@@ -20,7 +20,7 @@
     * Host name: localhost
     * Port: 5432
 
-    Create 2 databases called `question-db` and `question-db-test`.
+    Create 2 databases called `peerprep` and `peerpreptest`.
 
 5.  Generate the `TOKEN_KEY` from `node` in the terminal.
     This key aids in the generation of a random question for the frontend.

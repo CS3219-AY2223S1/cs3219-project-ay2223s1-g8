@@ -20,7 +20,7 @@
     * Host name: localhost
     * Port: 5432
 
-    Create a database called `matching-db`.
+    Create 2 databases called `peerprep` and `peerpreptest`.
 
 5.  To start the development server locally, run the following command:
     ```shell
