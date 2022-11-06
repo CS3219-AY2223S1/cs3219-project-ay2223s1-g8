@@ -63,7 +63,7 @@ jobs:
   #         npm run test
 
   Build:
-    needs: Test
+    # needs: Test
     if: ${{ github.event_name == 'push' }}
     name: Build and Push to GKE
     runs-on: ubuntu-latest
