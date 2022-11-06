@@ -6,31 +6,27 @@ osascript -e 'tell application "Terminal"
   
   my makeTab()
   do script "cd ./frontend/" in front window
-  do script "npm ci && npm run start:mac" in front window
+  do script "npm i && npm run start:mac" in front window
   
   my makeTab()
   do script "cd ../user-service/" in front window
-  do script "npm ci && npm run dev" in front window
+  do script "npm i && npm run dev" in front window
 
   my makeTab()
   do script "cd ../matching-service/" in front window
-  do script "npm ci && npm run dev" in front window
+  do script "npm i && npm run dev" in front window
 
   my makeTab()
   do script "cd ../question-service/" in front window
-  do script "npm ci && npm run dev" in front window
-
-  my makeTab()
-  do script "cd ../collab-service/" in front window
-  do script "npm ci && npm start" in front window
+  do script "npm i && npm run dev" in front window
 
   my makeTab()
   do script "cd ../communication-service/" in front window
-  do script "npm ci && npm run dev" in front window
+  do script "npm i && npm run dev" in front window
 
   my makeTab()
   do script "cd ../history-service/" in front window
-  do script "npm ci && npm run dev" in front window
+  do script "npm i && npm run dev" in front window
 
 end tell
 
