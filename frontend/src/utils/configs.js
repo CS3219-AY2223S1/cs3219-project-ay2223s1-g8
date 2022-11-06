@@ -7,7 +7,7 @@ export default {
     COMMUNICATION_SVC_BASE_URL:
       process.env.REACT_APP_URI_COMMUNICATION_SVC || "http://localhost:8005",
     COLLABORATION_SVC_BASE_URL:
-      process.env.REACT_APP_URI_COLLABORATION_SVC || "ws://localhost:8006",
+      process.env.REACT_APP_URI_COLLABORATION_SVC || "wss://demos.yjs.dev",
   },
   production: {
     USER_SVC_BASE_URL: window.__RUNTIME_CONFIG__.REACT_APP_API_URL || "http://localhost:8000",
@@ -17,6 +17,6 @@ export default {
     COMMUNICATION_SVC_BASE_URL:
       window.__RUNTIME_CONFIG__.REACT_APP_API_URL || "http://localhost:8005",
     COLLABORATION_SVC_BASE_URL:
-      window.__RUNTIME_CONFIG__.REACT_APP_API_URL || "ws://localhost:8006",
+      window.__RUNTIME_CONFIG__.REACT_APP_API_URL || "wss://demos.yjs.dev",
   },
 };
