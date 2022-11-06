@@ -3,48 +3,47 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.global-static-ip-name: gateway-ip
-    nginx.ingress.kubernetes.io/rewrite-target: /$2$3
   name: gateway
 spec:
   rules:
   - http:
       paths:
-      - path: /()(user-api)(.*)
+      - path: /user-api/*
         pathType: ImplementationSpecific
         backend:
           service:
             name: user-service
             port:
               number: 8000
-      - path: /()(matching-api)(.*)
+      - path: /matching-api/*
         pathType: ImplementationSpecific
         backend:
           service:
             name: matching-service
             port:
               number: 8001
-      - path: /()(question-api)(.*)
+      - path: /question-api/*
         pathType: ImplementationSpecific
         backend:
           service:
             name: question-service
             port:
               number: 8002
-      - path: /()(history-api)(.*)
+      - path: /history-api/*
         pathType: ImplementationSpecific
         backend:
           service:
             name: history-service
             port:
               number: 8004
-      - path: /()(communication-api)(.*)
+      - path: /communication-api/*
         pathType: ImplementationSpecific
         backend:
           service:
             name: communication-service
             port:
               number: 8005
-      - path: /(collab-api)(.*)
+      - path: /*
         pathType: ImplementationSpecific
         backend:
           service:
