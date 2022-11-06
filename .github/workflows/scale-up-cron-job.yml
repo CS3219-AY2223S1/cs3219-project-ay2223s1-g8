@@ -41,10 +41,12 @@ jobs:
           kubectl apply -f ./deployment/microservices/question-service.yaml
           kubectl apply -f ./deployment/microservices/history-service.yaml
           kubectl apply -f ./deployment/microservices/communication-service.yaml
+          kubectl apply -f ./deployment/microservices/collab-service.yaml
           kubectl apply -f ./deployment/microservices/frontend.yaml
           kubectl rollout status deployment/user-service
           kubectl rollout status deployment/matching-service
           kubectl rollout status deployment/question-service
           kubectl rollout status deployment/history-service
           kubectl rollout status deployment/communication-service
+          kubectl rollout status deployment/collab-service
           kubectl rollout status deployment/frontend
