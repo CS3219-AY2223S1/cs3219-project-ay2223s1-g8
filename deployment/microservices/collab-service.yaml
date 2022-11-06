@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: collab-service
+spec:
+  selector:
+    matchLabels:
+      app: collab-service-app
+  template:
+    metadata:
+      labels:
+        app: collab-service-app
+        environment: prod
+    spec:
+      serviceAccountName: cs3219-group8
+      containers:
+      - name: collab-service-app
+        image: us-central1-docker.pkg.dev/peerprep-363807/collab-service/collab-service-image:latest
+        # This app listens on port 8006 for web traffic.
+        ports:
+        - containerPort: 8006
+        env:
+        - name: NODE_ENV
+          value: "prod"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: collab-service
+spec:
+  type: NodePort
+  selector:
+    app: collab-service-app
+  ports:
+  - port: 8006 # port in service
+    targetPort: 8006 # port in deployment  
