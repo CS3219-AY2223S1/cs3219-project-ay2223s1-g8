@@ -18,3 +18,9 @@ Question Service | Stores all questions of various difficulty and randomly assig
 Collaboration Service | Handles editor collaboration between matched users | [Collaboration Service Documentation](/collab-service/README.md) | [http://localhost:8006]()
 Communication Service | Enables 2-way communication between matched users in a collaboration room | [Communication Service Documentation](/communication-service/README.md) | [http://localhost:8005]()
 History Service | Store user's latest question attempts | [History Service Documentation](/history-service/README.md) | [http://localhost:8004]()
+
+### Deployment
+
+We are using Google Kubernetes Engine to deploy all our microservices on Google Cloud.
+
+For more details on deployment, read the [Deployment Documentation](/deployment/README.md).
