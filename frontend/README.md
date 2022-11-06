@@ -21,14 +21,16 @@ npm ci
 
 5. To start the development server locally, run the following command:
 
-*For mac/linux machines:*
-```shell
-npm run start:mac
-```
-*For windows machines:*
-```shell
-npm run start:win
-```
+   _For mac/linux machines:_
+
+   ```shell
+   npm run start:mac
+   ```
+
+   _For windows machines:_
+
+   ```shell
+   npm run start:win
+   ```
 
 Access the frontend at [http://localhost:3000]().
-
