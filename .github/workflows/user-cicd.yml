@@ -2,7 +2,7 @@ name: User CICD
 
 on:
   push:
-    branches: [ "prod", "debug-cd" ]
+    branches: [ "prod" ]
     paths:
       - "user-service/**"
       - ".github/workflows/user-cicd.yml"
@@ -20,50 +20,50 @@ env:
   IMAGE: user-service-image
 
 jobs:
-  # Test:
-  #   runs-on: ubuntu-latest
+  Test:
+    runs-on: ubuntu-latest
     
-  #   env:
-  #     NODE_ENV: "test"
-  #     USER: ${{ secrets.PG_USERNAME }}
-  #     HOST: "127.0.0.1"
-  #     PASSWORD: ${{ secrets.PG_PASSWORD }}
-  #     PORT: "5432"
-  #     TEST_DB: peerprep-test
-  #     TOKEN_KEY: ${{ secrets.JWT_SECRET }}
+    env:
+      NODE_ENV: "test"
+      USER: ${{ secrets.PG_USERNAME }}
+      HOST: "127.0.0.1"
+      PASSWORD: ${{ secrets.PG_PASSWORD }}
+      PORT: "5432"
+      TEST_DB: peerprep-test
+      TOKEN_KEY: ${{ secrets.JWT_SECRET }}
 
-  #   services:
-  #     postgres:
-  #       image: postgres:12-alpine
-  #       env:
-  #         POSTGRES_USER: ${{ secrets.PG_USERNAME }}
-  #         POSTGRES_PASSWORD: ${{ secrets.PG_PASSWORD }}
-  #         POSTGRES_DB: peerprep-test
-  #       ports:
-  #         - 5432:5432
-  #       options: >-
-  #         --health-cmd pg_isready
-  #         --health-interval 10s
-  #         --health-timeout 5s
-  #         --health-retries 5
+    services:
+      postgres:
+        image: postgres:12-alpine
+        env:
+          POSTGRES_USER: ${{ secrets.PG_USERNAME }}
+          POSTGRES_PASSWORD: ${{ secrets.PG_PASSWORD }}
+          POSTGRES_DB: peerprep-test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Use Node.js
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: '16.x'
-  #     - name: Install dependencies
-  #       run: |
-  #         cd ${{ env.DEPLOYMENT_NAME }}
-  #         npm ci
-  #     - name: Run testcases
-  #       run: |
-  #         cd ${{ env.DEPLOYMENT_NAME }}
-  #         npm run test
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+      - name: Install dependencies
+        run: |
+          cd ${{ env.DEPLOYMENT_NAME }}
+          npm ci
+      - name: Run testcases
+        run: |
+          cd ${{ env.DEPLOYMENT_NAME }}
+          npm run test
 
   Build:
-    # needs: Test
+    needs: Test
     if: ${{ github.event_name == 'push' }}
     name: Build and Push to GKE
     runs-on: ubuntu-latest
@@ -85,13 +85,6 @@ jobs:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
           credentials: ${{ secrets.GKE_TERRAFORM_CREDS }}
-    
-      # - name: Declare docker tag variables
-      #   id: vars
-      #   shell: bash
-      #   run: |
-      #     GIT_HASH=$(git rev-parse --short "${GITHUB_SHA}")
-      #     echo "##[set-output name=docker_tag;]$(echo ${GITHUB_REF##*/}-${GIT_HASH})"
         
       # Build and push image to Google Container Registry
       - name: Build and push using Cloud Build
@@ -127,7 +120,8 @@ jobs:
 
       - name: Deploy
         run: |-
-          kubectl delete deploy user-service --ignore-not-found=true
+          kubectl delete deploy ${{ env.DEPLOYMENT_NAME }} --ignore-not-found=true
+          kubectl delete svc ${{ env.DEPLOYMENT_NAME }} --ignore-not-found=true
           kubectl apply -f ./deployment/microservices/${{ env.DEPLOYMENT_NAME }}.yaml
           kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
           kubectl get services -o wide
