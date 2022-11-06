@@ -41,7 +41,7 @@
     ```shell
     npm run dev
     ```
-    Access the server at [http://localhost:8000/]().
+    Access the server at [http://localhost:8000]().
 
 7.  To run the tests, use the following command:
 

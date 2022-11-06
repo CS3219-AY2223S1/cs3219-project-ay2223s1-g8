@@ -16,7 +16,7 @@
     ```shell
     npm start
     ```
-    Access the server at [http://localhost:8006/]().
+    Access the server at [http://localhost:8006]().
 
 ### Acknowledgement
 

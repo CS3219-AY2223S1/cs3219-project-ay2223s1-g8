@@ -2,31 +2,27 @@
 
 ### Development
 
-1. Navigate to the `history-service` directory.
+1.  Navigate to the `history-service` directory.
+    ```shell
+    cd history-service/
+    ```
 
-```shell
-cd history-service/
-```
+2.  Install dependencies.
+    ```shell
+    npm ci
+    ```
 
-2. Install dependencies.
+3.  To start the development server locally, run the following command:
+    ```shell
+    npm run dev
+    ```
 
-```shell
-npm ci
-```
+    Access the server at [http://localhost:8004]().
 
-3. To start the development server locally, run the following command:
-
-```shell
-npm run dev
-```
-
-Access the server at [http://localhost:8004/]().
-
-4. To run the tests, use the following command:
-
-```shell
-npm test
-```
+4.  To run the tests, use the following command:
+    ```shell
+    npm test
+    ```
 
 ### Endpoints
 

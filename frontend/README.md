@@ -30,5 +30,5 @@ npm run start:mac
 npm run start:win
 ```
 
-Access the frontend at [http://localhost:3000/]().
+Access the frontend at [http://localhost:3000]().
 
