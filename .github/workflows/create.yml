@@ -96,18 +96,20 @@ jobs:
 
       - name: Deploy services
         run: |-
-          kubectl delete deploy user-service matching-service question-service history-service communication-service frontend --ignore-not-found=true
+          kubectl delete deploy user-service matching-service question-service history-service communication-service collab-service frontend --ignore-not-found=true
           kubectl apply -f ./deployment/microservices/user-service.yaml
           kubectl apply -f ./deployment/microservices/matching-service.yaml
           kubectl apply -f ./deployment/microservices/question-service.yaml
           kubectl apply -f ./deployment/microservices/history-service.yaml
           kubectl apply -f ./deployment/microservices/communication-service.yaml
+          kubectl apply -f ./deployment/microservices/collab-service.yaml
           kubectl apply -f ./deployment/microservices/frontend.yaml
           kubectl rollout status deployment/user-service
           kubectl rollout status deployment/matching-service
           kubectl rollout status deployment/question-service
           kubectl rollout status deployment/history-service
           kubectl rollout status deployment/communication-service
+          kubectl rollout status deployment/collab-service
           kubectl rollout status deployment/frontend
 
       - name: Set up ingress controller
