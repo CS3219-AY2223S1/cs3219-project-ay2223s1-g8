@@ -78,7 +78,7 @@ const ChatWindow = () => {
 
   return (
     <div className="overlay rounded-md overflow-hidden shadow-4xl" id="ChatWindow-container">
-      <div className="pt-2 pb-1" id="Chat-header-container">
+      <div className="pt-2 pb-1 text-light" id="Chat-header-container">
         Chat Box
       </div>
       <div ref={messageEnd} className="p-2 h-100 overflow-auto" id="Chatbox-container">
@@ -101,7 +101,7 @@ const ChatWindow = () => {
           <textarea
             rows="1"
             placeholder="Write a message..."
-            className="Chat-message-input m-2"
+            className="Chat-message-input m-2 text-light"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             ref={textAreaRef}

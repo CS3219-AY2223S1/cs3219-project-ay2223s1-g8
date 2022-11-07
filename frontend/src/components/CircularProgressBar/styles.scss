@@ -6,11 +6,11 @@
 }
 
 .circle-background {
-  stroke: white;
+  stroke: $bg-light;
 }
 
 .circle-progress {
-  stroke: $shadow;
+  stroke: $primary;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
@@ -18,5 +18,9 @@
 .circle-text {
   font-size: 4em;
   font-weight: 600;
-  fill: black;
+  fill: $dark;
+}
+
+.circle-text-sm {
+  fill: $dark;
 }

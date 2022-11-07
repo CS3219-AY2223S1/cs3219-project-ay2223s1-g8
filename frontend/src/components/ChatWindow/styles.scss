@@ -9,16 +9,16 @@
 }
 
 #Chat-header-container {
-  background-color: white;
+  background-color: $bg-dark-900;
   text-align: center;
   font-weight: bold;
   font-family: $font-overpass-mono;
-  border: 0px double $outline;
+  border: 0px double $dark-outline;
   border-width: 1px 0px 1px 0px;
 }
 
 #Chatbox-container {
-  background-color: $bg-light;
+  background-color: $bg-dark-500;
 }
 
 #Chatbox-container::-webkit-scrollbar {
@@ -33,8 +33,9 @@
 }
 
 .Chat-footer-container {
-  background-color: white;
+  background-color: $bg-dark-500;
   max-height: 120px;
+  border-top: 1px solid $bg-dark-100;
 }
 
 .Chat-submit {
@@ -43,6 +44,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: transparent;
 
   textarea {
     max-height: 10vh;
@@ -65,22 +67,24 @@
   border: none;
   outline: none;
   resize: none;
+  background-color: transparent;
 }
 
 .Message {
   width: 80%;
   max-width: 80%;
   padding: 0.5rem 0.75rem;
+  color: white;
 }
 
 .Message-recipient {
-  background-color: white;
+  background-color: $bg-dark-100;
   border-radius: 10px;
   font-size: 15px;
 }
 
 .Message-sender {
-  background-color: rgb(194, 243, 194);
+  background-color: rgb(56, 108, 56);
   border-radius: 10px;
   margin-left: auto;
   font-size: 15px;

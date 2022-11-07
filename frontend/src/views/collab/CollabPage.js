@@ -64,7 +64,7 @@ function CollabPage() {
         <div className="Collab2-footer-div px-3 py-2">
           <Button
             className="btn-leave-room btn-sm"
-            variant="outline-danger"
+            variant="danger"
             onClick={() => setShowLeaveRoomModal(true)}
           >
             Leave Room

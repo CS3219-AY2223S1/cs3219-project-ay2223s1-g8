@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import DifficultyPill from "../DifficultyPill";
 import { getRandomQuestion } from "../../middleware/questionSvc";
 import { matchSelector, setQid } from "../../stores/match/match.slice";
 
@@ -33,9 +34,12 @@ function QuestionCard({ containerId }) {
   if (!question) return null;
 
   return (
-    <div className="card overflow-auto Qn-card-container" id={containerId}>
-      <div className="card-body Qn-card-body-container">
-        <h5 className="card-title text-center">{question.title}</h5>
+    <div className="overflow-auto Qn-card-container px-3 py-4" id={containerId}>
+      <div className="Qn-card-body-container text-light">
+        <div className="d-flex flex-row justify-content-between align-items-center mb-2">
+          <h4 className="text-center m-0">{question.title}</h4>
+          <DifficultyPill variant={question.difficulty} />
+        </div>
         <p className="card-text">{question.content}</p>
       </div>
     </div>

@@ -36,7 +36,7 @@ function NavBar({ isHistoryPage = false, isCollabPage = false }) {
   if (!hasToken()) {
     return (
       <>
-        <Navbar bg="light" fixed="top">
+        <Navbar bg="primary" fixed="top">
           <Container fluid>
             <Navbar.Brand href="/" className="Navbar-peerprep text-white">
               <img alt="" src={logo} width="30" height="30" className="d-inline-block align-top" />{" "}
@@ -44,7 +44,7 @@ function NavBar({ isHistoryPage = false, isCollabPage = false }) {
             </Navbar.Brand>
           </Container>
         </Navbar>
-        <Navbar bg="light" style={{ opacity: 0 }}>
+        <Navbar style={{ opacity: 0 }}>
           <Container fluid>
             <Navbar.Brand className="Navbar-peerprep text-white">
               <img alt="" src={logo} width="30" height="30" className="d-inline-block align-top" />{" "}
@@ -58,7 +58,7 @@ function NavBar({ isHistoryPage = false, isCollabPage = false }) {
 
   return (
     <>
-      <Navbar bg="light" variant="dark" fixed="top">
+      <Navbar bg="primary" variant="dark" fixed="top">
         <Container fluid>
           <Navbar.Brand href={isCollabPage ? "#" : "/match"} className="Navbar-peerprep text-white">
             <img alt="" src={logo} width="30" height="30" className="d-inline-block align-top" />{" "}
@@ -89,7 +89,7 @@ function NavBar({ isHistoryPage = false, isCollabPage = false }) {
         </Container>
       </Navbar>
 
-      <Navbar bg="light" style={{ opacity: 0 }}>
+      <Navbar style={{ opacity: 0 }}>
         <Container fluid>
           <Navbar.Brand className="Navbar-peerprep text-white">
             <img alt="" src={logo} width="30" height="30" className="d-inline-block align-top" />{" "}

@@ -28,7 +28,6 @@ const CircularProgressBar = ({ sqSize = 250, strokeWidth = 8, count = 30, start 
         cy={sqSize / 2}
         r={radius}
         strokeWidth={`${strokeWidth}px`}
-        // Start progress marker at 12 O'Clock
         transform={`rotate(-90 ${sqSize / 2} ${sqSize / 2})`}
         style={{
           strokeDasharray: dashArray,
@@ -38,7 +37,13 @@ const CircularProgressBar = ({ sqSize = 250, strokeWidth = 8, count = 30, start 
       <text className="circle-text" x="50%" y="50%" dy=".3em" textAnchor="middle">
         {count}
       </text>
-      <text className="fw-semibold text-center" x="50%" y="68%" dy=".3em" textAnchor="middle">
+      <text
+        className="circle-text-sm fw-semibold text-center"
+        x="50%"
+        y="68%"
+        dy=".3em"
+        textAnchor="middle"
+      >
         {start ? "Matching..." : "Find Match"}
       </text>
     </svg>
