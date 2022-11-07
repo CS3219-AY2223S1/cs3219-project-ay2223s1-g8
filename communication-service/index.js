@@ -41,6 +41,10 @@ io.on("connection", (socket) => {
     release();
   });
 
+  socket.on("leave chat", async (req) => {
+    io.socketsLeave(req.roomId);
+  });
+
   socket.on("disconnect", (reason) => {
     console.log(`User socketID=${socket.id} disconnected, reason=${reason}`);
   });

@@ -10,28 +10,28 @@ import NotifyUserLeftModal from "../../components/NotifyUserLeftModal";
 import { socketSelector } from "../../stores/socket/socket.slice";
 import { clearState, matchSelector } from "../../stores/match/match.slice";
 import { deleteAssignedQuestion } from "../../middleware/questionSvc";
-import { clearCommState, setCommSocket } from "../../stores/socket/commSocket.slice";
-import io from "socket.io-client";
-import configs from "../../utils/configs";
+// import { clearCommState, setCommSocket } from "../../stores/socket/commSocket.slice";
+// import io from "socket.io-client";
+// import configs from "../../utils/configs";
 
 import "./CollabPage.scss";
 
 function CollabPage() {
   const dispatch = useDispatch();
-  dispatch(clearCommState());
+  // dispatch(clearCommState());
 
-  const config = configs[process.env.NODE_ENV];
+  // const config = configs[process.env.NODE_ENV];
 
-  const commSocket = io.connect(config.COMMUNICATION_SVC_BASE_URL, {
-    path: "/communication-api",
-    closeOnBeforeunload: false,
-  });
+  // const commSocket = io.connect(config.COMMUNICATION_SVC_BASE_URL, {
+  //   path: "/communication-api",
+  //   closeOnBeforeunload: false,
+  // });
 
-  commSocket.on("connect_error", (data) => {
-    console.log("Matching socket connection error:", data);
-    commSocket.disconnect();
-  });
-  dispatch(setCommSocket({ commSocket: commSocket }));
+  // commSocket.on("connect_error", (data) => {
+  //   console.log("Matching socket connection error:", data);
+  //   commSocket.disconnect();
+  // });
+  // dispatch(setCommSocket({ commSocket: commSocket }));
 
   const [showLeaveRoomModal, setShowLeaveRoomModal] = useState(false);
   const [showUserLeftModal, setShowUserLeftModal] = useState(false);
@@ -72,7 +72,7 @@ function CollabPage() {
         <div className="Collab2-content-div">
           <div className="Collab2-left-div">
             <QuestionCard containerId="Collab2-qn-card-container" />
-            <ChatWindow sock={commSocket} />
+            <ChatWindow />
           </div>
 
           <div className="Collab2-right-div">
