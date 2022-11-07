@@ -85,20 +85,13 @@ jobs:
           cluster_name: ${{ env.GKE_CLUSTER }}
           location: ${{ env.GKE_ZONE }}
           credentials: ${{ secrets.GKE_TERRAFORM_CREDS }}
-    
-      - name: Declare docker tag variables
-        id: vars
-        shell: bash
-        run: |
-          GIT_HASH=$(git rev-parse --short "${GITHUB_SHA}")
-          echo "##[set-output name=docker_tag;]$(echo ${GITHUB_REF##*/}-${GIT_HASH})"
         
       # Build and push image to Google Container Registry
       - name: Build and push using Cloud Build
         run: |
           cd ${{ env.DEPLOYMENT_NAME }}
           gcloud config set project ${{ env.PROJECT_ID }}
-          gcloud builds submit --tag ${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.DEPLOYMENT_NAME }}/${{ env.IMAGE }}:${{ steps.vars.outputs.docker_tag }} .
+          gcloud builds submit --tag ${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.DEPLOYMENT_NAME }}/${{ env.IMAGE }}:latest .
 
 
   Deploy:
@@ -127,6 +120,8 @@ jobs:
 
       - name: Deploy
         run: |-
+          kubectl delete deploy ${{ env.DEPLOYMENT_NAME }} --ignore-not-found=true
+          kubectl delete svc ${{ env.DEPLOYMENT_NAME }} --ignore-not-found=true
           kubectl apply -f ./deployment/microservices/${{ env.DEPLOYMENT_NAME }}.yaml
           kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
           kubectl get services -o wide
