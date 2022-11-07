@@ -49,7 +49,10 @@ const ChatWindow = (props) => {
   }, []);
 
   socket.on("receive message", (req) => {
+    console.log("Receiving message:");
+    console.log(req);
     setMessages([...messages, req]);
+    console.log(messages);
   });
 
   useEffect(() => {

@@ -29,8 +29,6 @@ function CollabPage() {
 
   const commSocket = io.connect(config.COMMUNICATION_SVC_BASE_URL, {
     path: "/communication-api",
-    pingTimeout: 40000,
-    pingInterval: 10000,
     closeOnBeforeunload: false,
   });
   commSocket.on("connect_error", (data) => {

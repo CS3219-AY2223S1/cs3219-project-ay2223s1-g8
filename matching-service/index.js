@@ -28,12 +28,12 @@ const io = require("socket.io")(httpServer, {
     origin: "*",
     methods: ["POST", "GET"],
   },
-  pingTimeout: 40000,
-  pingInterval: 10000,
 });
 
 io.on("connection", (socket) => {
-  console.log(socket.id + " has connected");
+  console.log(
+    `SocketIO Matching Service connection created, socketID=${socket.id}`
+  );
   // Remove any existing match potential entry
   matchRefresh({ userId: socket.handshake.query["userId"] }).then((resp) => {
     if (resp.status == "Match Potential Refreshed") {
