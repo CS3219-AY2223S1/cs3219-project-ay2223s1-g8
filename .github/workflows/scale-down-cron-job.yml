@@ -13,7 +13,7 @@ env:
 
 jobs:
   scale:
-    name: Scale down to 0 replica
+    name: Scale down
     runs-on: ubuntu-latest
     
     steps:
@@ -33,7 +33,7 @@ jobs:
           location: ${{ env.GKE_ZONE }}
           credentials: ${{ secrets.GKE_TERRAFORM_CREDS }}
 
-      - name: Scale to 0 replicas
+      - name: Scale down
         run: |-
           kubectl delete deploy user-service matching-service question-service history-service communication-service frontend
 

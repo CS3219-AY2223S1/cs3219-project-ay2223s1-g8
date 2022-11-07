@@ -25,3 +25,15 @@ export const getHistory = async ({ uid }) => {
     return e.response.data;
   }
 };
+
+export const deleteHistory = async (uid) => {
+  try {
+    const res = await axios.delete(`${config.HISTORY_SVC_BASE_URL}/history-api/history`, {
+      data: { uid },
+    });
+    return res.data;
+  } catch (e) {
+    console.log("Error: Unable to delete user history", e.response.data);
+    return e.response.data;
+  }
+};
