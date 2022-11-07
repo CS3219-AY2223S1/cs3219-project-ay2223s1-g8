@@ -9,17 +9,35 @@ import LeaveRoomModal from "../../components/LeaveRoomModal";
 import NotifyUserLeftModal from "../../components/NotifyUserLeftModal";
 import { socketSelector } from "../../stores/socket/socket.slice";
 import { clearState, matchSelector } from "../../stores/match/match.slice";
+import { clearCommState, setCommSocket } from "../../stores/socket/commSocket.slice";
 import { deleteAssignedQuestion } from "../../middleware/questionSvc";
+import configs from "../../utils/configs";
+import io from "socket.io-client";
 
 import "./CollabPage.scss";
 
 function CollabPage() {
   const dispatch = useDispatch();
+  dispatch(clearCommState());
   const [showLeaveRoomModal, setShowLeaveRoomModal] = useState(false);
   const [showUserLeftModal, setShowUserLeftModal] = useState(false);
 
   const { socket } = useSelector(socketSelector);
   const { matchId } = useSelector(matchSelector);
+
+  const config = configs[process.env.NODE_ENV];
+
+  const commSocket = io.connect(config.COMMUNICATION_SVC_BASE_URL, {
+    path: "/communication-api",
+    pingTimeout: 40000,
+    pingInterval: 10000,
+    closeOnBeforeunload: false,
+  });
+  commSocket.on("connect_error", (data) => {
+    console.log("Communication socket connection error:", data);
+    commSocket.disconnect();
+  });
+  dispatch(setCommSocket({ commSocket: commSocket }));
 
   socket.on("other user left room", () => {
     setShowUserLeftModal(true);
@@ -54,7 +72,7 @@ function CollabPage() {
         <div className="Collab2-content-div">
           <div className="Collab2-left-div">
             <QuestionCard containerId="Collab2-qn-card-container" />
-            <ChatWindow />
+            <ChatWindow sock={commSocket} />
           </div>
 
           <div className="Collab2-right-div">

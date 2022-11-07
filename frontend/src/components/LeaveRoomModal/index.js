@@ -17,7 +17,7 @@ function LeaveRoomModal({ show, handleClose }) {
         <Modal.Title>Confirm Leave Room</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        Are you sure you want to leave the room? You would lose access to your match and your code.
+        Are you sure you want to leave the room? You will lose access to your match and existing code.
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-light" onClick={handleClose}>
