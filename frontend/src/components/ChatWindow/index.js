@@ -3,11 +3,24 @@ import { useSelector } from "react-redux";
 import { userSelector } from "../../stores/user";
 import { matchSelector } from "../../stores/match/match.slice";
 import useAutosizeTextArea from "../../utils/useAutoSizedTextArea";
-import PropTypes from "prop-types";
+import io from "socket.io-client";
+import configs from "../../utils/configs";
 import "./styles.scss";
 
-const ChatWindow = (props) => {
-  const socket = props.sock;
+const ChatWindow = () => {
+  const config = configs[process.env.NODE_ENV];
+
+  const socket = io.connect(config.COMMUNICATION_SVC_BASE_URL, {
+    path: "/communication-api",
+    pingTimeout: 40000,
+    pingInterval: 10000,
+    closeOnBeforeunload: false,
+  });
+
+  socket.on("connect_error", (data) => {
+    console.log("Communication socket connection error:", data);
+    socket.disconnect();
+  });
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const { username } = useSelector(userSelector);
@@ -105,8 +118,6 @@ const ChatWindow = (props) => {
   );
 };
 
-ChatWindow.propTypes = {
-  sock: PropTypes.object,
-};
+ChatWindow.propTypes = {};
 
 export default ChatWindow;
