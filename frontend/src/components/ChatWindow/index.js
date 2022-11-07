@@ -11,8 +11,6 @@ const config = configs[process.env.NODE_ENV];
 
 const socket = io.connect(config.COMMUNICATION_SVC_BASE_URL, {
   path: "/communication-api",
-  pingTimeout: 40000,
-  pingInterval: 10000,
   closeOnBeforeunload: false,
 });
 
