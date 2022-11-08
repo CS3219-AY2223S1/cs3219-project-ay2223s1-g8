@@ -63,10 +63,7 @@ const ChatWindow = ({ mode }) => {
   }, []);
 
   socket.on("receive message", (req) => {
-    console.log("Receiving message:");
-    console.log(req);
     setMessages([...messages, req]);
-    console.log(messages);
   });
 
   useEffect(() => {
@@ -77,7 +74,6 @@ const ChatWindow = ({ mode }) => {
 
   useEffect(() => {
     if (isLeaving) {
-      //socket.disconnect();
       socket.emit("leave chat", { roomId: matchId });
     }
   }, [isLeaving]);
