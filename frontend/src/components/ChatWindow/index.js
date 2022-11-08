@@ -5,8 +5,8 @@ import { matchSelector } from "../../stores/match/match.slice";
 import useAutosizeTextArea from "../../utils/useAutoSizedTextArea";
 import io from "socket.io-client";
 import configs from "../../utils/configs";
-
 import PropTypes from "prop-types";
+
 import "./styles.scss";
 
 const config = configs[process.env.NODE_ENV];
