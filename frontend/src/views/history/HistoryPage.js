@@ -24,7 +24,9 @@ const getDateString = (date = Date.now()) => {
     hour: "2-digit",
     minute: "2-digit",
   };
-  return d.toLocaleDateString(undefined, options) + ampm;
+  let result = d.toLocaleDateString(undefined, options);
+  if (result.includes("am") || result.includes("pm")) return result;
+  return result + ampm;
 };
 
 const HistoryPage = () => {
@@ -62,7 +64,7 @@ const HistoryPage = () => {
   return (
     <>
       <NavBar isHistoryPage />
-      <div className="h-content p-4" id="History-content-div">
+      <div className="h-content p-4 bg-whitesmoke" id="History-content-div">
         <h4>Past attempts</h4>
         <HistoryTable history={userHistories} handleShow={handleShow} />
       </div>

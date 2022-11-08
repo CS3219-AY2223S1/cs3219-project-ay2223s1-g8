@@ -15,9 +15,17 @@ import { deleteAssignedQuestion } from "../../middleware/questionSvc";
 // import configs from "../../utils/configs";
 
 import "./CollabPage.scss";
+import ToggleButton from "../../components/ToggleButton";
 
 function CollabPage() {
   const dispatch = useDispatch();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [showLeaveRoomModal, setShowLeaveRoomModal] = useState(false);
+  const [showUserLeftModal, setShowUserLeftModal] = useState(false);
+
+  const { socket } = useSelector(socketSelector);
+  const { matchId } = useSelector(matchSelector);
+  
   // dispatch(clearCommState());
 
   // const config = configs[process.env.NODE_ENV];
@@ -32,12 +40,6 @@ function CollabPage() {
   //   commSocket.disconnect();
   // });
   // dispatch(setCommSocket({ commSocket: commSocket }));
-
-  const [showLeaveRoomModal, setShowLeaveRoomModal] = useState(false);
-  const [showUserLeftModal, setShowUserLeftModal] = useState(false);
-
-  const { socket } = useSelector(socketSelector);
-  const { matchId } = useSelector(matchSelector);
 
   socket.on("other user left room", () => {
     setShowUserLeftModal(true);
@@ -67,22 +69,23 @@ function CollabPage() {
 
   return (
     <>
-      <div className="Collab2-container">
+      <div className={`Collab2-container ${isDarkMode ? "bg-dark-900" : "bg-whitesmoke"}`}>
         <NavBar isCollabPage />
         <div className="Collab2-content-div">
           <div className="Collab2-left-div">
-            <QuestionCard containerId="Collab2-qn-card-container" />
-            <ChatWindow />
+            <QuestionCard containerId="Collab2-qn-card-container" mode={isDarkMode} />
+            <ChatWindow mode={isDarkMode} />
           </div>
 
           <div className="Collab2-right-div">
-            <CollabEditor />
+            <CollabEditor mode={isDarkMode} />
           </div>
         </div>
         <div className="Collab2-footer-div px-3 py-2">
+          <ToggleButton mode={isDarkMode} onChange={() => setIsDarkMode(!isDarkMode)} />
           <Button
             className="btn-leave-room btn-sm"
-            variant="outline-danger"
+            variant="danger"
             onClick={() => setShowLeaveRoomModal(true)}
           >
             Leave Room
