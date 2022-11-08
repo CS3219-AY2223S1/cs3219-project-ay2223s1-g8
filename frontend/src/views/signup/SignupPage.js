@@ -94,7 +94,7 @@ function SignupPage() {
       <NavBar />
       <Formik initialValues={initialValues} validationSchema={signUpSchema} onSubmit={submitForm}>
         {({ values, handleChange, handleSubmit, handleBlur, errors, touched }) => (
-          <div className="Auth-form-container">
+          <div className="Auth-form-container bg-whitesmoke h-content w-100">
             <Form className="Auth-form" noValidate onSubmit={handleSubmit}>
               <div className="Auth-form-content">
                 <h3 className="Auth-form-title">Sign Up</h3>

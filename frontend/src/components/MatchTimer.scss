@@ -1,0 +1,35 @@
+@import "../scss/theme.scss";
+
+.filter-box {
+  display: flex;
+  flex-direction: row;
+  gap: 5vh;
+  margin: 5vh;
+}
+
+.timer-header {
+  font-weight: bold;
+}
+
+.timer-display {
+  display: flex;
+  justify-content: center;
+  font-size: 10vh;
+}
+
+.button-box {
+  display: flex;
+  flex: row;
+  gap: 10vh;
+  width: 40vw;
+}
+
+.start-button {
+  background-color: #809bce;
+  color: white;
+}
+
+.cancel-button {
+  background-color: #ff4747;
+  color: white;
+}

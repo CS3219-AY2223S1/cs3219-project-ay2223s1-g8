@@ -20,7 +20,7 @@ function LeaveRoomModal({ show, handleClose }) {
         Are you sure you want to leave the room? You will lose access to your match and code.
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-light" onClick={handleClose}>
+        <Button variant="outline-secondary" onClick={handleClose}>
           Cancel
         </Button>
         <Button variant="danger" onClick={leaveRoomButtonClick}>

@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
-import { useNavigate } from "react-router-dom";
-import "./MatchTimer.css";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Modal from "react-bootstrap/Modal";
+import CircularProgressBar from "./CircularProgressBar";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userSelector } from "../stores/user";
 import { addMatchId, setDifficulty, clearState } from "../stores/match/match.slice";
 import { QUESTION_DIFFICULTY } from "../utils/constants";
 import PropTypes from "prop-types";
+import "./MatchTimer.scss";
 
 function MatchTimer(props) {
   const socket = props.sock;
@@ -85,53 +87,62 @@ function MatchTimer(props) {
   };
 
   return (
-    <div className="page">
-      <Modal show={show} onHide={closePopUp} backdrop="static" keyboard={false}>
+    <div className="h-content w-100 bg-whitesmoke py-5 d-flex flex-column align-items-center justify-content-evenly">
+      <Modal show={show} onHide={closePopUp} centered backdrop="static" keyboard={false}>
         <Modal.Header closeButton>
           <Modal.Title>Cancel Match Search</Modal.Title>
         </Modal.Header>
         <Modal.Body>Are you sure you want to cancel the match search?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={closePopUp}>
+          <Button variant="outline-secondary" onClick={closePopUp}>
             Cancel
           </Button>
-          <Button vairant="primary" onClick={cancelTimer}>
+          <Button variant="danger" onClick={cancelTimer}>
             Confirm
           </Button>
         </Modal.Footer>
       </Modal>
-      <h1>Difficulty Level: {level}</h1>
-      <div className="filter-box">
-        <Button
-          className="filter-option-easy"
-          onClick={() => handleLevel(QUESTION_DIFFICULTY.EASY)}
-        >
-          Easy
-        </Button>
-        <Button
-          className="filter-option-medium"
-          onClick={() => handleLevel(QUESTION_DIFFICULTY.MEDIUM)}
-        >
-          Medium
-        </Button>
-        <Button
-          className="filter-option-hard"
-          onClick={() => handleLevel(QUESTION_DIFFICULTY.HARD)}
-        >
-          Hard
-        </Button>
+
+      <div className="d-flex flex-row align-items-center p-2">
+        <h3 className="m-0">Select Difficulty Level:</h3>
+
+        <ButtonGroup size="lg" className="ms-3">
+          <Button
+            variant={level === QUESTION_DIFFICULTY.EASY ? "primary" : "outline-primary"}
+            onClick={() => handleLevel(QUESTION_DIFFICULTY.EASY)}
+            disabled={start}
+          >
+            Easy
+          </Button>
+          <Button
+            variant={level === QUESTION_DIFFICULTY.MEDIUM ? "primary" : "outline-primary"}
+            onClick={() => handleLevel(QUESTION_DIFFICULTY.MEDIUM)}
+            disabled={start}
+          >
+            Medium
+          </Button>
+          <Button
+            variant={level === QUESTION_DIFFICULTY.HARD ? "primary" : "outline-primary"}
+            onClick={() => handleLevel(QUESTION_DIFFICULTY.HARD)}
+            disabled={start}
+          >
+            Hard
+          </Button>
+        </ButtonGroup>
       </div>
-      <div className="timer">
-        <div className="timer-header">Time left in queue:</div>
-        <div className="timer-display">{count}</div>
-      </div>
-      <div className="button-box">
-        <Button className="start-button" id="start" onClick={startTimer}>
-          Find Match
-        </Button>
-        <Button className="cancel-button" id="cancel" onClick={stopMatch}>
-          Cancel Match
-        </Button>
+
+      <CircularProgressBar count={count} start={start} />
+
+      <div className="button-box d-grid gap-2 m-2">
+        {!start ? (
+          <Button className="start-button" size="lg" id="start" onClick={startTimer}>
+            Find Match
+          </Button>
+        ) : (
+          <Button className="cancel-button" size="lg" id="cancel" onClick={stopMatch}>
+            Cancel Match
+          </Button>
+        )}
       </div>
     </div>
   );

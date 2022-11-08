@@ -14,6 +14,7 @@
   margin: 0px;
   position: relative;
   flex: 0.8;
+  background-color: $bg-dark-500;
 }
 .ql-container.ql-disabled .ql-tooltip {
   visibility: hidden;
@@ -45,6 +46,7 @@
   white-space: pre-wrap;
   word-wrap: break-word;
   font-family: monospace;
+  color: whitesmoke;
 }
 .ql-editor > * {
   cursor: text;
@@ -398,6 +400,7 @@
   pointer-events: none;
   position: absolute;
   right: 15px;
+  color: white;
 }
 .ql-snow.ql-toolbar:after,
 .ql-snow .ql-toolbar:after {
@@ -616,7 +619,7 @@
   text-decoration: underline;
 }
 .ql-snow .ql-editor blockquote {
-  border-left: 4px solid #ccc;
+  border-left: 4px solid $dark-outline;
   margin-bottom: 5px;
   margin-top: 5px;
   padding-left: 16px;
@@ -877,8 +880,8 @@
   border-top: 0px;
 }
 .ql-snow .ql-tooltip {
-  background-color: #fff;
-  border: 1px solid #ccc;
+  background-color: transparent;
+  border: 1px solid $dark-outline;
   box-shadow: 0px 0px 5px #ddd;
   color: #444;
   padding: 5px 12px;
@@ -891,7 +894,7 @@
 }
 .ql-snow .ql-tooltip input[type="text"] {
   display: none;
-  border: 1px solid #ccc;
+  border: 1px solid $dark-outline;
   font-size: 13px;
   height: 26px;
   margin: 0px;
@@ -943,5 +946,5 @@
   color: #06c;
 }
 .ql-container.ql-snow {
-  border: 1px solid $outline;
+  border: 1px solid $dark-outline;
 }

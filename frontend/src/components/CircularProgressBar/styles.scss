@@ -1,0 +1,26 @@
+@import "../../scss/theme.scss";
+
+.circle-background,
+.circle-progress {
+  fill: none;
+}
+
+.circle-background {
+  stroke: $bg-light;
+}
+
+.circle-progress {
+  stroke: $primary;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.circle-text {
+  font-size: 4em;
+  font-weight: 600;
+  fill: $dark;
+}
+
+.circle-text-sm {
+  fill: $dark;
+}

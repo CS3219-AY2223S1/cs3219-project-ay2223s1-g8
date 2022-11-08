@@ -20,7 +20,7 @@ function NotifyUserLeftModal({ handleClose, show }) {
         Your matched user has left the room. Would you like to leave the room?
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-light" onClick={handleClose}>
+        <Button variant="outline-secondary" onClick={handleClose}>
           Stay
         </Button>
         <Button variant="danger" onClick={leaveRoomButtonClick}>
