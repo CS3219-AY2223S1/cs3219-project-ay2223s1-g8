@@ -5,6 +5,8 @@ import { userSelector } from "../../stores/user";
 import { matchSelector } from "../../stores/match/match.slice";
 import useAutosizeTextArea from "../../utils/useAutoSizedTextArea";
 import configs from "../../utils/configs";
+
+import PropTypes from "prop-types";
 import "./styles.scss";
 
 const config = configs[process.env.NODE_ENV];
@@ -21,7 +23,7 @@ socket.on("connect_error", (data) => {
   socket.disconnect();
 });
 
-const ChatWindow = () => {
+const ChatWindow = ({ mode }) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const { username } = useSelector(userSelector);
@@ -76,12 +78,23 @@ const ChatWindow = () => {
     if (isLeaving) socket.disconnect();
   }, [isLeaving]);
 
+  const toggleClassNameMode = mode ? "chat-window--dark" : "";
+
   return (
-    <div className="overlay rounded-md overflow-hidden shadow-4xl" id="ChatWindow-container">
-      <div className="pt-2 pb-1 text-light" id="Chat-header-container">
+    <div
+      className={`overlay rounded-md overflow-hidden shadow-4xl ${toggleClassNameMode}`}
+      id="ChatWindow-container"
+    >
+      <div
+        className={`pt-2 pb-1 ${mode ? "text-light bg-dark-900" : "bg-whitesmoke"}`}
+        id="Chat-header-container"
+      >
         Chat Box
       </div>
-      <div ref={messageEnd} className="p-2 h-100 overflow-auto" id="Chatbox-container">
+      <div
+        ref={messageEnd}
+        className={`Chatbox-container p-2 h-100 overflow-auto ${toggleClassNameMode}`}
+      >
         {messages.map((message, idx) =>
           message.username === username ? (
             <div className="Chat-messages" key={idx}>
@@ -96,12 +109,12 @@ const ChatWindow = () => {
           ),
         )}
       </div>
-      <div className="Chat-footer-container px-2">
+      <div className={`Chat-footer-container px-2 ${mode && "bg-dark-500"}`}>
         <form className="Chat-submit" ref={(el) => (formRef = el)} onSubmit={handleSendMessage}>
           <textarea
             rows="1"
             placeholder="Write a message..."
-            className="Chat-message-input m-2 text-light"
+            className={`Chat-message-input m-2 ${mode && "text-light"}`}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             ref={textAreaRef}
@@ -116,6 +129,8 @@ const ChatWindow = () => {
   );
 };
 
-ChatWindow.propTypes = {};
+ChatWindow.propTypes = {
+  mode: PropTypes.bool,
+};
 
 export default ChatWindow;

@@ -1,10 +1,14 @@
 @import "../../scss/theme.scss";
 
+.Qn-card--dark {
+  color: whitesmoke;
+  background-color: $bg-dark-500;
+}
+
 .Qn-card-container {
   width: 100%;
   padding: 0.2vw;
   min-height: 50vh;
-  background-color: $bg-dark-500;
 }
 
 .Qn-card-body-container {
@@ -12,13 +16,17 @@
   white-space: pre-wrap;
 }
 
-.Qn-card-body-container::-webkit-scrollbar {
+.Qn-card-container::-webkit-scrollbar {
   background: none;
   width: 0.8vw;
   border-radius: 10px;
 }
 
-.Qn-card-body-container::-webkit-scrollbar-thumb {
-  background: $accent;
+.Qn-card-container::-webkit-scrollbar-thumb {
+  background: $light-accent;
   border-radius: 10px;
+}
+
+.Qn-card--dark::-webkit-scrollbar-thumb {
+  background: $dark-accent;
 }

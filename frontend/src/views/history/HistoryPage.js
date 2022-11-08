@@ -62,7 +62,7 @@ const HistoryPage = () => {
   return (
     <>
       <NavBar isHistoryPage />
-      <div className="h-content p-4" id="History-content-div">
+      <div className="h-content p-4 bg-whitesmoke" id="History-content-div">
         <h4>Past attempts</h4>
         <HistoryTable history={userHistories} handleShow={handleShow} />
       </div>

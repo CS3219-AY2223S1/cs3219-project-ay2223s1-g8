@@ -87,14 +87,14 @@ function MatchTimer(props) {
   };
 
   return (
-    <div className="page d-flex flex-column align-items-center py-5 justify-content-evenly">
+    <div className="h-content w-100 bg-whitesmoke py-5 d-flex flex-column align-items-center justify-content-evenly">
       <Modal show={show} onHide={closePopUp} centered backdrop="static" keyboard={false}>
         <Modal.Header closeButton>
           <Modal.Title>Cancel Match Search</Modal.Title>
         </Modal.Header>
         <Modal.Body>Are you sure you want to cancel the match search?</Modal.Body>
         <Modal.Footer>
-          <Button variant="outline-primary" onClick={closePopUp}>
+          <Button variant="outline-secondary" onClick={closePopUp}>
             Cancel
           </Button>
           <Button variant="danger" onClick={cancelTimer}>
@@ -133,7 +133,7 @@ function MatchTimer(props) {
 
       <CircularProgressBar count={count} start={start} />
 
-      <div className="button-box d-grid gap-2">
+      <div className="button-box d-grid gap-2 m-2">
         {!start ? (
           <Button className="start-button" size="lg" id="start" onClick={startTimer}>
             Find Match
