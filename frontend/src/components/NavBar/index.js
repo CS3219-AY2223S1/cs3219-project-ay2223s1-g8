@@ -79,6 +79,7 @@ function NavBar({ isHistoryPage = false, isCollabPage = false }) {
               title={`Welcome, ${getUsername() || "user"}`}
               id="Navbar-dropdown-text"
               align="end"
+              disabled={isCollabPage}
             >
               <NavDropdown.Item onClick={handleChangePassword}>Change password</NavDropdown.Item>
               <NavDropdown.Item onClick={handleDeleteUser}>Delete account</NavDropdown.Item>
