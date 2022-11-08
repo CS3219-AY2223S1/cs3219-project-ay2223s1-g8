@@ -1,9 +1,9 @@
 import { useEffect, useState, useRef } from "react";
-import io from "socket.io-client";
 import { useSelector } from "react-redux";
 import { userSelector } from "../../stores/user";
 import { matchSelector } from "../../stores/match/match.slice";
 import useAutosizeTextArea from "../../utils/useAutoSizedTextArea";
+import io from "socket.io-client";
 import configs from "../../utils/configs";
 
 import PropTypes from "prop-types";
@@ -13,8 +13,6 @@ const config = configs[process.env.NODE_ENV];
 
 const socket = io.connect(config.COMMUNICATION_SVC_BASE_URL, {
   path: "/communication-api",
-  pingTimeout: 40000,
-  pingInterval: 10000,
   closeOnBeforeunload: false,
 });
 
@@ -65,7 +63,10 @@ const ChatWindow = ({ mode }) => {
   }, []);
 
   socket.on("receive message", (req) => {
+    console.log("Receiving message:");
+    console.log(req);
     setMessages([...messages, req]);
+    console.log(messages);
   });
 
   useEffect(() => {
@@ -75,7 +76,10 @@ const ChatWindow = ({ mode }) => {
   }, []);
 
   useEffect(() => {
-    if (isLeaving) socket.disconnect();
+    if (isLeaving) {
+      //socket.disconnect();
+      socket.emit("leave chat", { roomId: matchId });
+    }
   }, [isLeaving]);
 
   const toggleClassNameMode = mode ? "chat-window--dark" : "";

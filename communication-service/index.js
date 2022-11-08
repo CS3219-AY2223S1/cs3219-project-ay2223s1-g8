@@ -20,15 +20,14 @@ const io = require("socket.io")(httpServer, {
     origin: "*",
     methods: ["POST", "GET"],
   },
-  pingTimeout: 40000,
-  pingInterval: 10000,
 });
 
 const Mutex = require("async-mutex").Mutex;
 
 io.on("connection", (socket) => {
-  console.log(`SocketIO connection created, socketID=${socket.id}`);
-
+  console.log(
+    `SocketIO Communication Service connection created, socketID=${socket.id}`
+  );
   socket.on("join chat", (req) => {
     console.log(req);
     socket.join(req.roomId);
@@ -40,6 +39,10 @@ io.on("connection", (socket) => {
     console.log(req);
     io.to(req.roomId).emit("receive message", req);
     release();
+  });
+
+  socket.on("leave chat", async (req) => {
+    io.socketsLeave(req.roomId);
   });
 
   socket.on("disconnect", (reason) => {

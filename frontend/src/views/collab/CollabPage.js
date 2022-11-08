@@ -10,6 +10,9 @@ import NotifyUserLeftModal from "../../components/NotifyUserLeftModal";
 import { socketSelector } from "../../stores/socket/socket.slice";
 import { clearState, matchSelector } from "../../stores/match/match.slice";
 import { deleteAssignedQuestion } from "../../middleware/questionSvc";
+// import { clearCommState, setCommSocket } from "../../stores/socket/commSocket.slice";
+// import io from "socket.io-client";
+// import configs from "../../utils/configs";
 
 import "./CollabPage.scss";
 import ToggleButton from "../../components/ToggleButton";
@@ -22,6 +25,21 @@ function CollabPage() {
 
   const { socket } = useSelector(socketSelector);
   const { matchId } = useSelector(matchSelector);
+  
+  // dispatch(clearCommState());
+
+  // const config = configs[process.env.NODE_ENV];
+
+  // const commSocket = io.connect(config.COMMUNICATION_SVC_BASE_URL, {
+  //   path: "/communication-api",
+  //   closeOnBeforeunload: false,
+  // });
+
+  // commSocket.on("connect_error", (data) => {
+  //   console.log("Matching socket connection error:", data);
+  //   commSocket.disconnect();
+  // });
+  // dispatch(setCommSocket({ commSocket: commSocket }));
 
   socket.on("other user left room", () => {
     setShowUserLeftModal(true);
