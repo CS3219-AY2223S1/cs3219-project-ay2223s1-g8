@@ -24,7 +24,9 @@ const getDateString = (date = Date.now()) => {
     hour: "2-digit",
     minute: "2-digit",
   };
-  return d.toLocaleDateString(undefined, options) + ampm;
+  let result = d.toLocaleDateString(undefined, options);
+  if (result.includes("am") || result.includes("pm")) return result;
+  return result + ampm;
 };
 
 const HistoryPage = () => {
