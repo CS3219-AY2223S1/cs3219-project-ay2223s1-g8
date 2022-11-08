@@ -5,8 +5,8 @@ import { matchSelector } from "../../stores/match/match.slice";
 import useAutosizeTextArea from "../../utils/useAutoSizedTextArea";
 import io from "socket.io-client";
 import configs from "../../utils/configs";
-
 import PropTypes from "prop-types";
+
 import "./styles.scss";
 
 const config = configs[process.env.NODE_ENV];
@@ -63,10 +63,7 @@ const ChatWindow = ({ mode }) => {
   }, []);
 
   socket.on("receive message", (req) => {
-    console.log("Receiving message:");
-    console.log(req);
     setMessages([...messages, req]);
-    console.log(messages);
   });
 
   useEffect(() => {
@@ -77,7 +74,6 @@ const ChatWindow = ({ mode }) => {
 
   useEffect(() => {
     if (isLeaving) {
-      //socket.disconnect();
       socket.emit("leave chat", { roomId: matchId });
     }
   }, [isLeaving]);
