@@ -17,7 +17,8 @@ function NotifyUserLeftModal({ handleClose, show }) {
         <Modal.Title>Matched user has left the room</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        Your matched user has left the room, and you will no longer be able to send chat messages. Would you like to leave the room?
+        Your matched user has left the room, and you will no longer be able to send chat messages.
+        Would you like to leave the room?
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-secondary" onClick={handleClose}>

@@ -14,7 +14,7 @@ import logo from "../../assets/logo-white.png";
 import PropTypes from "prop-types";
 import "./styles.scss";
 
-function NavBar({ isHistoryPage = false, isCollabPage = false }) {
+function NavBar({ isHistoryPage = false, isCollabPage = false, isMatching = false }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
@@ -60,16 +60,16 @@ function NavBar({ isHistoryPage = false, isCollabPage = false }) {
     <>
       <Navbar bg="primary" variant="dark" fixed="top">
         <Container fluid>
-          <Navbar.Brand href={isCollabPage ? "#" : "/match"} className="Navbar-peerprep text-white">
+          <Navbar.Brand className="Navbar-peerprep text-white" href={isCollabPage ? "#" : "/match"}>
             <img alt="" src={logo} width="30" height="30" className="d-inline-block align-top" />{" "}
             PeerPrep
           </Navbar.Brand>
           {!isCollabPage && (
             <Nav className="me-auto" activeKey={isHistoryPage ? "link-1" : "default"}>
-              <Nav.Link href="/match" eventKey="default">
+              <Nav.Link href="/match" eventKey="default" disabled={isMatching}>
                 Match
               </Nav.Link>
-              <Nav.Link href="/history" eventKey="link-1">
+              <Nav.Link href="/history" eventKey="link-1" disabled={isMatching}>
                 History
               </Nav.Link>
             </Nav>
@@ -79,7 +79,7 @@ function NavBar({ isHistoryPage = false, isCollabPage = false }) {
               title={`Welcome, ${getUsername() || "user"}`}
               id="Navbar-dropdown-text"
               align="end"
-              disabled={isCollabPage}
+              disabled={isCollabPage || isMatching}
             >
               <NavDropdown.Item onClick={handleChangePassword}>Change password</NavDropdown.Item>
               <NavDropdown.Item onClick={handleDeleteUser}>Delete account</NavDropdown.Item>
@@ -127,6 +127,7 @@ function NavBar({ isHistoryPage = false, isCollabPage = false }) {
 NavBar.propTypes = {
   isCollabPage: PropTypes.bool,
   isHistoryPage: PropTypes.bool,
+  isMatching: PropTypes.bool,
 };
 
 export default NavBar;
