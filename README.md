@@ -23,4 +23,6 @@ History Service | Store user's latest question attempts | [History Service Docum
 
 We are using Google Kubernetes Engine to deploy all our microservices on Google Cloud.
 
+**Deployed Link** (up until Demo on 11 Nov 2022): http://35.224.11.115:3000/.
+
 For more details on deployment, read the [Deployment Documentation](/deployment/README.md).
