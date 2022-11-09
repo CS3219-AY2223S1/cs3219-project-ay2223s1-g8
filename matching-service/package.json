@@ -3,21 +3,32 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "cross-env NODE_ENV=dev nodemon index.js",
+    "start": "cross-env NODE_ENV=dev node index.js",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^2.0.19"
+    "eslint": "^8.23.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.5",
+    "eslint-plugin-promise": "^6.0.1",
+    "eslint-plugin-react": "^7.31.7",
+    "nodemon": "^2.0.19",
+    "prettier": "2.7.1"
   },
   "dependencies": {
+    "async-mutex": "^0.4.0",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.2",
     "express": "^4.18.1",
-    "sequelize": "^6.21.3",
+    "pg": "^8.8.0",
+    "sequelize": "^6.21.4",
     "socket.io": "^4.5.1",
     "sqlite3": "^5.0.10",
     "uuid": "^8.3.2"

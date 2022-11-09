@@ -1,0 +1,10 @@
+@import "../../scss/theme.scss";
+
+.custom-dropdown-menu {
+  max-height: 30vh;
+  overflow-y: scroll;
+}
+
+.custom-dropdown-toggle {
+  background-color: $slate-grey;
+}

@@ -1,0 +1,137 @@
+@import "../../scss/theme.scss";
+
+.chat-window--dark {
+  color: whitesmoke;
+  background-color: $bg-dark-500;
+}
+
+#ChatWindow-container {
+  width: 100%;
+  height: 100%;
+  max-height: 40vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#Chat-header-container {
+  text-align: center;
+  font-weight: bold;
+  font-family: $font-overpass-mono;
+  border: 0px double $dark-outline;
+  border-width: 1px 0px 1px 0px;
+}
+
+.Chatbox-container::-webkit-scrollbar {
+  background: none;
+  width: 0.8vw;
+  border-radius: 10px;
+}
+
+.Chatbox-container::-webkit-scrollbar-thumb {
+  background: $light-accent;
+  border-radius: 10px;
+}
+
+.chat-window--dark .Chatbox-container::-webkit-scrollbar-thumb {
+  background: $dark-accent;
+}
+
+.Chat-footer-container {
+  background-color: whitesmoke;
+  max-height: 120px;
+  border-top: 1px solid $bg-dark-100;
+}
+
+.Chat-submit {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: transparent;
+
+  textarea {
+    max-height: 10vh;
+  }
+}
+
+.Chat-message-input::-webkit-scrollbar {
+  background: none;
+  width: 0.8vw;
+  border-radius: 10px;
+}
+
+.Chat-message-input::-webkit-scrollbar-thumb {
+  background: $light-accent;
+  border-radius: 10px;
+}
+
+.chat-window--dark .Chat-message-input::-webkit-scrollbar-thumb {
+  background: $dark-accent;
+}
+
+.Chat-message-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  background-color: transparent;
+}
+
+.Message {
+  width: 80%;
+  max-width: 80%;
+  padding: 0.5rem 0.75rem;
+}
+
+.chat-window--dark .Message {
+  color: whitesmoke;
+}
+
+.Message-recipient {
+  background-color: rgb(220, 218, 218);
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.chat-window--dark .Message-recipient {
+  background-color: $bg-dark-100;
+}
+
+.Message-sender {
+  background-color: rgb(108, 180, 108);
+  border-radius: 10px;
+  margin-left: auto;
+  font-size: 15px;
+}
+
+.chat-window--dark .Message-sender {
+  background-color: rgb(56, 108, 56);
+}
+
+.Chat-messages > p {
+  font-size: 15px;
+}
+
+.Sender-name {
+  text-align: right;
+  padding-right: 2vh;
+  margin-bottom: 1px;
+}
+
+.Recipient-name {
+  padding-left: 1vh;
+  margin-bottom: 1px;
+}
+
+#ChatWindow-btn {
+  border: none;
+  color: $grullo;
+  font-size: 1.2rem;
+  background-color: transparent;
+}
+
+#ChatWindow-btn:hover {
+  color: $shadow;
+  transition: 0.15s ease-out;
+}

@@ -1,0 +1,88 @@
+name: Frontend CICD
+
+on:
+  push:
+    branches: [ "prod" ]
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontend-cicd.yml"
+  pull_request:
+    branches: [ "prod", "main" ]
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontend-cicd.yml"
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
+  GKE_CLUSTER: peerprep-cluster
+  GKE_ZONE: us-central1
+  DEPLOYMENT_NAME: frontend
+  IMAGE: frontend-image
+
+jobs:
+  Local:
+    name: Local Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+      - name: Install dependencies
+        run: |
+          cd ${{ env.DEPLOYMENT_NAME }}
+          npm ci
+      - name: Build locally
+        run: |
+          cd ${{ env.DEPLOYMENT_NAME }}
+          npm run build
+
+  Build:
+    needs: Local
+    if: ${{ github.event_name == 'push' }}
+    name: Build, Push, Deploy to GKE
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v0'
+        with:
+          service_account_key: ${{ secrets.GKE_TERRAFORM_CREDS }}
+          project_id: ${{ secrets.GKE_PROJECT }}
+
+      # Get the GKE credentials so we can deploy to the cluster
+      - name: Set up GKE credentials
+        uses: 'google-github-actions/get-gke-credentials@v0'
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          location: ${{ env.GKE_ZONE }}
+          credentials: ${{ secrets.GKE_TERRAFORM_CREDS }}
+      
+      - name: Make .env.prod file
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_REACT_APP_API_URL: ${{ secrets.GATEWAY_URL }}
+          directory: frontend
+          file_name: .env.prod
+          fail_on_empty: false
+        
+      # Build and push image to Google Container Registry
+      - name: Build and push using Cloud Build
+        run: |
+          cd ${{ env.DEPLOYMENT_NAME }}
+          cat .env.prod
+          ls -a
+          gcloud config set project ${{ env.PROJECT_ID }}
+          gcloud builds submit --tag ${{ env.GKE_ZONE }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.DEPLOYMENT_NAME }}/${{ env.IMAGE }}:latest .
+
+      - name: Deploy
+        run: |-
+          kubectl delete deploy ${{ env.DEPLOYMENT_NAME }} --ignore-not-found=true
+          kubectl delete svc ${{ env.DEPLOYMENT_NAME }} --ignore-not-found=true
+          kubectl apply -f ./deployment/microservices/${{ env.DEPLOYMENT_NAME }}.yaml
+          kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}
+          kubectl get services -o wide

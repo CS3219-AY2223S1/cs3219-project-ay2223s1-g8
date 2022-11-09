@@ -1,0 +1,46 @@
+name: Destory GKE cluster
+
+on:
+  workflow_dispatch:
+    branches: [ "main" ]
+  # schedule: 
+  #   - cron: "0 18 * * *"  # every day at 6pm UTC (2am SGT)
+
+jobs:
+  terraform:
+    env:
+      GOOGLE_CREDENTIALS: ${{ secrets.GKE_TERRAFORM_CREDS }}
+    name: "Destroy cluster"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Terraform Format
+        id: fmt
+        run: |
+          cd deployment/terraform
+          terraform fmt -check
+
+      - name: Terraform Init
+        id: init
+        run: |
+          cd deployment/terraform
+          terraform init
+          
+      - name: Terraform Plan
+        id: plan
+        run: |
+          cd deployment/terraform
+          terraform plan -no-color
+        continue-on-error: true
+
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Destroy
+        run: |
+          cd deployment/terraform
+          terraform destroy -auto-approve --target 'google_container_cluster.primary'

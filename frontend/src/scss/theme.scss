@@ -1,0 +1,69 @@
+// original theme colors for reference
+// $theme-colors: (
+//   "primary":    $primary,
+//   "secondary":  $secondary,
+//   "success":    $success,
+//   "info":       $info,
+//   "warning":    $warning,
+//   "danger":     $danger,
+//   "light":      $light,
+//   "dark":       $dark
+// );
+
+// constants
+@import "./constants.scss";
+
+// fonts
+@import url("https://fonts.googleapis.com/css2?family=Overpass+Mono:wght@300;400;500;600;700&display=swap");
+
+// colors
+$shadow: #998670;
+$grullo: #a99985;
+$bone: #dad2bc;
+$alabaster: #e8e2d5;
+$isabelline: #f5f1ed;
+$slate-grey: #70798c;
+$raisin-black: #252323;
+
+// custom variables
+// $primary: $grullo;
+// $secondary: $bone;
+// $info: #fad4c0;
+// $success: #64b6ac;
+// $light: $shadow;
+// $dark: $raisin-black;
+
+$bg-light: $isabelline;
+
+$primary: #285188;
+$accent-blue: #285188;
+
+$bg-dark-900: #1f1f1f;
+$bg-dark-500: #242424;
+$bg-dark-300: #373737;
+$bg-dark-100: #555555;
+
+$dark-outline: $bg-dark-100;
+
+$light-accent: #dcdada;
+$dark-accent: $bg-dark-300;
+
+$accent: $alabaster;
+$outline: $bone;
+
+$font-overpass-mono: "Overpass Mono", monospace;
+
+// import functions and variables
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+
+$custom-theme-colors: (
+  "altlight": #f2ebfa,
+  "altdark": #522192,
+);
+
+// adding new variables to the theme-colors
+$theme-colors: map-merge($custom-theme-colors, $theme-colors);
+
+// import bootstrap
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
