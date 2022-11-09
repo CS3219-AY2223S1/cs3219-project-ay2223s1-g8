@@ -1,4 +1,3 @@
-import NavBar from "../components/NavBar";
 import MatchTimer from "../components/MatchTimer";
 import io from "socket.io-client";
 import configs from "../utils/configs";
@@ -25,7 +24,6 @@ function MatchingPage() {
 
   return (
     <>
-      <NavBar />
       <MatchTimer sock={socket} />
     </>
   );

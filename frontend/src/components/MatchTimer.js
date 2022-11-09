@@ -10,6 +10,7 @@ import { addMatchId, setDifficulty, clearState } from "../stores/match/match.sli
 import { QUESTION_DIFFICULTY } from "../utils/constants";
 import PropTypes from "prop-types";
 import "./MatchTimer.scss";
+import NavBar from "./NavBar";
 
 function MatchTimer(props) {
   const socket = props.sock;
@@ -87,64 +88,67 @@ function MatchTimer(props) {
   };
 
   return (
-    <div className="h-content w-100 bg-whitesmoke py-5 d-flex flex-column align-items-center justify-content-evenly">
-      <Modal show={show} onHide={closePopUp} centered backdrop="static" keyboard={false}>
-        <Modal.Header closeButton>
-          <Modal.Title>Cancel Match Search</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Are you sure you want to cancel the match search?</Modal.Body>
-        <Modal.Footer>
-          <Button variant="outline-secondary" onClick={closePopUp}>
-            Cancel
-          </Button>
-          <Button variant="danger" onClick={cancelTimer}>
-            Confirm
-          </Button>
-        </Modal.Footer>
-      </Modal>
+    <>
+      <NavBar isMatching={start} />
+      <div className="h-content w-100 bg-whitesmoke py-5 d-flex flex-column align-items-center justify-content-evenly">
+        <Modal show={show} onHide={closePopUp} centered backdrop="static" keyboard={false}>
+          <Modal.Header closeButton>
+            <Modal.Title>Cancel Match Search</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Are you sure you want to cancel the match search?</Modal.Body>
+          <Modal.Footer>
+            <Button variant="outline-secondary" onClick={closePopUp}>
+              Cancel
+            </Button>
+            <Button variant="danger" onClick={cancelTimer}>
+              Confirm
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
-      <div className="d-flex flex-row align-items-center p-2">
-        <h3 className="m-0">Select Difficulty Level:</h3>
+        <div className="d-flex flex-row align-items-center p-2">
+          <h3 className="m-0">Select Difficulty Level:</h3>
 
-        <ButtonGroup size="lg" className="ms-3">
-          <Button
-            variant={level === QUESTION_DIFFICULTY.EASY ? "primary" : "outline-primary"}
-            onClick={() => handleLevel(QUESTION_DIFFICULTY.EASY)}
-            disabled={start}
-          >
-            Easy
-          </Button>
-          <Button
-            variant={level === QUESTION_DIFFICULTY.MEDIUM ? "primary" : "outline-primary"}
-            onClick={() => handleLevel(QUESTION_DIFFICULTY.MEDIUM)}
-            disabled={start}
-          >
-            Medium
-          </Button>
-          <Button
-            variant={level === QUESTION_DIFFICULTY.HARD ? "primary" : "outline-primary"}
-            onClick={() => handleLevel(QUESTION_DIFFICULTY.HARD)}
-            disabled={start}
-          >
-            Hard
-          </Button>
-        </ButtonGroup>
+          <ButtonGroup size="lg" className="ms-3">
+            <Button
+              variant={level === QUESTION_DIFFICULTY.EASY ? "primary" : "outline-primary"}
+              onClick={() => handleLevel(QUESTION_DIFFICULTY.EASY)}
+              disabled={start}
+            >
+              Easy
+            </Button>
+            <Button
+              variant={level === QUESTION_DIFFICULTY.MEDIUM ? "primary" : "outline-primary"}
+              onClick={() => handleLevel(QUESTION_DIFFICULTY.MEDIUM)}
+              disabled={start}
+            >
+              Medium
+            </Button>
+            <Button
+              variant={level === QUESTION_DIFFICULTY.HARD ? "primary" : "outline-primary"}
+              onClick={() => handleLevel(QUESTION_DIFFICULTY.HARD)}
+              disabled={start}
+            >
+              Hard
+            </Button>
+          </ButtonGroup>
+        </div>
+
+        <CircularProgressBar count={count} start={start} />
+
+        <div className="button-box d-grid gap-2 m-2">
+          {!start ? (
+            <Button className="start-button" size="lg" id="start" onClick={startTimer}>
+              Find Match
+            </Button>
+          ) : (
+            <Button className="cancel-button" size="lg" id="cancel" onClick={stopMatch}>
+              Cancel Match
+            </Button>
+          )}
+        </div>
       </div>
-
-      <CircularProgressBar count={count} start={start} />
-
-      <div className="button-box d-grid gap-2 m-2">
-        {!start ? (
-          <Button className="start-button" size="lg" id="start" onClick={startTimer}>
-            Find Match
-          </Button>
-        ) : (
-          <Button className="cancel-button" size="lg" id="cancel" onClick={stopMatch}>
-            Cancel Match
-          </Button>
-        )}
-      </div>
-    </div>
+    </>
   );
 }
 
